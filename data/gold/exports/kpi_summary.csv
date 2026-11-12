@@ -49,12 +49,12 @@ Coût moyen au m² (loyer + charges) : Outlet,Réseau,ES,290.0,€/m²/an,,INFO,
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,GB,387.0,€/m²/an,,INFO,CALCUL,SIMULE
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,IT,386.0,€/m²/an,,INFO,CALCUL,SIMULE
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,NL,256.0,€/m²/an,,INFO,CALCUL,SIMULE
-"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,BE,3.96,%,,INFO,CALCUL,REEL
-"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,DE,5.54,%,,INFO,CALCUL,REEL
 "Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,ES,9.27,%,,INFO,CALCUL,REEL
-"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,FR,-0.24,%,,INFO,CALCUL,REEL
 "Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,IT,3.15,%,,INFO,CALCUL,REEL
-"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,NL,1.43,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires)",Marché,BE,3.96,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires)",Marché,DE,5.54,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires)",Marché,FR,-0.24,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires)",Marché,NL,1.43,%,,INFO,CALCUL,REEL
 Croissance du secteur (TCAM 2022-2025),Marché,BE,3.46,%,≥ 2 %,GO,CALCUL,SIMULE
 Croissance du secteur (TCAM 2022-2025),Marché,DE,3.89,%,≥ 2 %,GO,CALCUL,SIMULE
 Croissance du secteur (TCAM 2022-2025),Marché,ES,5.33,%,≥ 2 %,GO,CALCUL,SIMULE
@@ -76,13 +76,13 @@ Distance moyenne au hub le plus proche,Logistique,GB,663.2,km,,INFO,CALCUL,SIMUL
 Distance moyenne au hub le plus proche,Logistique,IT,768.0,km,,INFO,CALCUL,SIMULE
 Distance moyenne au hub le plus proche,Logistique,NL,90.3,km,,INFO,CALCUL,SIMULE
 "Distance moyenne au hub le plus proche (comparaison, jeu simulé)",Logistique,DE,515.3,km,,INFO,CALCUL,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,BE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,DE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,ES,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,FR,0.0,%,,INFO,HYPOTHÈSE,SIMULE
 "Droit d'import (origine Asie, via la France)",Logistique,GB,16.0,%,,INFO,HYPOTHÈSE,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,IT,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-"Droit d'import (origine Asie, via la France)",Logistique,NL,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,BE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,DE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,ES,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,FR,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,IT,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France) (comparaison, jeu simulé)",Logistique,NL,0.0,%,,INFO,HYPOTHÈSE,SIMULE
 "Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,BE,16.8,%,,INFO,FAIT,REEL
 "Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,DE,16.8,%,,INFO,FAIT,REEL
 "Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,ES,16.8,%,,INFO,FAIT,REEL

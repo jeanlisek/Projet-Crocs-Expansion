@@ -10,10 +10,15 @@ with LF, so that the same warehouse gives the same bytes on every system.
 
 An object of OPTIONAL that is not in the warehouse yet is skipped with a message, and its
 previous export, if any, is left as it is. A missing object of REQUIRED stops the export.
+
+The AI commentary of T9 may also be written as a file, data/gold/ai_commentary.csv: when it
+exists, it is copied as it is into the exports directory (it replaces an export of the table
+of the same name). When it does not exist, nothing happens.
 """
 
 import argparse
 import csv
+import shutil
 from pathlib import Path
 
 import duckdb
@@ -22,6 +27,7 @@ from src.transform.bronze_to_silver import REPO_ROOT
 from src.transform.build_gold import DEFAULT_WAREHOUSE
 
 DEFAULT_EXPORTS_DIR = REPO_ROOT / "data" / "gold" / "exports"
+DEFAULT_AI_COMMENTARY = REPO_ROOT / "data" / "gold" / "ai_commentary.csv"
 
 # Views and tables the dashboard reads today: all of them must be in the warehouse.
 REQUIRED = (
@@ -37,6 +43,9 @@ REQUIRED = (
     "fact_parts_de_marche",
     "fact_immobilier",
     "fact_prix_releves",
+    "sensibilite_payback",
+    "eurostat_series",
+    "crocs_produits",
 )
 # Delivered by later tasks (T8 business case and city scoring, T9 AI commentary).
 OPTIONAL = ("business_case", "city_scoring", "ai_commentary")
@@ -97,12 +106,27 @@ def export(
     return written
 
 
+def copy_ai_commentary(
+    source: Path = DEFAULT_AI_COMMENTARY, exports_dir: Path = DEFAULT_EXPORTS_DIR
+) -> bool:
+    """Copy the AI commentary file into the exports directory if it exists; say whether."""
+    if not source.exists():
+        print(f"{source.name:32s} absent de {source.parent} : non copié")
+        return False
+    exports_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, exports_dir / source.name)
+    print(f"{source.name:32s} copié tel quel depuis {source.parent}")
+    return True
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--warehouse", type=Path, default=DEFAULT_WAREHOUSE)
     parser.add_argument("--exports", type=Path, default=DEFAULT_EXPORTS_DIR)
+    parser.add_argument("--ai-commentary", type=Path, default=DEFAULT_AI_COMMENTARY)
     args = parser.parse_args()
     export(args.warehouse, args.exports)
+    copy_ai_commentary(args.ai_commentary, args.exports)
 
 
 if __name__ == "__main__":

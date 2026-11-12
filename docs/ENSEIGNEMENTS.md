@@ -127,3 +127,20 @@ Constat du 12/11/2026, table réelle `eurostat_series` (T4) : dépenses de conso
 - **Données allemandes provisoires** : Eurostat signale comme provisoires toutes les valeurs allemandes de 2022 à 2025. Elles peuvent être révisées.
 - **Comparaison avec le jeu simulé, à périmètre égal** (toutes chaussures, `fact_marche`, segment « Chaussures (total) », TCAM 2022-2025) : +1,9 % pour l'Allemagne et +1,4 % pour la France. Le réel donne une croissance plus forte en Allemagne et une baisse en France : il creuse l'écart entre les deux pays, dans le sens favorable à l'Allemagne.
 - Le KPI « Croissance du secteur » de `kpi_summary` porte sur un autre périmètre : le segment simulé « Casual moulé & sandales » (+3,9 % pour l'Allemagne, +3,0 % pour la France). Eurostat ne publie pas ce segment ; le chiffre réel ci-dessus ne le remplace donc pas tel quel.
+
+## 6. Levier possible : l'origine Vietnam supprime le droit de douane, mais ne suffit pas au payback
+
+Constat du 12/11/2026, vue `impact_origine`, magasin type du business case Allemagne, scénario pessimiste, centre commercial. Droits réels lus dans TARIC le 12/11/2026 ; produits, coûts et ventes simulés (`origine_donnees` = MIXTE).
+
+- **Le droit** : une chaussure du code 6402 99 (dont le sabot en plastique type Classic Clog) paie 16,8 % de droit de douane à l'entrée dans l'UE, sauf si elle est fabriquée au Vietnam : l'accord UE-Vietnam la fait entrer à 0 % (préférence tarifaire, depuis le 01/08/2020).
+- **La part du Vietnam** : dans le catalogue simulé, 75 produits sur 147 sont fabriqués au Vietnam (51 %), dont 41 sur les 87 du code 6402.99. En magasin de centre commercial en 2025, les produits d'origine Vietnam font 50,1 % du CA HT ; ceux du code 6402.99 d'origine Vietnam, 37,3 %.
+
+| Cas | Droit appliqué aux 87 produits du code 6402.99 | Coût débarqué moyen par paire | Taux de marge | EBITDA de croisière | Payback pessimiste |
+|---|---|---|---|---|---|
+| Jeu simulé (business case actuel) | 16,9 % pour tous | 9,24 € | 68,72 % | −3 779 € | Non atteint en 10 ans |
+| Droit réel sans préférence | 16,8 % pour tous | 9,23 € | 68,74 % | −3 681 € | Non atteint en 10 ans |
+| **Préférence Vietnam** | 0 % pour les 41 produits fabriqués au Vietnam, 16,8 % pour les autres | **8,72 €** | **70,34 %** | **+4 136 €** | **Non atteint en 10 ans** |
+
+- **Lecture** : la préférence Vietnam fait gagner 1,6 point de marge et rend l'EBITDA de croisière positif, mais l'investissement n'est toujours pas remboursé en 10 ans. C'est un levier d'appoint, à combiner avec les autres (effectif allégé, CA/m² plus élevé), pas une solution à lui seul.
+- Le premier cas retrouve exactement le business case actuel : la vue ne change que le droit de douane.
+- Limites : seul le code 6402.99, vérifié dans TARIC, est recalculé ; les autres codes du catalogue gardent leur droit simulé. La préférence suppose que l'origine vietnamienne soit prouvée à l'importation. Le code du Classic Clog (6402 99 39) vient de la lecture des libellés de la nomenclature, sans décision de classement officielle trouvée ; les codes voisins ont les mêmes droits.
