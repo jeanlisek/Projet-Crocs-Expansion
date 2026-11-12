@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | T2 | Recalibrer la rentabilité des magasins | ✅ Fait | — | Business case crédible |
 | T7 | Vues KPI + `kpi_summary` | ✅ Fait | T6 (faite) | IA, dashboard |
-| T8 | Business case Allemagne : 3 scénarios + scoring des villes | ✅ Fait (corrections en cours) | T7 | Recommandation |
+| T8 | Business case Allemagne : 3 scénarios + scoring des villes | ✅ Fait | T7 | Recommandation |
 
 ## Pourquoi T2 est urgent
 

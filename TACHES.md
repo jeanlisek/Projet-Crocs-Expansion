@@ -58,7 +58,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | Fait |
-| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (chiffres provisoires : corrections d'Alexis en cours, voir `docs/ENSEIGNEMENTS.md`, section 4) |
+| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (sensibilité du payback, population Destatis et référence France mergées le 12/11/2026 ; voir `docs/ENSEIGNEMENTS.md`, section 4) |
 | T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
 
 ### 5. Restitution
