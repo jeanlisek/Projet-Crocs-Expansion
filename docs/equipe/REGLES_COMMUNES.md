@@ -26,7 +26,7 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 
 | Étape | Commande | Ce qu'elle produit | Où |
 |---|---|---|---|
-| 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV | `data/bronze/*.csv` |
+| 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV. Jeu recalibré par T2 le 12/11/2026 : paramètres des magasins dans `config/hypotheses.yaml`, 3 magasins fermés (`date_fermeture`), zones insulaires signalées (`zone_insulaire`) | `data/bronze/*.csv` |
 | 2. Silver | `make silver` | Les tables de `data/bronze/` et de `data/manual/`, typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
 | 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 23 tables (19 simulées, 4 réelles), 23 clés primaires, 28 relations | `data/gold/warehouse.duckdb` |
 | 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Deux vues à ce jour : `densite_concurrentielle` (T16) et `distance_hub` (T17) | Vues dans `data/gold/warehouse.duckdb` |
@@ -40,7 +40,8 @@ Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `m
 - **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`). Quatre y sont à ce jour : `osm_villes`, `osm_magasins_chaussures` et `destatis_population_villes` (T16), `osrm_distances` (T17). Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion. Tant que son fichier n'existe pas, elle est ignorée avec un message, sans arrêter le pipeline.
 - **Deux dossiers d'entrée** : un fichier collecté par un script va dans `data/bronze/` (non versionné) ; un fichier saisi à la main depuis une source officielle va dans `data/manual/` (versionné) et se déclare avec `directory=MANUAL`. Dans les deux cas, le fichier s'appelle `<nom de la table>.csv`.
 - **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville ou un trajet absent de `data/bronze/`.
-- **Tâches faites** : T1, T5 (squelette, tables réelles à brancher), T6, T16, T17. Le suivi complet est dans `TACHES.md`.
+- **Jeu simulé recalibré (T2)** : le recalibrage a retiré aussi 11 des 19 tables simulées, pas seulement les magasins et les ventes. Relancez `make all` après votre `git pull`. Tout chiffre du jeu v1 recopié dans un document (README, journal de nettoyage, slides) est à recalculer.
+- **Tâches faites** : T1, T2, T5 (squelette, tables réelles à brancher), T6, T16, T17. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
 

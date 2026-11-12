@@ -43,6 +43,8 @@ Une valeur qui ne correspond pas au type attendu (par exemple un prix `49,99 €
 
 Constats de `make silver` sur le jeu v1 (seed 2027), multiplicateur IQR de 1,5. Aucun doublon, aucune valeur nulle inattendue.
 
+> **À recalculer.** Depuis le recalibrage du générateur (T2, 12/11/2026), les nombres de lignes de N-001 à N-009 ne correspondent plus à ce que produit `make silver`. Les décisions et leurs justifications restent valables dans leur principe ; les comptes sont ceux du jeu v1.
+
 | ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
 |---|---|---|---|---|---|---|---|---|
 | N-001 | 12/11/2026 | `fact_ventes_france` | `quantite_vendue` | Quantités mensuelles hors intervalle IQR, calculé par magasin × produit : 3 480 valeurs hautes, 149 basses | 3 629 sur 261 832 (1,39 % des lignes, 1,98 % du CA net HT) | **Conservé** (proposition à valider par l'équipe) | Saisonnalité, pas erreur de saisie. 60,7 % des lignes tombent en novembre-décembre (Black Friday, Noël), dont 1 738 sur des produits au profil « noël ». Les pics de juin-juillet portent sur les produits au profil « été » (363 lignes), ceux de mars à mai sur le profil « printemps » (384 lignes). Les soldes n'expliquent pas ces volumes : dans le générateur, ils n'agissent que sur la remise ; les 309 pics de juillet sont des pics d'été et janvier n'en compte que 4. Les valeurs basses se concentrent en janvier-février sur les produits au profil « plat » (78 lignes). Supprimer ces lignes effacerait la saisonnalité, qui est l'information métier | Aucune |
