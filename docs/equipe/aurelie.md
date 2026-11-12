@@ -67,8 +67,9 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 | `sensibilite_payback.csv` | Payback du magasin type (scénario pessimiste, centre commercial) selon le nombre d'ETP et le CA/m² : grille pour une carte de chaleur | 1 519 |
 | `eurostat_series.csv` | Séries annuelles Eurostat par pays et indicateur (dépenses en chaussures, prix, population, chômage...), réelles | 463 |
 | `crocs_produits.csv` | Prix relevés sur crocs.fr et crocs.de, par modèle et coloris, le 12/11/2026, réels | 577 |
+| `ai_commentary.csv` | Commentaires générés par IA, un par page et valeur de filtre, avec la synthèse Comex | 23 |
 
-`ai_commentary.csv` (T9) apparaîtra dans le même dossier dès que la tâche sera mergée : `make exports` le copie tel quel depuis `data/gold/ai_commentary.csv`. Il n'y est pas encore.
+`ai_commentary.csv` (T9) contient 23 textes : la synthèse Comex (`page` = « Synthèse Comex »), un commentaire par pays (« Marché & prix »), par ville allemande (« Où s'implanter ») et par scénario (« Business case »). `make exports` le copie tel quel depuis `data/gold/ai_commentary.csv`. La colonne `verifie` vaut `true` quand chaque chiffre du texte a été retrouvé dans les données par le garde-fou de T9 : n'afficher que ces textes.
 
 ### Format des fichiers
 

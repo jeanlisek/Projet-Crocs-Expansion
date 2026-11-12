@@ -366,6 +366,7 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 | `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires, les 23 relations du modèle en constellation (section 3.2) et les 7 relations des tables réelles |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
-| `make exports` | Écrit en CSV UTF-8, dans `data/gold/exports/` (versionné), les tables et vues lues par le dashboard (17 fichiers). `data/gold/ai_commentary.csv` (T9) y est copié tel quel dès qu'il existe ; d'ici là, la cible le saute sans erreur |
+| `make exports` | Écrit en CSV UTF-8, dans `data/gold/exports/` (versionné), les tables et vues lues par le dashboard, et y copie `data/gold/ai_commentary.csv` (T9) : 18 fichiers |
+| `make ai` | Régénère les commentaires IA (`data/gold/ai_commentary.csv`) avec le modèle de langage, puis les exports. Il faut la clé dans `.env` (voir `.env.example`) et le réseau : la cible ne fait pas partie de `make all` |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
 | `make format` | Reformate `src/` et `tests/` avec `black` |
