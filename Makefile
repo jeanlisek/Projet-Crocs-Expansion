@@ -55,8 +55,8 @@ exports:
 # T9: generates the AI commentary with the language model, then rewrites the exports. Needs
 # the key in .env and the network: like `collect`, it is not part of `all`. Run it after `all`.
 ai:
-	$(PYTHON) -m src.ai.commentary --warehouse $(WAREHOUSE)
-	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR)
+	$(PYTHON) -m src.ai.commentary --warehouse $(WAREHOUSE) --out $(AI_COMMENTARY)
+	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR) --ai-commentary $(AI_COMMENTARY)
 
 format:
 	$(PYTHON) -m black $(CODE_DIRS)

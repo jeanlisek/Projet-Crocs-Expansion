@@ -182,7 +182,8 @@ def test_a_missing_payback_is_said_not_reached(warehouse):
 def test_the_synthesis_counts_the_verdicts(warehouse):
     synthesis = requests_of(warehouse)[0]
     assert synthesis.template == "synthese.md"
-    assert synthesis.lines[-2] == "- Verdicts des KPI à seuil : 1 GO, 1 NO-GO"
+    # Searched, not indexed: the lines of the team decision, when there is one, come after.
+    assert "- Verdicts des KPI à seuil : 1 GO, 1 NO-GO" in synthesis.lines
 
 
 def test_the_synthesis_reads_the_team_decision_and_never_takes_it(warehouse):
