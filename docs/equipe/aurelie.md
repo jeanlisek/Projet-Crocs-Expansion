@@ -14,6 +14,12 @@
 
 > **Contrat `kpi_summary` mis à jour le 12/11/2026** : il a gagné la colonne `origine_donnees` (REEL, SIMULE ou MIXTE), décrite dans `REGLES_COMMUNES.md` (« Contrat entre les tâches »). Elle te sert à afficher la mention « données simulées » là où c'est le cas.
 
+> **Mentions obligatoires**, à afficher sur le dashboard et sur la slide des sources :
+>
+> - dès qu'un visuel utilise les magasins de chaussures OpenStreetMap (densité concurrentielle) : « Données © les contributeurs d’OpenStreetMap, licence ODbL » ;
+> - dès qu'un visuel utilise la population des villes allemandes (densité concurrentielle) : « Population : © Statistisches Bundesamt (Destatis), 2025, reproduction autorisée avec mention de la source » ;
+> - dès qu'un visuel utilise les distances routières : « Itinéraires : OSRM, données © les contributeurs d’OpenStreetMap, licence ODbL ».
+
 ## Le dashboard
 
 Du général au détail, au plus 7 visuels par page :

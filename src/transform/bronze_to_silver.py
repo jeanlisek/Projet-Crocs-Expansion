@@ -400,17 +400,104 @@ SIMULATED_TABLES: dict[str, TableSpec] = {
 # --------------------------------------------------------------------------------------
 # Real tables: collected by src/collect/ into data/bronze/, or typed in by hand in data/manual/
 # --------------------------------------------------------------------------------------
-# Nothing is registered yet. File names and columns are only known once the collectors
-# have run: they are not guessed here. To plug a real table in, add a TableSpec with
+# File names and columns are only known once a collector has run: they are not guessed
+# here. A real table is optional: while its file does not exist, it is skipped by the
+# pipeline and the simulated tables are used alone. To plug a real table in, add a TableSpec with
 # simulated=False and `source` set to the URL of the dated bronze file (or a `source`
 # column in the file itself), then log its anomalies in docs/JOURNAL_NETTOYAGE.md.
 # A table typed in by hand is declared the same way, with directory=MANUAL: its file is
 # then read from data/manual/ instead of data/bronze/.
 # A CSV file without a TableSpec is listed as ignored at the end of the run.
 REAL_TABLES: dict[str, TableSpec] = {
+    # T16: OpenStreetMap, collected by src/collect/osm.py (`make collect`). Both files carry
+    # their own `source` column. Data © OpenStreetMap contributors, ODbL.
+    "osm_villes": TableSpec(
+        columns={
+            "id_zone": STR,
+            "ville": STR,
+            "osm_relation_id": INT,
+            "nom_osm": STR,
+            "niveau_administratif": INT,
+            "code_communal": STR,
+            "population_osm": INT,
+            "annee_population_osm": INT,
+            "tag_annee_population_osm": STR,
+            "source_population_osm": STR,
+            "nb_magasins_chaussures": INT,
+            "nb_magasins_avec_enseigne": INT,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("id_zone",),
+        # The population tags are optional in OSM and missing for most cities: the density
+        # uses the official Destatis population, the OSM figure is kept for comparison.
+        expected_nulls=(
+            "population_osm",
+            "annee_population_osm",
+            "tag_annee_population_osm",
+            "source_population_osm",
+        ),
+        simulated=False,
+    ),
+    "osm_magasins_chaussures": TableSpec(
+        columns={
+            "id_zone": STR,
+            "osm_type": STR,
+            "osm_id": INT,
+            "nom": STR,
+            "enseigne": STR,
+            "latitude": FLOAT,
+            "longitude": FLOAT,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("osm_type", "osm_id"),
+        # `name` and `brand` are optional OSM tags: a shop without them is still a shop.
+        expected_nulls=("nom", "enseigne"),
+        simulated=False,
+    ),
+    # T16: official population of the target cities, extracted by src/collect/destatis.py
+    # from the Destatis workbook saved in data/bronze/.
+    "destatis_population_villes": TableSpec(
+        columns={
+            "id_zone": STR,
+            "ville": STR,
+            "code_communal": STR,
+            "cle_regionale": STR,
+            "nom_destatis": STR,
+            "population": INT,
+            "date_reference": DATE,
+            "source_url": STR,
+            "date_consultation": DATE,
+            "source": STR,
+        },
+        primary_key=("id_zone",),
+        simulated=False,
+    ),
+    # T17: road distance and driving time from each hub to each target city, collected by
+    # src/collect/osrm.py (OSRM public server; Nominatim for the towns of the hubs).
+    "osrm_distances": TableSpec(
+        columns={
+            "id_hub": STR,
+            "id_zone": STR,
+            "commune_hub": STR,
+            "ville": STR,
+            "latitude_hub": FLOAT,
+            "longitude_hub": FLOAT,
+            "latitude_ville": FLOAT,
+            "longitude_ville": FLOAT,
+            "distance_route_km": FLOAT,
+            "duree_h": FLOAT,
+            "ecart_route_hub_m": INT,
+            "ecart_route_ville_m": INT,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("id_hub", "id_zone"),
+        simulated=False,
+    ),
     # TODO T3: Crocs prices scraped on crocs.fr and crocs.de (src/collect/scrape_crocs.py).
     # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
-    # TODO T16 / T17: OpenStreetMap shops and OSRM road distances (src/collect/).
     # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }
@@ -570,8 +657,11 @@ def run(
     for name, spec in tables.items():
         path = input_dirs[spec.directory] / f"{name}.csv"
         if not path.exists():
-            hint = "run `make simulate` first" if spec.simulated else "the file was not collected"
-            raise FileNotFoundError(f"{path} is missing: {hint}")
+            if spec.simulated:
+                raise FileNotFoundError(f"{path} is missing: run `make simulate` first")
+            # A real table is optional: it only exists once it has been collected or typed in.
+            print(f"{name:32s} absente : {path} n'existe pas encore (table réelle)")
+            continue
         raw = apply_corrections(name, load_raw(path), STAGE_RAW)
         typed = cast_table(name, raw, spec)
         table_findings = check_table(name, typed, spec, iqr_multiplier)

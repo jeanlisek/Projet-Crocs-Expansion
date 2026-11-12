@@ -89,9 +89,9 @@ Chaque chiffre de l'étude porte l'un des quatre statuts du référentiel analyt
 | Marché | Part de marché d'un concurrent en Allemagne | Idem, filtré sur le concurrent (Birkenstock, Deichmann…) | `fact_parts_de_marche` | CALCUL |
 | Prix | Indice prix relatif | Moyenne, sur un panier identique de SKU hors promotion, de (prix HT DE ÷ prix HT FR) × 100 | `fact_prix_releves`, `fact_fiscalite` | CALCUL |
 | Prix | Marge brute post-taxe | (prix TTC local ÷ (1 + TVA) − coût débarqué − transport unitaire) ÷ prix HT | `dim_produit`, `fact_logistique`, `fact_fiscalite` | CALCUL |
-| Réseau | Densité concurrentielle | Points de vente concurrents ÷ 100 000 habitants de la zone de chalandise | `dim_zone_chalandise` | CALCUL |
+| Réseau | Densité concurrentielle | Magasins de chaussures toutes enseignes (OpenStreetMap, `shop=shoes`) pour 100 000 habitants, population officielle Destatis au 31/12/2024 | `osm_villes`, `destatis_population_villes` | CALCUL |
 | Réseau | Coût moyen au m² | Loyer + charges, en €/m²/an, par ville et par format | `fact_immobilier` | CALCUL |
-| Logistique | Distance moyenne aux hubs | Moyenne, sur les villes cibles, de la distance au hub **le plus proche** | `fact_logistique` | CALCUL |
+| Logistique | Distance moyenne aux hubs | Moyenne, sur les 12 villes allemandes, de la distance routière réelle (OSRM) au hub **le plus proche** | `osrm_distances` | CALCUL |
 | Logistique | Droits & taxes locales | TVA, impôt sur les sociétés, droits d'import, éco-contribution | `fact_fiscalite` | FAIT (à vérifier) |
 | Assortiment | Pénétration des catégories | Part des consommateurs ayant acheté la catégorie | `fact_penetration_categories` | CALCUL |
 | Assortiment | % du catalogue éligible | SKU éligibles ÷ 147 | `fact_eligibilite_assortiment` | CALCUL |
@@ -198,15 +198,31 @@ erDiagram
 | Prix Crocs France et Allemagne | crocs.fr, crocs.de | Scraping | **Réel** | T3 | Seule source de prix SKU par SKU |
 | Part du catalogue France présente sur crocs.de, par catégorie | crocs.fr, crocs.de | Scraping | **Réel** | T3 | Mesure l'assortiment réellement vendu en Allemagne |
 | Magasins de chaussures par ville allemande (`shop=shoes`, `brand`), densité pour 100 000 habitants | OpenStreetMap (API Overpass) | API | **Réel** | T16 | Ouvert, toutes enseignes |
-| Coordonnées des hubs et des villes cibles, distances routières | OpenStreetMap (OSRM, serveur public) | API | **Réel** | T17 | Distances par la route, pas à vol d'oiseau |
+| Population des 12 villes allemandes au 31/12/2024 | Destatis, Gemeindeverzeichnis (classeur officiel conservé dans `data/bronze/`) | Fichier officiel | **Réel** | T16 | Officielle, même date de référence pour toutes les villes |
+| Distance routière et temps de conduite des 3 hubs vers les 12 villes allemandes | OSRM (serveur public) pour les trajets, Nominatim pour les communes des hubs | API | **Réel** | T17 | Distances par la route, pas à vol d'oiseau |
 | TVA standard, TVA réduite chaussures enfant, impôt sur les sociétés, droit de douane UE (chapitre 64) | Commission européenne (Taxes in Europe, TARIC), URL et date dans `data/manual/taxes_reference.csv` | Saisie manuelle sourcée | **Réel** | T18 | Référence légale |
 | Loyers prime par ville | Calibrés sur Cushman & Wakefield | Simulé calibré | Simulé | — | Pas de source ouverte au détail |
 | Tailles et parts de marché par marque | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | — | Sources payantes |
 | Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | — | Données internes inaccessibles |
 
-**État au 12/11/2026 : aucune source réelle n'est encore collectée.** Les lignes « Réel » décrivent ce que les tâches T3, T4, T16, T17 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
+**État au 12/11/2026 : les sources de T16 et de T17 sont collectées** (magasins OpenStreetMap, population Destatis et distances routières OSRM, pour les 12 villes allemandes). Les autres lignes « Réel » décrivent ce que les tâches T3, T4 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
+
+**Mentions obligatoires**, à afficher sur le dashboard et sur la slide des sources :
+
+- pour les magasins de chaussures OpenStreetMap (T16) : « Données © les contributeurs d’OpenStreetMap, licence ODbL » ;
+- pour la population des villes allemandes (T16) : « Population : © Statistisches Bundesamt (Destatis), 2025, reproduction autorisée avec mention de la source » ;
+- pour les distances routières (T17) : « Itinéraires : OSRM, données © les contributeurs d’OpenStreetMap, licence ODbL ».
 
 Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signalé comme simulé dans le dashboard et les slides.
+
+### 3.4 Limites des données réelles
+
+- **Exhaustivité d'OpenStreetMap non garantie.** La carte est renseignée par des contributeurs bénévoles : un magasin absent de la carte n'est pas compté. Les nombres de magasins sont donc probablement des minimums.
+- **Tag `brand` incomplet.** Sur les 992 magasins de chaussures relevés dans les 12 villes allemandes, 418 portent une enseigne (42 %). Une analyse par enseigne sous-estime la présence des concurrents ; la densité concurrentielle, elle, compte tous les magasins.
+- **Durée OSRM : un temps de conduite, pas un délai de livraison.** `duree_h` est le temps de trajet d'une voiture, sans pause, sans chargement et sans les règles de conduite des poids lourds. Le délai de livraison reste celui du jeu simulé.
+- **Points de départ et d'arrivée.** Chaque hub est placé au centre de sa commune, son adresse exacte étant une hypothèse du scénario. Chaque ville est placée au point médian de ses magasins de chaussures, c'est-à-dire dans son centre commerçant.
+- **Dates différentes.** Les magasins sont relevés le 12/11/2026, la population est celle du 31/12/2024 (dernière publiée par Destatis, sur la base du recensement de 2022).
+- **Une autre mesure que le jeu simulé.** La densité réelle compte tous les magasins de chaussures, toutes enseignes confondues, alors que la colonne simulée comptait les points de vente de neuf concurrents nommés. Les deux chiffres ne se comparent pas terme à terme.
 
 ---
 
@@ -294,6 +310,7 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 | Commande | Rôle |
 |---|---|
 | `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold puis vues KPI ; chaque tâche y ajoute son étape (collecte, commentaires IA, exports) |
+| `make collect` | Reconstruit les tables réelles de T16 et T17 (magasins OpenStreetMap, population Destatis, distances OSRM). Les réponses brutes sont versionnées dans `data/bronze/` : la cible n'appelle le réseau que pour une ville ou un trajet qui n'y est pas encore. Elle ne fait pas partie de `make all` |
 | `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |

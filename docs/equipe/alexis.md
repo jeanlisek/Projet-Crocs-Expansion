@@ -37,10 +37,17 @@ Consignes techniques :
 - L'ordre des fichiers est libre : une vue qui en lit une autre est retentée après les autres.
 - Une erreur SQL arrête `make kpi` en nommant le fichier fautif.
 - Pour tester : `make gold && make kpi`.
+- Deux vues existent déjà, sur données réelles, et servent de modèle : `sql/kpi/densite_concurrentielle.sql` (T16) et `sql/kpi/distance_hub.sql` (T17), chacune avec son test dans `tests/`. Reprends-les telles quelles pour alimenter `kpi_summary`.
+- La distance au hub réelle est disponible : la vue `distance_hub` donne, pour chacune des 12 villes allemandes, le hub le plus proche par la route, la distance routière et l'écart avec le jeu simulé. Le KPI « Distance moyenne aux hubs » est la moyenne de `distance_reelle_km`.
 
 Réel ou simulé : pour l'indice prix, le % du catalogue éligible, la densité concurrentielle et la distance au hub, la table réelle est prioritaire quand elle existe dans l'entrepôt ; sinon, utilise la simulée. Dans `kpi_summary`, `origine_donnees` indique d'où viennent les entrées (REEL, SIMULE ou MIXTE) et `statut_epistemique` reste conforme au README (section 2.3). Quand les deux tables existent, ajoute une ligne de comparaison réel / simulé.
 
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T7 sur `feature/T7-kpi`, créée depuis ce `develop` à jour. Écris une vue SQL par KPI du README (section 2.3), une vue par fichier dans `sql/kpi/`, exécutée par `make kpi`, avec les règles de gestion de la section 2.5. Construis `kpi_summary` avec les colonnes exactes de `docs/equipe/REGLES_COMMUNES.md` (« Contrat entre les tâches »), pour tous les pays, avec les seuils de `config/hypotheses.yaml`. Un test par KPI sur un petit jeu calculé à la main.
 
 **T8**
+
+La vue `densite_concurrentielle` donne la densité réelle des 12 villes : à intégrer dans `city_scoring`.
+
+La distance au hub réelle est disponible elle aussi : la vue `distance_hub` donne le hub le plus proche et la distance routière de chaque ville, à intégrer dans `city_scoring`. Sa colonne `duree_conduite_h` est un temps de conduite en voiture, pas un délai de livraison.
+
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T8 sur `feature/T8-business-case`, créée depuis ce `develop` à jour. Compte de résultat d'un magasin type en Allemagne : loyer + charges, personnel, énergie, marketing de lancement, logistique, démarque, frais bancaires, frais de siège, amortissement. Trois scénarios de montée en charge (pessimiste, central, optimiste), hypothèses dans `config/hypotheses.yaml`. Vues `business_case` (payback, point mort, coût d'occupation par scénario et format) et `city_scoring` (score des villes allemandes : potentiel, loyer, densité concurrentielle, distance au hub). Ajoute les KPIs de rentabilité à `kpi_summary`.
