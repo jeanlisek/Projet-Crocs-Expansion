@@ -240,7 +240,10 @@ FIELDS = {
         "population_ville_millions": "Population de la ville (millions d'habitants)",
         "population_zone_chalandise_millions": "Population de la zone de chalandise (millions)",
         "indice_revenu_ue100": "Indice de revenu de la zone (UE = 100)",
-        "indice_frequentation_commerce": f"Indice de fréquentation commerciale ({TODO} : échelle)",
+        # generate_data.py, section 9: min(100, 40 + 9 × population + N(0, 6)).
+        "indice_frequentation_commerce": "Indice de fréquentation commerciale, sans unité, "
+        "plafonné à 100 : 40 + 9 × population_ville_millions, plus un aléa d'écart-type 6 "
+        "(pas une mesure observée)",
         "nb_centres_commerciaux": "Nombre de centres commerciaux de la zone",
         "part_touristes_pct": "Part des touristes dans la fréquentation (%)",
         "climat_temperature_moy_ete": "Température moyenne en été (°C)",

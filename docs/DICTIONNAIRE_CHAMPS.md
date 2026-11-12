@@ -141,7 +141,7 @@ Villes cibles des pays candidats (53 villes). Table simulée, 53 lignes. Grain :
 | `population_ville_millions` | Décimal | Population de la ville (millions d'habitants) | — | 3.75 | Simulé : generate_data.py (seed 2027) |
 | `population_zone_chalandise_millions` | Décimal | Population de la zone de chalandise (millions) | — | 9.35 | Simulé : generate_data.py (seed 2027) |
 | `indice_revenu_ue100` | Entier | Indice de revenu de la zone (UE = 100) | — | 116 | Simulé : generate_data.py (seed 2027) |
-| `indice_frequentation_commerce` | Décimal | Indice de fréquentation commerciale (TODO : échelle) | — | 70.7 | Simulé : generate_data.py (seed 2027) |
+| `indice_frequentation_commerce` | Décimal | Indice de fréquentation commerciale, sans unité, plafonné à 100 : 40 + 9 × population_ville_millions, plus un aléa d'écart-type 6 (pas une mesure observée) | — | 70.7 | Simulé : generate_data.py (seed 2027) |
 | `nb_centres_commerciaux` | Entier | Nombre de centres commerciaux de la zone | — | 19 | Simulé : generate_data.py (seed 2027) |
 | `part_touristes_pct` | Décimal | Part des touristes dans la fréquentation (%) | — | 3.5 | Simulé : generate_data.py (seed 2027) |
 | `climat_temperature_moy_ete` | Décimal | Température moyenne en été (°C) | — | 21.8 | Simulé : generate_data.py (seed 2027) |
