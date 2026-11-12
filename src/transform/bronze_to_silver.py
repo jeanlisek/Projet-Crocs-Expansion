@@ -177,9 +177,12 @@ SIMULATED_TABLES: dict[str, TableSpec] = {
             "id_hub_rattachement": STR,
             "distance_hub_km": FLOAT,
             "statut": STR,
+            "date_fermeture": DATE,
             "canal": STR,
         },
         primary_key=("id_magasin",),
+        # T2 : vide pour les magasins ouverts (seuls quelques magasins ont fermé)
+        expected_nulls=("date_fermeture",),
         outlier_checks={
             "surface_vente_m2": ("type_emplacement",),
             "loyer_annuel_eur": ("type_emplacement",),
@@ -216,6 +219,7 @@ SIMULATED_TABLES: dict[str, TableSpec] = {
             "climat_temperature_moy_ete": FLOAT,
             "nb_points_vente_concurrents": INT,
             "densite_concurrentielle_pour_100k_hab": FLOAT,
+            "zone_insulaire": BOOL,
         },
         primary_key=("id_zone",),
     ),
