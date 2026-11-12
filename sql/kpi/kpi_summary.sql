@@ -29,6 +29,12 @@ lignes AS (
         'CALCUL' AS statut_epistemique, k.origine_donnees
     FROM kpi_croissance_secteur AS k JOIN reference AS r USING (code_pays), s
     UNION ALL
+    -- Confirmation sur données réelles (Eurostat) : autre périmètre, ligne INFO sans seuil
+    SELECT 'Croissance des dépenses des ménages en chaussures (Eurostat, TCAM ' || k.annee_debut || '-'
+            || k.annee_fin || ', toutes chaussures, en valeur, inflation comprise)',
+        'Marché', k.code_pays, k.tcam_pct, '%', NULL, 'INFO', 'CALCUL', k.origine_donnees
+    FROM kpi_croissance_depenses_chaussures AS k
+    UNION ALL
     SELECT 'Part de marché ' || k.nom_concurrent, 'Marché', k.code_pays, k.part_marche_pct, '%',
         NULL, 'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_part_de_marche AS k

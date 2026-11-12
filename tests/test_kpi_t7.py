@@ -469,6 +469,8 @@ def summary(silver, tmp_path_factory):
             date_reference DATE);
         CREATE TABLE osrm_distances (id_hub VARCHAR, id_zone VARCHAR, commune_hub VARCHAR,
             ville VARCHAR, distance_route_km DOUBLE, duree_h DOUBLE);
+        CREATE TABLE eurostat_series (code_pays VARCHAR, indicateur VARCHAR, annee INTEGER,
+            valeur DOUBLE, statut_eurostat VARCHAR, est_simule BOOLEAN);
         """)
     con.execute(CROCS_PRICES + CROCS_CATALOGUE)
     con.close()
