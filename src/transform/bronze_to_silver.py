@@ -543,7 +543,50 @@ REAL_TABLES: dict[str, TableSpec] = {
         outlier_checks={"prix_affiche": ("categorie",)},
         simulated=False,
     ),
-    # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
+    # T4: Eurostat dissemination API, collected by src/collect/eurostat.py (`make collect`).
+    # One row per country and indicator (latest year published); the dataset code and the
+    # filter of each row say exactly which Eurostat series it comes from.
+    "eurostat_pays": TableSpec(
+        columns={
+            "code_pays": STR,
+            "indicateur": STR,
+            "libelle_eurostat": STR,
+            "jeu_donnees": STR,
+            "filtre": STR,
+            "annee": INT,
+            "valeur": FLOAT,
+            "unite": STR,
+            "statut_eurostat": STR,
+            "note": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("code_pays", "indicateur"),
+        # No value when Eurostat publishes none for a country (TODO in `note`); no flag when
+        # the value is final; no note when there is a value.
+        expected_nulls=("annee", "valeur", "statut_eurostat", "note"),
+        simulated=False,
+    ),
+    # T4, same raw answers: every year published since `annee_depuis`, for growth rates (the
+    # sector growth KPI is a CAGR). A year Eurostat does not publish has no row.
+    "eurostat_series": TableSpec(
+        columns={
+            "code_pays": STR,
+            "indicateur": STR,
+            "annee": INT,
+            "valeur": FLOAT,
+            "unite": STR,
+            "statut_eurostat": STR,
+            "jeu_donnees": STR,
+            "filtre": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("code_pays", "indicateur", "annee"),
+        # No flag when the value is final.
+        expected_nulls=("statut_eurostat",),
+        simulated=False,
+    ),
     # T18: tax reference typed in by hand from the official sources (Commission européenne
     # TEDB and TARIC, OECD, national texts), one row per country. The URLs of each row are in
     # its `source_url` column, separated by a semicolon; `note` says what each rate covers.

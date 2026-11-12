@@ -2,7 +2,7 @@
 
 > Généré par `python -m src.collect.dictionnaire` à partir de l'entrepôt `data/gold/warehouse.duckdb` : ne pas modifier à la main, relancer le script. Types et exemples lus dans les données ; descriptions et sources tirées de `docs/DICTIONNAIRE_DONNEES.md`, du README et des scripts ; chaque formule est vérifiée sur les données. `TODO` = information manquante.
 
-28 tables et 24 vues. Une table simulée porte `est_simule` = vrai sur toutes ses lignes ; « Source » donne alors la source publique sur laquelle la simulation est calibrée.
+30 tables et 24 vues. Une table simulée porte `est_simule` = vrai sur toutes ses lignes ; « Source » donne alors la source publique sur laquelle la simulation est calibrée.
 
 ## Dimensions
 
@@ -502,6 +502,44 @@ Référentiel des taxes par pays : TVA, impôt sur les sociétés, droit de doua
 | `date_consultation` | Date | Jour où les pages ont été lues | — | 2026-11-12 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
 | `note` | Texte | Ce que couvre chaque taux et pourquoi une cellule est vide | — | TVA : TEDB (Commission européenne), recherche sur le code N… | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
 | `source` | Texte | Origine de la ligne : script et source, ou générateur pour une ligne simulée | — | Saisie manuelle depuis les sources officielles, URL par lig… | Pipeline : bronze_to_silver.py |
+| `est_simule` | Booléen | Vrai pour une donnée simulée, faux pour une donnée réelle | — | False | Pipeline : bronze_to_silver.py |
+
+### `eurostat_pays`
+
+Indicateurs pays Eurostat : une ligne par pays et indicateur (dernière année publiée). Table réelle, 77 lignes. Grain : `code_pays, indicateur`.
+
+| Champ | Type | Description | Formule | Exemple | Source |
+|---|---|---|---|---|---|
+| `code_pays` | Texte | Code pays ISO 3166-1 alpha-2 (FR, DE, ES, IT, BE, NL, GB) | — | BE | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `indicateur` | Texte | Nom de l'indicateur | — | commerce_chaussures_ca_meur | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `libelle_eurostat` | Texte | Libellés Eurostat des codes du filtre | — | Retail sale of footwear and leather goods in specialised st… | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `jeu_donnees` | Texte | Code du jeu de données Eurostat | — | sbs_ovw_act | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `filtre` | Texte | Codes des dimensions retenues (dimension=code) | — | nace_r2=G4772;indic_sbs=NETTUR_MEUR | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `annee` | Entier | Dernière année publiée, vide si aucune | — | 2024 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `valeur` | Décimal | Valeur publiée, vide si Eurostat n'en publie pas | — | 1378 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `unite` | Texte | Unité de la valeur | — | millions d'euros | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `statut_eurostat` | Texte | Statut Eurostat (p provisoire, e estimé, d définition différente) | — | p | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `note` | Texte | TODO quand Eurostat ne publie pas la série pour le pays | — | TODO : aucune valeur publiée par Eurostat depuis 2018 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `date_collecte` | Date | Jour de la collecte | — | 2026-11-12 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `source` | Texte | Origine de la ligne : script et source, ou générateur pour une ligne simulée | — | Eurostat, jeu sbs_ovw_act (https://ec.europa.eu/eurostat/ap… | Pipeline : bronze_to_silver.py |
+| `est_simule` | Booléen | Vrai pour une donnée simulée, faux pour une donnée réelle | — | False | Pipeline : bronze_to_silver.py |
+
+### `eurostat_series`
+
+Séries annuelles Eurostat : une ligne par pays, indicateur et année publiée depuis annee_depuis, pour les taux de croissance. Table réelle, 463 lignes. Grain : `code_pays, indicateur, annee`.
+
+| Champ | Type | Description | Formule | Exemple | Source |
+|---|---|---|---|---|---|
+| `code_pays` | Texte | Code pays ISO 3166-1 alpha-2 (FR, DE, ES, IT, BE, NL, GB) | — | BE | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `indicateur` | Texte | Nom de l'indicateur | — | commerce_chaussures_ca_meur | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `annee` | Entier | Année de la valeur | — | 2021 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `valeur` | Décimal | Valeur publiée par Eurostat pour l'année | — | 1356.38 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `unite` | Texte | Unité de la valeur | — | millions d'euros | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `statut_eurostat` | Texte | Statut Eurostat de la valeur (p provisoire, b rupture de série, d définition différente) ; vide si la valeur est définitive | — | p | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `jeu_donnees` | Texte | Code du jeu de données Eurostat | — | sbs_ovw_act | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `filtre` | Texte | Codes des dimensions retenues (dimension=code) | — | nace_r2=G4772;indic_sbs=NETTUR_MEUR | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `date_collecte` | Date | Jour de la collecte | — | 2026-11-12 | API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne |
+| `source` | Texte | Origine de la ligne : script et source, ou générateur pour une ligne simulée | — | Eurostat, jeu sbs_ovw_act (https://ec.europa.eu/eurostat/ap… | Pipeline : bronze_to_silver.py |
 | `est_simule` | Booléen | Vrai pour une donnée simulée, faux pour une donnée réelle | — | False | Pipeline : bronze_to_silver.py |
 
 ## Paramètres des KPI

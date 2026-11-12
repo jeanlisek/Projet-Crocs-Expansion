@@ -72,11 +72,9 @@ Aucun doublon. Les 304 valeurs nulles de `prix_barre` (sur 577 lignes) sont atte
 
 #### 2.2 Indicateurs pays Eurostat (API, T4)
 
-_TODO T4 : aucun fichier collecté à ce jour._
+Fichiers : `data/bronze/eurostat_<jeu de données>_2026-11-12.json` (une réponse brute par jeu : `nama_10_cp18`, `prc_hicp_ainr`, `prc_ppp_ind_1`, `sbs_ovw_act`, `tec00114`, `tps00001`, `une_rt_a`), `eurostat_pays.csv` et `eurostat_series.csv`. Source : API de diffusion Eurostat, <https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/>, © Union européenne. Le code du jeu et le filtre de chaque série sont dans les colonnes `jeu_donnees` et `filtre`.
 
-| ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
-|---|---|---|---|---|---|---|---|---|
-| _N-…_ | | | | | | | | |
+Aucun doublon, aucun constat à examiner dans le rapport de contrôles. Les valeurs nulles sont attendues : une série qu'Eurostat ne publie pas pour un pays (le Royaume-Uni : aucune valeur publiée depuis 2018, première année collectée) porte un TODO dans `note`, sans valeur imputée. Une valeur provisoire, une rupture de série ou une définition différente est signalée par `statut_eurostat` (`p`, `b`, `d`) et conservée telle quelle : aucune correction.
 
 #### 2.3 Magasins de chaussures OpenStreetMap (API Overpass, T16)
 
