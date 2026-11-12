@@ -1,7 +1,7 @@
 # Journal de nettoyage (bronze → silver)
 
 > **État au 12/11/2026.** Les 10 constats du rapport de contrôles sur le jeu simulé, recalibré par T2, sont consignés ci-dessous. Chaque décision est une **proposition à valider par l'équipe**. Aucune correction n'est appliquée : le jeu v1 est écrit en silver tel quel.
-> Les données réelles de T16 (OpenStreetMap, Destatis) et de T17 (OSRM) sont consignées en section 2. Les sections de T3 et T4 restent à ouvrir.
+> Les données réelles de T3 (prix Crocs), de T16 (OpenStreetMap, Destatis) et de T17 (OSRM) sont consignées en section 2. La section de T4 reste à ouvrir.
 
 ## Principe
 
@@ -62,11 +62,13 @@ Sections à ouvrir quand les fichiers datés existent dans `data/bronze/`. Pour 
 
 #### 2.1 Prix Crocs France et Allemagne (scraping, T3)
 
-_TODO T3 : aucun fichier collecté à ce jour._
+Fichiers : `data/bronze/crocs_liste_<site>_<catégorie>_2026-11-12.json` (6 listes de catégorie), `crocs_<site>_<code modèle>_2026-11-12.json` (44 pages produit : 21 pour la France, 23 pour l'Allemagne), `crocs_catalogue.csv` et `crocs_produits.csv`. Sources : <https://www.crocs.fr> et <https://www.crocs.de>, pages publiques de catégorie et de produit, relevé du 12/11/2026.
+
+Aucun doublon. Les 304 valeurs nulles de `prix_barre` (sur 577 lignes) sont attendues : un coloris qui n'est pas en promotion n'a pas de prix barré.
 
 | ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
 |---|---|---|---|---|---|---|---|---|
-| _N-…_ | | | | | | | | |
+| N-016 | 12/11/2026 | `crocs_produits` | `prix_affiche` | Prix au-dessus de la borne haute de l'intervalle IQR (49,49 €), calculé par catégorie ; aucun prix sous la borne basse | 6 sur 577 | **Conservé** (proposition à valider par l'équipe) | Un seul modèle : Brooklyn Buckle Low Wedge Sandal (code 207431), à 59,99 € dans 3 coloris (Chalk, Deep Navy, Pink Caramel), relevés à l'identique sur crocs.fr et crocs.de. 59,99 € est le prix hors promotion du modèle : ses 3 autres coloris sont affichés à 35,99 € avec un prix barré de 59,99 €. C'est le prix le plus élevé de la catégorie Sandales (66 lignes, de 20,99 € à 59,99 €), où 30 lignes sont en promotion, ce qui abaisse la borne haute. Ces 6 coloris ne sont pas disponibles à la commande (`disponible = False`) : ils ne font pas partie des 128 paires FR/DE et n'entrent pas dans l'indice prix. Vrais prix affichés, non corrigés | Aucune |
 
 #### 2.2 Indicateurs pays Eurostat (API, T4)
 

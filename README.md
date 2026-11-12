@@ -205,7 +205,7 @@ erDiagram
 | Tailles et parts de marché par marque | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | — | Sources payantes |
 | Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | — | Données internes inaccessibles |
 
-**État au 12/11/2026 : les sources de T16 et de T17 sont collectées** (magasins OpenStreetMap, population Destatis et distances routières OSRM, pour les 12 villes allemandes). Les autres lignes « Réel » décrivent ce que les tâches T3, T4 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
+**État au 12/11/2026 : les sources de T3, de T16 et de T17 sont collectées** (prix et catalogue de crocs.fr et crocs.de ; magasins OpenStreetMap, population Destatis et distances routières OSRM, pour les 12 villes allemandes). Les autres lignes « Réel » décrivent ce que les tâches T4 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
 
 **Mentions obligatoires**, à afficher sur le dashboard et sur la slide des sources :
 
@@ -310,7 +310,7 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 | Commande | Rôle |
 |---|---|
 | `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold, vues KPI puis exports ; chaque tâche y ajoute son étape (collecte, commentaires IA) |
-| `make collect` | Reconstruit les tables réelles de T16 et T17 (magasins OpenStreetMap, population Destatis, distances OSRM). Les réponses brutes sont versionnées dans `data/bronze/` : la cible n'appelle le réseau que pour une ville ou un trajet qui n'y est pas encore. Elle ne fait pas partie de `make all` |
+| `make collect` | Reconstruit les tables réelles de T3, T16 et T17 (prix et catalogue Crocs FR / DE, magasins OpenStreetMap, population Destatis, distances OSRM). Les réponses brutes sont versionnées dans `data/bronze/` : la cible n'appelle le réseau que pour une ville ou un trajet qui n'y est pas encore. Elle ne fait pas partie de `make all` |
 | `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
