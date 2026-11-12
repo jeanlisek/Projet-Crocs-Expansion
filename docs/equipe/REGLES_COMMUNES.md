@@ -1,5 +1,7 @@
 # Règles communes de l'équipe
 
+> **Avant chaque session : `git checkout develop && git pull`.** Les fiches sont mises à jour au fil de l'eau ; copiez toujours les messages depuis GitHub, pas depuis une ancienne copie.
+
 > À lire par chaque membre **et par son assistant de code** avant toute tâche.
 > Chaque membre a sa fiche dans ce dossier : `jean-li.md`, `mehdi.md`, `alexis.md`, `briac.md`, `aurelie.md`.
 
@@ -49,7 +51,7 @@ Puis prévenir Jean-Li, qui merge dans `develop`. **Personne ne pousse sur `main
 
 ## Si vous utilisez un assistant de code
 
-1. Commencez **chaque** session par : « Lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/<ton-prénom>.md`. Je travaille sur la tâche T<n>. »
+1. Commencez **chaque** session par : « Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/<ton-prénom>.md`. Je travaille sur la tâche T<n>. »
 2. Votre fiche contient des messages prêts à coller pour chaque tâche. Utilisez-les : ils limitent l'assistant à votre périmètre.
 3. Demandez toujours à voir le résultat **avant** commit et push.
 

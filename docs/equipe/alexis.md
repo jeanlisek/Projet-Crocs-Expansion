@@ -22,7 +22,7 @@ Dans le jeu v1, un magasin rembourse son investissement en 3 à 6 mois, pour un 
 ## Messages à coller
 
 **T2**
-> Lis `docs/equipe/REGLES_COMMUNES.md`, `docs/equipe/alexis.md` et le point 1 de `docs/AUDIT_JEU_DE_DONNEES_V1.md`. Tâche T2 sur `feature/T2-recalibrage` depuis `develop`.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Lis aussi le point 1 de `docs/AUDIT_JEU_DE_DONNEES_V1.md`. Tâche T2 sur `feature/T2-recalibrage`, créée depuis ce `develop` à jour.
 > 1. Recalibre `src/simulate/generate_data.py` pour un payback médian France entre 1 et 4 ans par format, avec un CA/m² plausible pour du commerce de chaussures spécialisé. Les paramètres changés vont dans `config/hypotheses.yaml`, avec un commentaire.
 > 2. Ajoute `date_fermeture` à `dim_magasin` (quelques fermetures pour illustrer le biais de survie) et déclare la colonne dans le `TableSpec` de `src/transform/bronze_to_silver.py`.
 > 3. Ajoute une colonne qui signale les zones insulaires (Las Palmas) pour les exclure du benchmark logistique.
@@ -38,7 +38,7 @@ Consignes techniques :
 - Une erreur SQL arrête `make kpi` en nommant le fichier fautif.
 - Pour tester : `make gold && make kpi`.
 
-> Tâche T7 sur `feature/T7-kpi`. Écris une vue SQL par KPI du README (section 2.3), une vue par fichier dans `sql/kpi/`, exécutée par `make kpi`, avec les règles de gestion de la section 2.5. Construis `kpi_summary` avec les colonnes exactes de `docs/equipe/REGLES_COMMUNES.md` (« Contrat entre les tâches »), pour tous les pays, avec les seuils de `config/hypotheses.yaml`. Un test par KPI sur un petit jeu calculé à la main.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T7 sur `feature/T7-kpi`, créée depuis ce `develop` à jour. Écris une vue SQL par KPI du README (section 2.3), une vue par fichier dans `sql/kpi/`, exécutée par `make kpi`, avec les règles de gestion de la section 2.5. Construis `kpi_summary` avec les colonnes exactes de `docs/equipe/REGLES_COMMUNES.md` (« Contrat entre les tâches »), pour tous les pays, avec les seuils de `config/hypotheses.yaml`. Un test par KPI sur un petit jeu calculé à la main.
 
 **T8**
-> Tâche T8 sur `feature/T8-business-case`. Compte de résultat d'un magasin type en Allemagne : loyer + charges, personnel, énergie, marketing de lancement, logistique, démarque, frais bancaires, frais de siège, amortissement. Trois scénarios de montée en charge (pessimiste, central, optimiste), hypothèses dans `config/hypotheses.yaml`. Vues `business_case` (payback, point mort, coût d'occupation par scénario et format) et `city_scoring` (score des villes allemandes : potentiel, loyer, densité concurrentielle, distance au hub). Ajoute les KPIs de rentabilité à `kpi_summary`.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T8 sur `feature/T8-business-case`, créée depuis ce `develop` à jour. Compte de résultat d'un magasin type en Allemagne : loyer + charges, personnel, énergie, marketing de lancement, logistique, démarque, frais bancaires, frais de siège, amortissement. Trois scénarios de montée en charge (pessimiste, central, optimiste), hypothèses dans `config/hypotheses.yaml`. Vues `business_case` (payback, point mort, coût d'occupation par scénario et format) et `city_scoring` (score des villes allemandes : potentiel, loyer, densité concurrentielle, distance au hub). Ajoute les KPIs de rentabilité à `kpi_summary`.

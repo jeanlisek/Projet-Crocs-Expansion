@@ -25,9 +25,9 @@ C'est ce garde-fou qui rend la brique défendable devant le jury : l'IA commente
 ## Messages à coller
 
 **T9, étape 1 (maintenant)**
-> Lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/briac.md`. Tâche T9 sur `feature/T9-ia` depuis `develop`. Crée `src/ai/commentary.py` et `src/ai/prompts/`. En attendant T7, fabrique un `kpi_summary` factice respectant exactement les colonnes du « Contrat entre les tâches », clairement marqué comme factice. Pour chaque (page × valeur de filtre), génère un commentaire de 2-3 phrases et une synthèse Comex structurée (contexte, constats par axe, risques, recommandation Go/No-Go avec conditions). Clé API lue dans `.env`. Ajoute la vérification des nombres. Écris dans `data/gold/ai_commentary.csv` (colonnes : `page`, `filtre`, `valeur_filtre`, `texte`, `verifie`, `date_generation`). Cible `make ai`. Montre-moi 3 exemples.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/briac.md`. Tâche T9 sur `feature/T9-ia`, créée depuis ce `develop` à jour. Crée `src/ai/commentary.py` et `src/ai/prompts/`. En attendant T7, fabrique un `kpi_summary` factice respectant exactement les colonnes du « Contrat entre les tâches », clairement marqué comme factice. Pour chaque (page × valeur de filtre), génère un commentaire de 2-3 phrases et une synthèse Comex structurée (contexte, constats par axe, risques, recommandation Go/No-Go avec conditions). Clé API lue dans `.env`. Ajoute la vérification des nombres. Écris dans `data/gold/ai_commentary.csv` (colonnes : `page`, `filtre`, `valeur_filtre`, `texte`, `verifie`, `date_generation`). Cible `make ai`. Montre-moi 3 exemples.
 
 **T9, étape 2 (quand T7 est mergée)**
-> Remplace le `kpi_summary` factice par la vraie vue de `data/gold/`. Régénère tous les commentaires, montre-moi ceux de la page Synthèse pour DE et ceux qui ont `verifie = false`.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/briac.md`. Reviens ensuite sur `feature/T9-ia` et fais `git merge develop` pour y récupérer les dernières modifications. Remplace le `kpi_summary` factice par la vraie vue de `data/gold/`. Régénère tous les commentaires, montre-moi ceux de la page Synthèse pour DE et ceux qui ont `verifie = false`.
 
 **Point à trancher avec l'équipe** : quel fournisseur de LLM, et qui a une clé API.
