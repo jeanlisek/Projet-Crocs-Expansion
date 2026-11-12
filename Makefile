@@ -39,6 +39,7 @@ gold:
 
 # Creates the KPI views: runs every sql/kpi/*.sql file on the warehouse (none is not an error).
 kpi:
+	$(PYTHON) -m src.transform.parametres_kpi --warehouse $(WAREHOUSE)
 	$(PYTHON) -m src.transform.run_kpi --warehouse $(WAREHOUSE) --sql-dir $(SQL_KPI_DIR)
 
 format:
