@@ -27,14 +27,15 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 | Étape | Commande | Ce qu'elle produit | Où |
 |---|---|---|---|
 | 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV | `data/bronze/*.csv` |
-| 2. Silver | `make silver` | Les mêmes tables typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
+| 2. Silver | `make silver` | Les tables de `data/bronze/` et de `data/manual/`, typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
 | 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 19 tables, 19 clés primaires, 23 relations | `data/gold/warehouse.duckdb` |
 | 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Le dossier est vide à ce jour : l'étape ne crée encore aucune vue | Vues dans `data/gold/warehouse.duckdb` |
 
-Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`.
+Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`. Seule exception en entrée : `data/manual/`, qui contient les saisies manuelles sourcées et qui est versionné.
 
 - **Les 23 relations de l'entrepôt** sont celles du diagramme du README (section 3.2). Elles sont déclarées en clés étrangères dans `RELATIONSHIPS` (`src/transform/build_gold.py`) : l'entrepôt refuse un doublon ou une clé orpheline.
 - **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`), vide à ce jour. Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion.
+- **Deux dossiers d'entrée** : un fichier collecté par un script va dans `data/bronze/` (non versionné) ; un fichier saisi à la main depuis une source officielle va dans `data/manual/` (versionné) et se déclare avec `directory=MANUAL`. Dans les deux cas, le fichier s'appelle `<nom de la table>.csv`.
 - **Tâches faites** : T1, T5 (squelette, tables réelles à brancher), T6. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
@@ -90,6 +91,9 @@ La table `kpi_summary` (T7) est le point de rencontre entre KPIs, IA et dashboar
 | `unite` | %, €, km, indice… |
 | `seuil` | Seuil Go/No-Go (README 4.2), vide si aucun |
 | `statut_go` | GO, NO-GO ou INFO |
-| `statut_epistemique` | FAIT, CALCUL, HYPOTHÈSE ou CONVENTION |
+| `statut_epistemique` | FAIT, CALCUL, HYPOTHÈSE ou CONVENTION, au sens du README (section 2.2) |
+| `origine_donnees` | REEL, SIMULE ou MIXTE : d'où viennent les entrées du calcul |
+
+`origine_donnees` a été ajoutée le 12/11/2026. Elle ne remplace pas `statut_epistemique` : un indice calculé sur des prix réels reste un CALCUL, avec `origine_donnees` = REEL.
 
 Briac et Aurélie peuvent commencer avec une version factice de cette table, puis se brancher sur la vraie.

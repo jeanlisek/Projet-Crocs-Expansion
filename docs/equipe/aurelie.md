@@ -12,6 +12,8 @@
 
 **Décision à prendre tout de suite** : Power BI (si tu as Windows) ou Looker Studio.
 
+> **Contrat `kpi_summary` mis à jour le 12/11/2026** : il a gagné la colonne `origine_donnees` (REEL, SIMULE ou MIXTE), décrite dans `REGLES_COMMUNES.md` (« Contrat entre les tâches »). Elle te sert à afficher la mention « données simulées » là où c'est le cas.
+
 ## Le dashboard
 
 Du général au détail, au plus 7 visuels par page :
