@@ -6,9 +6,5 @@ __pycache__/
 .venv/
 *.pbix.bak
 .DS_Store
-# Fichiers de travail locaux (non versionnés)
-CLAUDE.md
-CLAUDE.local.md
-.claude/
 # Archives
 *.zip
