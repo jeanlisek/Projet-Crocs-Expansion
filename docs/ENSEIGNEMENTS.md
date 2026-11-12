@@ -112,3 +112,18 @@ Vue `city_scoring` : le critère potentiel (40 % du score) utilise désormais la
 
 - Les cinq premières villes ne bougent pas. Nürnberg remplace Leipzig parmi les six villes prioritaires. München gagne deux places, Dresden et Stuttgart en perdent une.
 - Le changement vient surtout de la définition du potentiel (ville au lieu de zone de chalandise), pas de l'écart entre population réelle et simulée, qui est de 0,1 à 6 % selon les villes. La zone de chalandise simulée valait de 1,6 à 2,5 fois la population de la ville : München, où ce rapport était le plus faible, gagne deux places ; Leipzig, où il était le plus élevé, sort des villes prioritaires.
+
+## 5. Marché réel : les dépenses en chaussures progressent en Allemagne, stagnent en France
+
+Constat du 12/11/2026, table réelle `eurostat_series` (T4) : dépenses de consommation des ménages en chaussures (Eurostat, jeu `nama_10_cp18`, poste CP032, millions d'euros courants), toutes chaussures confondues, données mises à jour par Eurostat le 10/11/2026. Aucune vue KPI ne lit encore cette table : `kpi_croissance_secteur` reste sur le jeu simulé.
+
+| Pays | Dépenses 2022 | Dépenses 2025 | TCAM 2022-2025 en valeur | TCAM en volume (estimation indicative) | Statut Eurostat |
+|---|---|---|---|---|---|
+| **Allemagne** | 17 485 M€ | 20 554 M€ | **+5,5 %** | environ +2,9 % | provisoire sur toute la période (2022 à 2025) |
+| **France** | 7 510 M€ | 7 456 M€ | **−0,2 %** | environ −1,6 % | provisoire en 2024 et 2025 |
+
+- **En valeur, inflation comprise** : le TCAM est calculé sur les dépenses en euros courants, entre 2022 et 2025. Le marché allemand de la chaussure a progressé de 5,5 % par an ; le marché français a reculé de 0,2 % par an.
+- **En volume, estimation indicative** : en retirant la hausse des prix des chaussures (indice des prix à la consommation harmonisé, jeu `prc_hicp_ainr`, poste CP032, moyenne annuelle), la croissance serait d'environ +2,9 % par an en Allemagne et −1,6 % en France. C'est une approximation : l'indice des prix suit un panier de chaussures, pas exactement la composition des dépenses.
+- **Données allemandes provisoires** : Eurostat signale comme provisoires toutes les valeurs allemandes de 2022 à 2025. Elles peuvent être révisées.
+- **Comparaison avec le jeu simulé, à périmètre égal** (toutes chaussures, `fact_marche`, segment « Chaussures (total) », TCAM 2022-2025) : +1,9 % pour l'Allemagne et +1,4 % pour la France. Le réel donne une croissance plus forte en Allemagne et une baisse en France : il creuse l'écart entre les deux pays, dans le sens favorable à l'Allemagne.
+- Le KPI « Croissance du secteur » de `kpi_summary` porte sur un autre périmètre : le segment simulé « Casual moulé & sandales » (+3,9 % pour l'Allemagne, +3,0 % pour la France). Eurostat ne publie pas ce segment ; le chiffre réel ci-dessus ne le remplace donc pas tel quel.
