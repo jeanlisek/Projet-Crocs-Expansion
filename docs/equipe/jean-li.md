@@ -13,7 +13,7 @@
 | T10 | Exports pour le dashboard | Fait | T7, T9 | T11 |
 | T16 | OpenStreetMap : magasins de chaussures par ville allemande | ✅ Fait | — | Densité concurrentielle réelle |
 | T17 | Coordonnées réelles et distances routières (OSRM) | ✅ Fait | — | Distance aux hubs réelle |
-| T14 | README final | Vendredi matin | T13 | Livrable 1 |
+| T14 | README final | Fait | T13 | Livrable 1 |
 
 **Ton rôle transverse** : merger les branches dans `develop` dès qu'elles sont prêtes (CI verte), débloquer les autres.
 
