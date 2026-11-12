@@ -22,6 +22,7 @@ SELECT
     m.id_magasin,
     m.type_emplacement,
     m.surface_vente_m2,
+    m.nb_etp,
     ventes.ca_ht_eur,
     ventes.marge_brute_eur,
     m.loyer_annuel_eur,

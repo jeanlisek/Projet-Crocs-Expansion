@@ -4,7 +4,6 @@
 -- Seuils : parametres_kpi (section go_no_go de config/hypotheses.yaml, README 4.2).
 -- statut_go : GO / NO-GO quand un seuil s'applique au pays candidat ; INFO sinon (pays de
 -- référence, KPI sans seuil, lignes de comparaison réel / simulé).
--- Les KPIs de rentabilité Allemagne (par scénario) sont ajoutés par T8.
 CREATE OR REPLACE VIEW kpi_summary AS
 WITH s AS (
     SELECT
@@ -12,7 +11,9 @@ WITH s AS (
         max(valeur) FILTER (WHERE parametre = 'go_no_go.indice_prix_min') AS indice_min,
         max(valeur) FILTER (WHERE parametre = 'go_no_go.indice_prix_max') AS indice_max,
         max(valeur) FILTER (WHERE parametre = 'go_no_go.ecart_marge_vs_france_max_pts') AS ecart_marge_max,
-        max(valeur) FILTER (WHERE parametre = 'go_no_go.catalogue_eligible_min_pct') AS catalogue_min
+        max(valeur) FILTER (WHERE parametre = 'go_no_go.catalogue_eligible_min_pct') AS catalogue_min,
+        max(valeur) FILTER (WHERE parametre = 'go_no_go.cout_occupation_max_pct_ca') AS occupation_max,
+        max(valeur) FILTER (WHERE parametre = 'go_no_go.payback_pessimiste_max_mois') AS payback_max
     FROM parametres_kpi
 ),
 reference AS (
@@ -97,6 +98,37 @@ lignes AS (
     SELECT 'Payback : ' || k.type_emplacement, 'Rentabilité', k.code_pays, k.payback_mois, 'mois', NULL,
         'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_payback AS k
+    -- Rentabilité : business case Allemagne (T8), par scénario et par format.
+    -- Payback jugé sur le scénario pessimiste (README 4.2) ; vide = non atteint dans l'horizon -> NO-GO.
+    -- Coût d'occupation jugé sur le scénario central (le README ne fixe pas de scénario).
+    UNION ALL
+    SELECT 'Payback (scénario ' || b.scenario || ') : ' || b.format, 'Rentabilité', b.code_pays,
+        b.payback_mois, 'mois',
+        CASE WHEN b.scenario = 'pessimiste' THEN printf('≤ %g mois', s.payback_max) END,
+        CASE
+            WHEN b.scenario <> 'pessimiste' THEN 'INFO'
+            WHEN b.payback_mois <= s.payback_max THEN 'GO'
+            ELSE 'NO-GO'
+        END,
+        'HYPOTHÈSE', b.origine_donnees
+    FROM business_case AS b, s
+    UNION ALL
+    SELECT 'Coût d''occupation (loyer + charges ÷ CA, scénario ' || b.scenario || ') : ' || b.format,
+        'Rentabilité', b.code_pays, b.cout_occupation_pct, '%',
+        CASE WHEN b.scenario = 'central' THEN printf('≤ %g %%', s.occupation_max) END,
+        CASE
+            WHEN b.scenario <> 'central' THEN 'INFO'
+            WHEN b.cout_occupation_pct <= s.occupation_max THEN 'GO'
+            ELSE 'NO-GO'
+        END,
+        'HYPOTHÈSE', b.origine_donnees
+    FROM business_case AS b, s
+    UNION ALL
+    -- le point mort ne dépend pas du scénario (coûts fixes et taux identiques) : une ligne par format
+    SELECT 'Point mort par magasin : ' || b.format, 'Rentabilité', b.code_pays, b.point_mort_ca_ht_eur,
+        '€ de CA HT/an', NULL, 'INFO', 'HYPOTHÈSE', b.origine_donnees
+    FROM business_case AS b
+    WHERE b.scenario = 'central'
 )
 SELECT
     kpi,
