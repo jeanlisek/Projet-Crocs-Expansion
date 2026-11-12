@@ -173,7 +173,11 @@ def render_kpi(row: dict) -> str:
     if value is None:
         value = MISSING_PAYBACK if row["kpi"].startswith("Payback") else MISSING_VALUE
     else:
-        value = f"{value} {row['unite'] or ''}".strip()
+        unit = row["unite"] or ""
+        # A TCAM is a yearly mean rate: "3,89 %" alone reads as a total growth.
+        if "TCAM" in row["kpi"] and unit == "%":
+            unit = "% par an"
+        value = f"{value} {unit}".strip()
     origin = ORIGIN_LABELS.get(row["origine_donnees"], row["origine_donnees"])
     return (
         f"- {row['kpi']} | axe : {row['axe']} | valeur : {value} | "
@@ -222,6 +226,53 @@ def _decision_items(prefix: str, value) -> list[str]:
     return [f"- {prefix} : {format_value(value) or MISSING_VALUE}"]
 
 
+# README 4.2: the payback criterion is judged on the pessimistic scenario.
+PAYBACK_SCENARIO = "pessimiste"
+SENSITIVITY_VIEW = "sensibilite_payback"
+CONDITION_KEYS = ("format", "nb_etp", "ca_m2_min_vs_france")
+
+
+def lifting_condition(con: duckdb.DuckDBPyConnection, decision) -> str | None:
+    """The team condition that lifts the NO-GO of the payback, with the payback it gives.
+
+    The payback is read in the sensitivity view, on the row of the conditions of the
+    decision: a value of the warehouse, which the guard rail accepts, and not the figure of
+    a comment of the config, which the model never receives. None without a decision, a
+    complete set of conditions or a matching row.
+    """
+    conditions = decision.get("conditions") if isinstance(decision, dict) else None
+    # Another layout of the section (a list, missing keys) gives no condition, never a crash.
+    if not isinstance(conditions, dict) or any(conditions.get(k) is None for k in CONDITION_KEYS):
+        return None
+    objects = con.execute("SELECT table_name FROM information_schema.tables").fetchall()
+    if SENSITIVITY_VIEW not in {name for (name,) in objects}:
+        return None
+    rows = fetch_dicts(
+        con,
+        f"SELECT * FROM {SENSITIVITY_VIEW} WHERE code_pays = ? AND scenario = ? AND format = ? "
+        "AND nb_etp = ? AND abs(ratio_ca_m2_vs_france - ?) < 1e-9",
+        (
+            TARGET_COUNTRY,
+            PAYBACK_SCENARIO,
+            conditions["format"],
+            conditions["nb_etp"],
+            conditions["ca_m2_min_vs_france"],
+        ),
+    )
+    if not rows:
+        return None
+    row = rows[0]
+    gain = format_value(round((row["ratio_ca_m2_vs_france"] - 1) * 100, 2))
+    origin = ORIGIN_LABELS.get(row["origine_donnees"], row["origine_donnees"])
+    return (
+        f"- condition de l'équipe qui lève le NO-GO du payback (section decision, vue "
+        f"{SENSITIVITY_VIEW}) : format {row['format']}, {format_value(row['nb_etp'])} ETP, "
+        f"CA/m² au moins égal à la France + {gain} % ({format_value(row['ca_m2_eur'])} €/m²), "
+        f"payback {format_value(row['payback_mois'])} mois pour un seuil {row['seuil']}, "
+        f"verdict {row['statut_go']} | données : {origin}"
+    )
+
+
 def decision_lines(decision) -> tuple[str, ...]:
     """The decision is the team's, read from config/hypotheses.yaml (section `decision`):
     README 4.2 sets one threshold per criterion and no rule to combine them, so the model
@@ -241,11 +292,34 @@ def city_reading(n_cities: int, weights: dict) -> tuple[str, ...]:
         f"- lecture des notes : chaque note va de 0 à 100 et classe les {n_cities} villes entre "
         f"elles sur un critère ; 100 = la plus favorable des {n_cities}, 0 = la moins favorable "
         f"des {n_cities}, jamais une valeur nulle",
-        "- sens des critères : loyer moins cher = mieux ; densité concurrentielle moins dense = "
-        "mieux ; distance au hub plus proche = mieux ; potentiel plus élevé = mieux",
+        # One line per note: "densité moins dense = mieux" alone was read as "forte densité
+        # favorable" for Dortmund (note 100, 5,8 shops per 100 000 inhabitants), 12/11/2026.
+        "- note_potentiel élevée : le plus fort potentiel de clientèle",
+        "- note_loyer élevée : le loyer le plus bas",
+        "- note_densite élevée : le moins de magasins de chaussures par habitant, donc la "
+        "concurrence la plus faible ; une note de densité élevée signifie une densité faible",
+        "- note_distance élevée : la ville la plus proche d'un hub logistique",
         f"- score : moyenne des notes pondérée par {weighting}",
         "- densite_pour_100k_hab : magasins de chaussures pour 100 000 habitants",
     )
+
+
+def criterion_ranks(city: dict, cities: list[dict]) -> tuple[str, ...]:
+    """The rank of the city on each note, 1 being the best of the cities.
+
+    A good overall rank says nothing of each criterion: Dortmund, 2nd, was said to have a
+    "potentiel solide" with a note of 6,4 (12/11/2026). The rank on each note is a fact of
+    city_scoring that leaves no room for that reading.
+    """
+    columns = [c for c in city if c.startswith("note_") and city[c] is not None]
+    if not columns:
+        return ()
+    n = len(cities)
+    ranks = [
+        f"{column} rang {1 + sum((other[column] or 0) > city[column] for other in cities)} sur {n}"
+        for column in columns
+    ]
+    return (f"- rang de la ville sur chaque note (rang 1 = la meilleure) : {' ; '.join(ranks)}",)
 
 
 def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -> list[Request]:
@@ -276,6 +350,7 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
         )
     ]
 
+    page_words = config["ia"]["commentaire_mots_max"]
     countries = fetch_dicts(con, "SELECT code_pays, nom_pays FROM dim_pays ORDER BY nom_pays")
     for country in countries:
         rows = [
@@ -288,6 +363,7 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
                 valeur_filtre=country["nom_pays"],
                 question=f"Que disent le marché et les prix pour : {country['nom_pays']} ?",
                 lines=tuple(render_kpi(row) for row in rows),
+                max_words=page_words,
             )
         )
 
@@ -300,7 +376,8 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
                 filtre="ville",
                 valeur_filtre=city["ville"],
                 question=f"Quel est l'intérêt de {city['ville']} pour un magasin Crocs ?",
-                lines=(*reading, *render_record(city)),
+                lines=(*reading, *render_record(city), *criterion_ranks(city, cities)),
+                max_words=page_words,
             )
         )
 
@@ -309,6 +386,7 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
         for row in fetch_dicts(con, "SELECT DISTINCT scenario FROM business_case ORDER BY 1")
     ]
     business = [row for row in target if row["axe"] == BUSINESS_AXIS]
+    condition = lifting_condition(con, config.get(DECISION_SECTION))
     for scenario in scenarios:
         # The rows of this scenario, and the ones that do not depend on any (break-even).
         rows = [
@@ -316,13 +394,15 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
             for row in business
             if f"scénario {scenario})" in row["kpi"] or "scénario" not in row["kpi"]
         ]
+        extra = (condition,) if condition and scenario == PAYBACK_SCENARIO else ()
         requests.append(
             Request(
                 page=PAGE_BUSINESS,
                 filtre="scenario",
                 valeur_filtre=scenario,
                 question=f"Que montre le business case allemand dans le scénario {scenario} ?",
-                lines=tuple(render_kpi(row) for row in rows),
+                lines=(*(render_kpi(row) for row in rows), *extra),
+                max_words=page_words,
             )
         )
     return requests

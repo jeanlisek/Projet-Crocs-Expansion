@@ -193,3 +193,4 @@ ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/com
   delai_entre_appels_s: 0.5     # CONVENTION : marge entre deux appels ; le SDK rejoue de lui-même une erreur 429
   tentatives_max: 3             # nouveaux essais du SDK sur 408, 409, 429 et 5xx (anthropic/_base_client.py)
   synthese_mots_max: 300        # CONVENTION : la synthèse tient dans une zone de texte du dashboard ; une version sans limite a été coupée à 816 mots au plafond max_tokens le 12/11/2026
+  commentaire_mots_max: 60      # CONVENTION : commentaire d'une page, deux ou trois phrases courtes (demande de Jean-Li, 12/11/2026) ; le modèle dépasse parfois la limite

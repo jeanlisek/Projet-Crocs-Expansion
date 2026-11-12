@@ -226,6 +226,8 @@ def test_a_city_request_explains_how_to_read_the_notes(warehouse):
     munich = next(r for r in requests_of(warehouse) if r.valeur_filtre == "München")
     text = "\n".join(munich.lines)
     assert "0 = la moins favorable des 2, jamais une valeur nulle" in text  # 2 cities here
+    # Dortmund, note 100 on density, was said to have "une forte densité" (12/11/2026).
+    assert "une note de densité élevée signifie une densité faible" in text
     assert "100 000 habitants" in text
     weights = ai.load_config()["city_scoring"]["poids"]
     assert all(f"{criterion} {weight}" in text for criterion, weight in weights.items())
@@ -403,6 +405,101 @@ def test_the_synthesis_is_asked_to_fit_in_a_text_box(warehouse):
     limit = ai.load_settings()["synthese_mots_max"]
     assert synthesis.max_words == limit
     assert f"en {limit} mots au plus" in ai.user_prompt(synthesis)
-    # The page comments have no word limit of their own: two or three sentences.
-    market = next(r for r in requests_of(warehouse) if r.page == ai.PAGE_MARKET)
-    assert market.max_words is None and "deux ou trois phrases" in ai.user_prompt(market)
+
+
+def test_every_page_comment_is_short_and_starts_with_its_key_message(warehouse):
+    """Two or three short sentences, the key message first (Jean-Li, 12/11/2026)."""
+    limit = ai.load_settings()["commentaire_mots_max"]
+    for request in requests_of(warehouse)[1:]:
+        prompt = ai.user_prompt(request)
+        assert request.max_words == limit and f"{limit} mots au plus" in prompt
+        assert "deux ou trois phrases courtes au maximum" in prompt
+        assert "La première phrase est le message clé, courte et sans aucun chiffre" in prompt
+
+
+def test_a_tcam_is_written_as_a_yearly_rate():
+    row = {
+        "kpi": "Croissance du secteur (TCAM 2022-2025)",
+        "axe": "Marché",
+        "valeur": 3.89,
+        "unite": "%",
+        "seuil": "≥ 2 %",
+        "statut_go": "GO",
+        "statut_epistemique": "CALCUL",
+        "origine_donnees": "SIMULE",
+    }
+    assert "valeur : 3,89 % par an" in ai.render_kpi(row)
+    # A rate that is not a TCAM keeps its unit.
+    assert "valeur : 14,94 % |" in ai.render_kpi(
+        {**row, "kpi": "Coût d'occupation", "valeur": 14.94}
+    )
+
+
+DECISION = {
+    "verdict": "NO-GO en l'état, GO conditionnel",
+    "conditions": {"format": "Centre commercial", "nb_etp": 3.0, "ca_m2_min_vs_france": 1.02},
+}
+
+
+def add_sensitivity_view(path):
+    con = duckdb.connect(str(path))
+    con.execute(
+        "CREATE TABLE sensibilite_payback AS SELECT * FROM (VALUES "
+        "('DE', 'pessimiste', 'Centre commercial', 3.0, 1.02, 5707.0, 35.5, '≤ 36 mois', 'GO', "
+        "'SIMULE'), "
+        "('DE', 'pessimiste', 'Centre commercial', 3.0, 1.00, 5595.0, 41.2, '≤ 36 mois', 'NO-GO', "
+        "'SIMULE')) AS t(code_pays, scenario, format, nb_etp, ratio_ca_m2_vs_france, ca_m2_eur, "
+        "payback_mois, seuil, statut_go, origine_donnees)"
+    )
+    con.close()
+
+
+def test_the_pessimistic_page_ends_on_the_team_condition_read_in_the_data(warehouse):
+    """The 35,5 months come from sensibilite_payback, on the row of the decision: a value the
+    guard rail accepts, not the figure of a comment of the config."""
+    add_sensitivity_view(warehouse)
+    config = {**ai.load_config(), "decision": DECISION}
+    con = duckdb.connect(str(warehouse), read_only=True)
+    try:
+        requests = {r.valeur_filtre: r for r in ai.build_requests(con, config)}
+    finally:
+        con.close()
+    condition = requests["pessimiste"].lines[-1]
+    assert "3 ETP" in condition and "France + 2 %" in condition
+    assert "payback 35,5 mois" in condition and "verdict GO" in condition
+    assert "41,2" not in condition  # the other row of the view is not the condition
+    allowed = ai.allowed_values(ai.user_prompt(requests["pessimiste"]))
+    assert ai.unsupported_numbers("GO possible à 3 ETP, France + 2 %, en 35,5 mois.", allowed) == []
+    assert not any("condition de l'équipe" in line for line in requests["central"].lines)
+
+
+def test_without_a_decision_or_the_view_there_is_no_condition(warehouse):
+    con = duckdb.connect(str(warehouse), read_only=True)
+    try:
+        assert ai.lifting_condition(con, DECISION) is None  # no sensitivity view here
+        assert ai.lifting_condition(con, None) is None
+    finally:
+        con.close()
+
+
+def test_another_layout_of_the_decision_gives_no_condition_and_no_crash(warehouse):
+    add_sensitivity_view(warehouse)
+    con = duckdb.connect(str(warehouse), read_only=True)
+    try:
+        for decision in ({"conditions": ["3 ETP", "centre commercial"]}, {"conditions": {}}, "GO"):
+            assert ai.lifting_condition(con, decision) is None
+    finally:
+        con.close()
+
+
+def test_a_city_gets_its_rank_on_each_note():
+    """Dortmund, 2nd overall, was said to have a solid potential with a note of 6,4."""
+    cities = [
+        {"ville": "Berlin", "note_potentiel": 100.0, "note_loyer": 37.3},
+        {"ville": "Dortmund", "note_potentiel": 6.4, "note_loyer": 90.4},
+        {"ville": "Köln", "note_potentiel": 33.8, "note_loyer": 90.4},
+    ]
+    (line,) = ai.criterion_ranks(cities[1], cities)
+    assert "note_potentiel rang 3 sur 3" in line  # the weakest potential of the three
+    assert "note_loyer rang 1 sur 3" in line  # tied first: both have 90,4
+    assert ai.criterion_ranks({"ville": "X"}, [{"ville": "X"}]) == ()  # no note, no line

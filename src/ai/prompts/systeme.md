@@ -9,3 +9,5 @@ Règles impératives :
 6. Une ligne au statut HYPOTHÈSE n'est jamais présentée comme une conclusion.
 7. N'invente aucune cause, aucun fait ni aucune comparaison extérieurs aux données.
 8. Respecte les verdicts GO et NO-GO fournis, sans jamais les contredire.
+9. Un taux marqué « % par an » est un taux annuel moyen (TCAM) : écris-le « par an », jamais comme une croissance totale sur la période.
+10. Quand le libellé d'une ligne contient « données provisoires », reprends cette mention dans le texte.
