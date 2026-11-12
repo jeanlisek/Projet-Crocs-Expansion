@@ -191,15 +191,20 @@ erDiagram
 
 ### 3.3 Sources retenues
 
-| Donnée | Source | Type | Statut | Pourquoi |
-|---|---|---|---|---|
-| Population, PIB/hab, chômage, niveaux de prix | Eurostat | API | **Réel** | Statistique officielle, comparable entre pays |
-| Prix Crocs France et Allemagne | crocs.fr, crocs.de | Scraping | **Réel** | Seule source de prix SKU par SKU |
-| Densité concurrentielle par ville | OpenStreetMap (Overpass, `shop=shoes`) | API | **Réel** | Ouvert, toutes enseignes |
-| TVA, impôt sur les sociétés, droits | Commission européenne (Taxes in Europe, TARIC) | Saisie sourcée | Réel | Référence légale |
-| Loyers prime par ville | Calibrés sur Cushman & Wakefield | Simulé calibré | Simulé | Pas de source ouverte au détail |
-| Tailles et parts de marché | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | Sources payantes |
-| Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | Données internes inaccessibles |
+| Donnée | Source | Type | Statut | Tâche | Pourquoi |
+|---|---|---|---|---|---|
+| Population, PIB/hab en SPA, chômage, indice de niveau de prix | Eurostat | API | **Réel** | T4 | Statistique officielle, comparable entre pays |
+| Dépenses des ménages en chaussures ; commerce de détail de chaussures (NACE 47.72) | Eurostat | API | **Réel** | T4 | Taille de marché officielle, comparable entre pays |
+| Prix Crocs France et Allemagne | crocs.fr, crocs.de | Scraping | **Réel** | T3 | Seule source de prix SKU par SKU |
+| Part du catalogue France présente sur crocs.de, par catégorie | crocs.fr, crocs.de | Scraping | **Réel** | T3 | Mesure l'assortiment réellement vendu en Allemagne |
+| Magasins de chaussures par ville allemande (`shop=shoes`, `brand`), densité pour 100 000 habitants | OpenStreetMap (API Overpass) | API | **Réel** | T16 | Ouvert, toutes enseignes |
+| Coordonnées des hubs et des villes cibles, distances routières | OpenStreetMap (OSRM, serveur public) | API | **Réel** | T17 | Distances par la route, pas à vol d'oiseau |
+| TVA standard, TVA réduite chaussures enfant, impôt sur les sociétés, droit de douane UE (chapitre 64) | Commission européenne (Taxes in Europe, TARIC), URL et date dans `data/manual/taxes_reference.csv` | Saisie manuelle sourcée | **Réel** | T18 | Référence légale |
+| Loyers prime par ville | Calibrés sur Cushman & Wakefield | Simulé calibré | Simulé | — | Pas de source ouverte au détail |
+| Tailles et parts de marché par marque | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | — | Sources payantes |
+| Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | — | Données internes inaccessibles |
+
+**État au 12/11/2026 : aucune source réelle n'est encore collectée.** Les lignes « Réel » décrivent ce que les tâches T3, T4, T16, T17 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
 
 Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signalé comme simulé dans le dashboard et les slides.
 
@@ -242,7 +247,7 @@ _À compléter après l'analyse, selon la décision._
 | Couche | Outil |
 |---|---|
 | Langage | Python 3.11 |
-| Collecte | `requests`, `BeautifulSoup`, API Eurostat, API Overpass |
+| Collecte | `requests`, `BeautifulSoup`, API Eurostat, API Overpass, API OSRM |
 | Transformation | `pandas` |
 | Entrepôt | DuckDB (bronze / silver / gold) |
 | Brique IA | API d’un modèle de langage (LLM) : commentaires pré-générés par valeur de filtre, chiffres vérifiés par code |

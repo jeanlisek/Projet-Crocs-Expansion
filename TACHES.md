@@ -30,9 +30,9 @@
 |---|---|---|---|---|---|
 | T1 | Dépôt : arborescence, `develop`, CI, `Makefile`, `requirements.txt` | Jean-Li | — | La CI passe au vert sur `develop` | Fait |
 | T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | À faire |
-| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés | À faire |
-| T4 | API Eurostat → `dim_pays` réel | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées | À faire |
-| T5 | Bronze → silver : nettoyage + journal | Jean-Li | T3, T4 | `docs/JOURNAL_NETTOYAGE.md` : anomalie → décision → justification | Fait (squelette, tables réelles à brancher) |
+| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | À faire |
+| T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
+| T5 | Bronze → silver : nettoyage + journal | Jean-Li | T3, T4, T16, T17, T18 | `docs/JOURNAL_NETTOYAGE.md` : anomalie → décision → justification | Fait (squelette, tables réelles à brancher) |
 | T6 | Silver → gold dans DuckDB + tests de qualité | Jean-Li | T2, T5 | `tests/test_qualite_gold.py` passe : unicité, intégrité, validité, cohérence | Fait |
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | À faire |
 | T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | À faire |
@@ -43,6 +43,9 @@
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
 | T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies | À faire |
 | T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | À faire |
+| T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | À faire |
+| T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | À faire |
+| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | À faire |
 
 ## Planning
 
