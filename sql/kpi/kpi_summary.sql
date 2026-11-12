@@ -29,6 +29,12 @@ lignes AS (
         'CALCUL' AS statut_epistemique, k.origine_donnees
     FROM kpi_croissance_secteur AS k JOIN reference AS r USING (code_pays), s
     UNION ALL
+    -- Confirmation sur données réelles (Eurostat) : autre périmètre, ligne INFO sans seuil
+    SELECT 'Croissance des dépenses des ménages en chaussures (Eurostat, TCAM ' || k.annee_debut || '-'
+            || k.annee_fin || ', toutes chaussures, en valeur, inflation comprise)',
+        'Marché', k.code_pays, k.tcam_pct, '%', NULL, 'INFO', 'CALCUL', k.origine_donnees
+    FROM kpi_croissance_depenses_chaussures AS k
+    UNION ALL
     SELECT 'Part de marché ' || k.nom_concurrent, 'Marché', k.code_pays, k.part_marche_pct, '%',
         NULL, 'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_part_de_marche AS k
@@ -76,8 +82,11 @@ lignes AS (
         'Logistique', k.code_pays, k.distance_moyenne_km, 'km', NULL, 'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_distance_hub_pays AS k
     UNION ALL
-    -- README : FAIT (à vérifier). Tant que la source est simulée, ce n'est qu'une HYPOTHÈSE.
-    SELECT k.taxe, 'Logistique', k.code_pays, k.valeur, k.unite, NULL, 'INFO',
+    -- README : FAIT pour les taxes relevées sur les sources officielles (T18) ; une valeur simulée
+    -- n'est qu'une HYPOTHÈSE, affichée en comparaison quand le réel existe.
+    SELECT k.taxe || CASE WHEN k.note IS NOT NULL THEN ' (' || k.note || ')' ELSE '' END
+            || CASE WHEN k.est_retenue THEN '' ELSE ' (comparaison, jeu simulé)' END,
+        'Logistique', k.code_pays, k.valeur, k.unite, NULL, 'INFO',
         CASE WHEN k.origine_donnees = 'REEL' THEN 'FAIT' ELSE 'HYPOTHÈSE' END, k.origine_donnees
     FROM kpi_taxes AS k
     -- Assortiment
