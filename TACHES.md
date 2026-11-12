@@ -21,7 +21,7 @@ Les numéros sont des identifiants ; l'ordre est donné par les phases.
 
 | # | Décision | Proposition |
 |---|---|---|
-| D1 | Outil de dashboard | Power BI si au moins un membre a Windows, sinon Looker Studio |
+| D1 | Outil de dashboard | **Décidé le 12/11/2026 : Power BI.** (Proposition de départ : Power BI si au moins un membre a Windows, sinon Looker Studio) |
 | D2 | Seuils Go / No-Go | Ceux du README (section 4.2) |
 | D3 | Recalibrage de la rentabilité magasin | Oui (voir l'audit, point 1) |
 | D4 | Sources réelles | Eurostat (T4), prix et catalogue crocs.fr / crocs.de (T3), OpenStreetMap (T16, T17), taxes officielles (T18) |
@@ -65,7 +65,7 @@ Les phases suivent l'ordre de la démarche du cours.
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | À faire |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` ; `business_case`, `city_scoring` et `ai_commentary` s'exportent dès qu'ils existent) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | À faire |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |

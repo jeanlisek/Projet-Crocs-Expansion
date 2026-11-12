@@ -1,0 +1,155 @@
+code_pays,annee,segment,taille_marche_meur,taux_croissance_annuel_pct,est_projection,source,est_simule
+BE,2019,Casual moulé & sandales,161.9,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2019,Chaussures (total),1722.8,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2020,Casual moulé & sandales,136.5,-15.69,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2020,Chaussures (total),1433.8,-16.78,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2021,Casual moulé & sandales,162.2,18.83,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2021,Chaussures (total),1682.8,17.37,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2022,Casual moulé & sandales,180.4,11.22,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2022,Chaussures (total),1847.9,9.81,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2023,Casual moulé & sandales,182.4,1.11,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2023,Chaussures (total),1868.8,1.13,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2024,Casual moulé & sandales,190.4,4.39,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2024,Chaussures (total),1904.3,1.9,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2025,Casual moulé & sandales,199.8,4.94,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2025,Chaussures (total),1950.4,2.42,False,Panel marché simulé (calibré Euromonitor/Statista),True
+BE,2026,Casual moulé & sandales,207.1,3.65,True,Projection interne (CAGR),True
+BE,2026,Chaussures (total),1972.9,1.15,True,Projection interne (CAGR),True
+BE,2027,Casual moulé & sandales,216.2,4.39,True,Projection interne (CAGR),True
+BE,2027,Chaussures (total),2010.4,1.9,True,Projection interne (CAGR),True
+BE,2028,Casual moulé & sandales,225.7,4.39,True,Projection interne (CAGR),True
+BE,2028,Chaussures (total),2048.6,1.9,True,Projection interne (CAGR),True
+BE,2029,Casual moulé & sandales,235.6,4.39,True,Projection interne (CAGR),True
+BE,2029,Chaussures (total),2087.5,1.9,True,Projection interne (CAGR),True
+DE,2019,Casual moulé & sandales,936.6,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2019,Chaussures (total),10488.6,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2020,Casual moulé & sandales,802.4,-14.33,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2020,Chaussures (total),8871.9,-15.41,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2021,Casual moulé & sandales,941.3,17.31,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2021,Chaussures (total),10278.9,15.86,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2022,Casual moulé & sandales,1036.7,10.13,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2022,Chaussures (total),11180.8,8.77,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2023,Casual moulé & sandales,1045.3,0.83,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2023,Chaussures (total),11371.2,1.7,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2024,Casual moulé & sandales,1108.5,6.05,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2024,Chaussures (total),11668.7,2.62,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2025,Casual moulé & sandales,1162.4,4.86,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2025,Chaussures (total),11840.7,1.47,False,Panel marché simulé (calibré Euromonitor/Statista),True
+DE,2026,Casual moulé & sandales,1219.6,4.92,True,Projection interne (CAGR),True
+DE,2026,Chaussures (total),12021.4,1.53,True,Projection interne (CAGR),True
+DE,2027,Casual moulé & sandales,1283.0,5.2,True,Projection interne (CAGR),True
+DE,2027,Chaussures (total),12237.7,1.8,True,Projection interne (CAGR),True
+DE,2028,Casual moulé & sandales,1349.7,5.2,True,Projection interne (CAGR),True
+DE,2028,Chaussures (total),12458.0,1.8,True,Projection interne (CAGR),True
+DE,2029,Casual moulé & sandales,1419.9,5.2,True,Projection interne (CAGR),True
+DE,2029,Chaussures (total),12682.3,1.8,True,Projection interne (CAGR),True
+ES,2019,Casual moulé & sandales,634.6,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2019,Chaussures (total),5000.6,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2020,Casual moulé & sandales,553.1,-12.84,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2020,Chaussures (total),4303.3,-13.94,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2021,Casual moulé & sandales,640.1,15.73,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2021,Chaussures (total),4918.6,14.3,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2022,Casual moulé & sandales,716.6,11.95,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2022,Chaussures (total),5438.8,10.58,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2023,Casual moulé & sandales,745.8,4.07,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2023,Chaussures (total),5668.8,4.23,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2024,Casual moulé & sandales,798.9,7.12,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2024,Chaussures (total),5917.9,4.39,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2025,Casual moulé & sandales,837.3,4.81,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2025,Chaussures (total),6044.4,2.14,False,Panel marché simulé (calibré Euromonitor/Statista),True
+ES,2026,Casual moulé & sandales,896.6,7.08,True,Projection interne (CAGR),True
+ES,2026,Chaussures (total),6308.0,4.36,True,Projection interne (CAGR),True
+ES,2027,Casual moulé & sandales,951.3,6.1,True,Projection interne (CAGR),True
+ES,2027,Chaussures (total),6522.5,3.4,True,Projection interne (CAGR),True
+ES,2028,Casual moulé & sandales,1009.4,6.11,True,Projection interne (CAGR),True
+ES,2028,Chaussures (total),6744.3,3.4,True,Projection interne (CAGR),True
+ES,2029,Casual moulé & sandales,1070.9,6.09,True,Projection interne (CAGR),True
+ES,2029,Chaussures (total),6973.6,3.4,True,Projection interne (CAGR),True
+FR,2019,Casual moulé & sandales,853.5,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2019,Chaussures (total),8647.1,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2020,Casual moulé & sandales,726.8,-14.84,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2020,Chaussures (total),7271.0,-15.91,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2021,Casual moulé & sandales,864.5,18.95,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2021,Chaussures (total),8540.7,17.46,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2022,Casual moulé & sandales,967.9,11.96,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2022,Chaussures (total),9444.8,10.59,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2023,Casual moulé & sandales,972.5,0.48,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2023,Chaussures (total),9488.5,0.46,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2024,Casual moulé & sandales,1035.2,6.45,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2024,Chaussures (total),9858.7,3.9,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2025,Casual moulé & sandales,1058.7,2.27,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2025,Chaussures (total),9842.2,-0.17,False,Panel marché simulé (calibré Euromonitor/Statista),True
+FR,2026,Casual moulé & sandales,1114.4,5.26,True,Projection interne (CAGR),True
+FR,2026,Chaussures (total),10111.7,2.74,True,Projection interne (CAGR),True
+FR,2027,Casual moulé & sandales,1165.6,4.59,True,Projection interne (CAGR),True
+FR,2027,Chaussures (total),10324.0,2.1,True,Projection interne (CAGR),True
+FR,2028,Casual moulé & sandales,1219.2,4.6,True,Projection interne (CAGR),True
+FR,2028,Chaussures (total),10540.8,2.1,True,Projection interne (CAGR),True
+FR,2029,Casual moulé & sandales,1275.3,4.6,True,Projection interne (CAGR),True
+FR,2029,Chaussures (total),10762.2,2.1,True,Projection interne (CAGR),True
+GB,2019,Casual moulé & sandales,1036.1,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2019,Chaussures (total),11022.1,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2020,Casual moulé & sandales,880.0,-15.07,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2020,Chaussures (total),9243.3,-16.14,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2021,Casual moulé & sandales,1026.4,16.64,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2021,Chaussures (total),10647.8,15.19,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2022,Casual moulé & sandales,1155.3,12.56,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2022,Chaussures (total),11837.5,11.17,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2023,Casual moulé & sandales,1182.1,2.32,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2023,Chaussures (total),12178.4,2.88,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2024,Casual moulé & sandales,1252.2,5.93,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2024,Chaussures (total),12522.3,2.82,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2025,Casual moulé & sandales,1296.5,3.54,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2025,Chaussures (total),12584.2,0.49,False,Panel marché simulé (calibré Euromonitor/Statista),True
+GB,2026,Casual moulé & sandales,1380.2,6.46,True,Projection interne (CAGR),True
+GB,2026,Chaussures (total),13002.3,3.32,True,Projection interne (CAGR),True
+GB,2027,Casual moulé & sandales,1456.1,5.5,True,Projection interne (CAGR),True
+GB,2027,Chaussures (total),13314.4,2.4,True,Projection interne (CAGR),True
+GB,2028,Casual moulé & sandales,1536.1,5.49,True,Projection interne (CAGR),True
+GB,2028,Chaussures (total),13633.9,2.4,True,Projection interne (CAGR),True
+GB,2029,Casual moulé & sandales,1620.6,5.5,True,Projection interne (CAGR),True
+GB,2029,Chaussures (total),13961.2,2.4,True,Projection interne (CAGR),True
+IT,2019,Casual moulé & sandales,850.3,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2019,Chaussures (total),8223.2,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2020,Casual moulé & sandales,721.5,-15.15,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2020,Chaussures (total),6889.6,-16.22,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2021,Casual moulé & sandales,844.3,17.02,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2021,Chaussures (total),7961.8,15.56,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2022,Casual moulé & sandales,923.3,9.36,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2022,Chaussures (total),8599.9,8.01,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2023,Casual moulé & sandales,944.1,2.25,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2023,Chaussures (total),8802.7,2.36,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2024,Casual moulé & sandales,980.8,3.89,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2024,Chaussures (total),8916.1,1.29,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2025,Casual moulé & sandales,1026.7,4.68,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2025,Chaussures (total),9100.8,2.07,False,Panel marché simulé (calibré Euromonitor/Statista),True
+IT,2026,Casual moulé & sandales,1060.9,3.33,True,Projection interne (CAGR),True
+IT,2026,Chaussures (total),9169.0,0.75,True,Projection interne (CAGR),True
+IT,2027,Casual moulé & sandales,1104.4,4.1,True,Projection interne (CAGR),True
+IT,2027,Chaussures (total),9306.5,1.5,True,Projection interne (CAGR),True
+IT,2028,Casual moulé & sandales,1149.7,4.1,True,Projection interne (CAGR),True
+IT,2028,Chaussures (total),9446.1,1.5,True,Projection interne (CAGR),True
+IT,2029,Casual moulé & sandales,1196.8,4.1,True,Projection interne (CAGR),True
+IT,2029,Chaussures (total),9587.8,1.5,True,Projection interne (CAGR),True
+NL,2019,Casual moulé & sandales,221.6,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2019,Chaussures (total),2619.8,,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2020,Casual moulé & sandales,186.1,-16.02,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2020,Chaussures (total),2172.0,-17.09,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2021,Casual moulé & sandales,218.2,17.25,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2021,Chaussures (total),2515.4,15.81,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2022,Casual moulé & sandales,245.1,12.33,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2022,Chaussures (total),2790.0,10.92,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2023,Casual moulé & sandales,249.3,1.71,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2023,Chaussures (total),2837.8,1.71,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2024,Casual moulé & sandales,261.2,4.77,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2024,Chaussures (total),2902.2,2.27,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2025,Casual moulé & sandales,275.5,5.47,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2025,Chaussures (total),2988.1,2.96,False,Panel marché simulé (calibré Euromonitor/Statista),True
+NL,2026,Casual moulé & sandales,286.1,3.85,True,Projection interne (CAGR),True
+NL,2026,Chaussures (total),3029.0,1.37,True,Projection interne (CAGR),True
+NL,2027,Casual moulé & sandales,299.6,4.72,True,Projection interne (CAGR),True
+NL,2027,Chaussures (total),3095.6,2.2,True,Projection interne (CAGR),True
+NL,2028,Casual moulé & sandales,313.6,4.67,True,Projection interne (CAGR),True
+NL,2028,Chaussures (total),3163.7,2.2,True,Projection interne (CAGR),True
+NL,2029,Casual moulé & sandales,328.4,4.72,True,Projection interne (CAGR),True
+NL,2029,Chaussures (total),3233.3,2.2,True,Projection interne (CAGR),True
