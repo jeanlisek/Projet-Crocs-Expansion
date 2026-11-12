@@ -38,7 +38,7 @@ Consignes techniques :
 - Une erreur SQL arrête `make kpi` en nommant le fichier fautif.
 - Pour tester : `make gold && make kpi`.
 
-Réel ou simulé : pour l'indice prix, le % du catalogue éligible, la densité concurrentielle et la distance au hub, utilise la table réelle si elle existe dans l'entrepôt, sinon la simulée. `kpi_summary` indique la source dans `statut_epistemique` (FAIT pour le réel, CALCUL ou HYPOTHÈSE pour le simulé). Quand les deux existent, ajoute une ligne de comparaison réel / simulé.
+Réel ou simulé : pour l'indice prix, le % du catalogue éligible, la densité concurrentielle et la distance au hub, la table réelle est prioritaire quand elle existe dans l'entrepôt ; sinon, utilise la simulée. Dans `kpi_summary`, `origine_donnees` indique d'où viennent les entrées (REEL, SIMULE ou MIXTE) et `statut_epistemique` reste conforme au README (section 2.3). Quand les deux tables existent, ajoute une ligne de comparaison réel / simulé.
 
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T7 sur `feature/T7-kpi`, créée depuis ce `develop` à jour. Écris une vue SQL par KPI du README (section 2.3), une vue par fichier dans `sql/kpi/`, exécutée par `make kpi`, avec les règles de gestion de la section 2.5. Construis `kpi_summary` avec les colonnes exactes de `docs/equipe/REGLES_COMMUNES.md` (« Contrat entre les tâches »), pour tous les pays, avec les seuils de `config/hypotheses.yaml`. Un test par KPI sur un petit jeu calculé à la main.
 

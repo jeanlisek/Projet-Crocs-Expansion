@@ -294,7 +294,7 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 | Commande | Rôle |
 |---|---|
 | `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold puis vues KPI ; chaque tâche y ajoute son étape (collecte, commentaires IA, exports) |
-| `make silver` | Type et contrôle les tables de `data/bronze/`, les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
+| `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
