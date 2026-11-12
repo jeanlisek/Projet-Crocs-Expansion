@@ -89,7 +89,9 @@ def run_views(tmp_path, warehouse, views, query):
     sql_dir = tmp_path / "kpi"
     sql_dir.mkdir()
     for view in views:
-        (sql_dir / f"{view}.sql").write_text((SQL_DIR / f"{view}.sql").read_text(encoding="utf-8"))
+        (sql_dir / f"{view}.sql").write_text(
+            (SQL_DIR / f"{view}.sql").read_text(encoding="utf-8"), encoding="utf-8"
+        )
     run_kpi.run(warehouse, sql_dir)
     con = duckdb.connect(str(warehouse), read_only=True)
     try:

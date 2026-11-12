@@ -73,6 +73,7 @@ Puis prévenir Jean-Li, qui merge dans `develop`. **Personne ne pousse sur `main
 7. **Scraping** : lire `robots.txt` d'abord, user-agent explicite, ≥ 2 s entre requêtes, données produit publiques seulement. Blocage ou CAPTCHA : on s'arrête, jamais de contournement.
 8. **Secrets** (clé API) dans `.env`, jamais commité. Le dépôt est **public**.
 9. **Le générateur est gelé** : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
+10. **Encodage** : toute lecture ou écriture de fichier précise `encoding="utf-8"` (le projet tourne aussi sous Windows).
 
 ## Périmètre de chacun
 
