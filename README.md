@@ -34,7 +34,7 @@ Chaque membre commence par sa fiche : [`docs/equipe/`](docs/equipe/).
 
 **Crocs France** est la filiale française du groupe coté Crocs, Inc. (Nasdaq : CROX). Elle exploite un réseau intégré de magasins aux marques Crocs et HEYDUDE.
 
-En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deichmann…). Dans nos données, elle y pèse 13,9 % du segment casual moulé & sandales en 2025. Le Comex se demande s'il faut **ouvrir un réseau de magasins en propre** sur la période 2027-2029.
+En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deichmann…). Dans nos données, elle y pèse 14,0 % du segment casual moulé & sandales en 2025. Le Comex se demande s'il faut **ouvrir un réseau de magasins en propre** sur la période 2027-2029.
 
 > **Scénario fictif, limite assumée.** En réalité, Crocs, Inc. possède déjà quelques boutiques en Allemagne. Nous traitons cette présence réelle comme un indice que le marché existe, pas comme une donnée de l'étude.
 
@@ -42,9 +42,9 @@ En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deich
 
 | Élément | Valeur |
 |---|---|
-| Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports |
-| E-commerce | crocs.fr, environ 24 % du CA HT |
-| CA net TTC | 59 M€ (2023) → 75 M€ (2024) → 81 M€ (2025) |
+| Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports. Trois ont fermé entre 2023 et 2025 : 45 sont ouverts |
+| E-commerce | crocs.fr, environ 37 % du CA HT |
+| CA net TTC | 40 M€ (2023) → 50 M€ (2024) → 53 M€ (2025) |
 | Logistique | Hubs de Moissy-Cramayel (IDF) et Saint-Quentin-Fallavier (Lyon), centre de distribution EMEA à Dordrecht (Pays-Bas) |
 
 ### Catalogue

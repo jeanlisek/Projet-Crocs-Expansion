@@ -3,7 +3,7 @@
 -- Numérateur : osm_villes (réel). Dénominateur : destatis_population_villes (réel, officiel,
 -- même date de référence pour toutes les villes).
 -- Les colonnes *_population_osm et *_population_simulee refont le même calcul avec les deux
--- autres populations, pour comparaison ; densite_simulee_v1 est la valeur du jeu simulé,
+-- autres populations, pour comparaison ; densite_simulee est la valeur du jeu simulé (recalibré),
 -- qui comptait les points de vente de neuf concurrents nommés (autre mesure).
 CREATE OR REPLACE VIEW densite_concurrentielle AS
 SELECT
@@ -19,7 +19,7 @@ SELECT
     CAST(round(zone.population_ville_millions * 1000000) AS BIGINT) AS population_simulee,
     round(osm.nb_magasins_chaussures * 100000.0 / (zone.population_ville_millions * 1000000), 2)
         AS densite_population_simulee,
-    zone.densite_concurrentielle_pour_100k_hab AS densite_simulee_v1,
+    zone.densite_concurrentielle_pour_100k_hab AS densite_simulee,
     'REEL' AS origine_donnees
 FROM osm_villes AS osm
 JOIN destatis_population_villes AS destatis ON destatis.id_zone = osm.id_zone
