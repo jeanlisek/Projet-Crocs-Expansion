@@ -87,14 +87,14 @@ Chaque chiffre de l'étude porte l'un des quatre statuts du référentiel analyt
 | Marché | Croissance du secteur | TCAM 2022-2025 de la taille du marché, segment casual moulé & sandales | `fact_marche` | CALCUL |
 | Marché | Part de marché Crocs en France | Part en valeur de la marque, tous canaux | `fact_parts_de_marche` | CALCUL |
 | Marché | Part de marché d'un concurrent en Allemagne | Idem, filtré sur le concurrent (Birkenstock, Deichmann…) | `fact_parts_de_marche` | CALCUL |
-| Prix | Indice prix relatif | Moyenne, sur un panier identique de SKU hors promotion, de (prix HT DE ÷ prix HT FR) × 100 | `fact_prix_releves`, `fact_fiscalite` | CALCUL |
+| Prix | Indice prix relatif | Moyenne, sur un panier identique de SKU hors promotion, de (prix HT DE ÷ prix HT FR) × 100 | Allemagne : `crocs_produits` (réel, T3). Autres pays et ligne de comparaison : `fact_prix_releves`, `fact_fiscalite` (simulé) | CALCUL |
 | Prix | Marge brute post-taxe | (prix TTC local ÷ (1 + TVA) − coût débarqué − transport unitaire) ÷ prix HT | `dim_produit`, `fact_logistique`, `fact_fiscalite` | CALCUL |
 | Réseau | Densité concurrentielle | Magasins de chaussures toutes enseignes (OpenStreetMap, `shop=shoes`) pour 100 000 habitants, population officielle Destatis au 31/12/2024 | `osm_villes`, `destatis_population_villes` | CALCUL |
 | Réseau | Coût moyen au m² | Loyer + charges, en €/m²/an, par ville et par format | `fact_immobilier` | CALCUL |
 | Logistique | Distance moyenne aux hubs | Moyenne, sur les 12 villes allemandes, de la distance routière réelle (OSRM) au hub **le plus proche** | `osrm_distances` | CALCUL |
 | Logistique | Droits & taxes locales | TVA, impôt sur les sociétés, droits d'import, éco-contribution | `fact_fiscalite` | FAIT (à vérifier) |
 | Assortiment | Pénétration des catégories | Part des consommateurs ayant acheté la catégorie | `fact_penetration_categories` | CALCUL |
-| Assortiment | % du catalogue éligible | SKU éligibles ÷ 147 | `fact_eligibilite_assortiment` | CALCUL |
+| Assortiment | % du catalogue éligible | Allemagne : références du catalogue crocs.fr listées sur crocs.de ÷ références du catalogue crocs.fr. Autres pays et ligne de comparaison : SKU éligibles ÷ 147 | `crocs_catalogue` (réel, T3) ; `fact_eligibilite_assortiment` (simulé) | CALCUL |
 | Rentabilité | Coût d'occupation | (loyer + charges) ÷ CA du magasin | `fact_immobilier`, business case | CALCUL |
 | Rentabilité | Point mort par magasin | Coûts fixes annuels ÷ taux de marge sur coûts variables | business case | CALCUL |
 | Rentabilité | Payback | Investissement d'ouverture ÷ résultat annuel du magasin, par scénario | business case | CALCUL + HYPOTHÈSE |
