@@ -49,6 +49,12 @@ Coût moyen au m² (loyer + charges) : Outlet,Réseau,ES,290.0,€/m²/an,,INFO,
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,GB,387.0,€/m²/an,,INFO,CALCUL,SIMULE
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,IT,386.0,€/m²/an,,INFO,CALCUL,SIMULE
 Coût moyen au m² (loyer + charges) : Outlet,Réseau,NL,256.0,€/m²/an,,INFO,CALCUL,SIMULE
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,BE,3.96,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,DE,5.54,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,ES,9.27,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,FR,-0.24,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,IT,3.15,%,,INFO,CALCUL,REEL
+"Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise)",Marché,NL,1.43,%,,INFO,CALCUL,REEL
 Croissance du secteur (TCAM 2022-2025),Marché,BE,3.46,%,≥ 2 %,GO,CALCUL,SIMULE
 Croissance du secteur (TCAM 2022-2025),Marché,DE,3.89,%,≥ 2 %,GO,CALCUL,SIMULE
 Croissance du secteur (TCAM 2022-2025),Marché,ES,5.33,%,≥ 2 %,GO,CALCUL,SIMULE
@@ -77,13 +83,26 @@ Distance moyenne au hub le plus proche,Logistique,NL,90.3,km,,INFO,CALCUL,SIMULE
 "Droit d'import (origine Asie, via la France)",Logistique,GB,16.0,%,,INFO,HYPOTHÈSE,SIMULE
 "Droit d'import (origine Asie, via la France)",Logistique,IT,0.0,%,,INFO,HYPOTHÈSE,SIMULE
 "Droit d'import (origine Asie, via la France)",Logistique,NL,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,BE,25.0,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,DE,29.9,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,ES,25.0,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,FR,25.0,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,GB,25.0,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,IT,27.9,%,,INFO,HYPOTHÈSE,SIMULE
-Impôt sur les sociétés,Logistique,NL,25.8,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,BE,16.8,%,,INFO,FAIT,REEL
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,DE,16.8,%,,INFO,FAIT,REEL
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,ES,16.8,%,,INFO,FAIT,REEL
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,FR,16.8,%,,INFO,FAIT,REEL
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,IT,16.8,%,,INFO,FAIT,REEL
+"Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)",Logistique,NL,16.8,%,,INFO,FAIT,REEL
+Impôt sur les sociétés,Logistique,BE,25.0,%,,INFO,FAIT,REEL
+Impôt sur les sociétés,Logistique,ES,25.0,%,,INFO,FAIT,REEL
+Impôt sur les sociétés,Logistique,GB,25.0,%,,INFO,FAIT,REEL
+Impôt sur les sociétés,Logistique,IT,27.81,%,,INFO,FAIT,REEL
+Impôt sur les sociétés,Logistique,NL,25.8,%,,INFO,FAIT,REEL
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,BE,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,DE,29.9,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,ES,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,FR,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,GB,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,IT,27.9,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (comparaison, jeu simulé)",Logistique,NL,25.8,%,,INFO,HYPOTHÈSE,SIMULE
+"Impôt sur les sociétés (taux combiné : IS, solidarité et taxe professionnelle moyenne incluses)",Logistique,DE,30.06,%,,INFO,FAIT,REEL
+"Impôt sur les sociétés (taux normal, hors surtaxes)",Logistique,FR,25.0,%,,INFO,FAIT,REEL
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,BE,99.17,indice,95 à 110,GO,CALCUL,SIMULE
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,DE,100.85,indice,95 à 110,GO,CALCUL,REEL
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,ES,99.17,indice,95 à 110,GO,CALCUL,SIMULE
@@ -232,20 +251,34 @@ Pénétration : Sandales,Assortiment,FR,37.9,%,,INFO,CALCUL,SIMULE
 Pénétration : Sandales,Assortiment,GB,32.9,%,,INFO,CALCUL,SIMULE
 Pénétration : Sandales,Assortiment,IT,42.7,%,,INFO,CALCUL,SIMULE
 Pénétration : Sandales,Assortiment,NL,30.9,%,,INFO,CALCUL,SIMULE
-TVA chaussures enfant,Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,GB,0.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA chaussures enfant,Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,GB,20.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
-TVA standard,Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,GB,0.0,%,,INFO,FAIT,REEL
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,GB,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA chaussures enfant (comparaison, jeu simulé)",Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,BE,21.0,%,,INFO,FAIT,REEL
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,DE,19.0,%,,INFO,FAIT,REEL
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,ES,21.0,%,,INFO,FAIT,REEL
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,FR,20.0,%,,INFO,FAIT,REEL
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,IT,22.0,%,,INFO,FAIT,REEL
+TVA chaussures enfant (pas de taux réduit : taux normal),Logistique,NL,21.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,BE,21.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,DE,19.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,ES,21.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,FR,20.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,GB,20.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,IT,22.0,%,,INFO,FAIT,REEL
+TVA standard,Logistique,NL,21.0,%,,INFO,FAIT,REEL
+"TVA standard (comparaison, jeu simulé)",Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,GB,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
+"TVA standard (comparaison, jeu simulé)",Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
 Éco-contribution,Logistique,BE,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
 Éco-contribution,Logistique,DE,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
 Éco-contribution,Logistique,ES,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE

@@ -314,17 +314,43 @@ def test_cost_per_square_metre_adds_rent_and_service_charges(tmp_path):
     assert rows == [("DE", "Centre commercial", 345)]
 
 
-def test_taxes_give_one_row_per_tax(tmp_path):
-    warehouse = build(tmp_path, TAX)
+def test_taxes_prefer_the_official_reference_and_keep_the_simulated_for_comparison(tmp_path):
+    warehouse = build(
+        tmp_path,
+        TAX + """
+        CREATE TABLE taxes_reference (code_pays VARCHAR, taux_tva_standard_pct DOUBLE,
+            taux_tva_reduite_chaussures_enfant_pct DOUBLE, taux_impot_societes_pct DOUBLE,
+            droit_douane_ue_chaussures_ch64_pct DOUBLE, est_simule BOOLEAN);
+        INSERT INTO taxes_reference VALUES
+            ('DE', 19.0, NULL, 30.06, 16.8, FALSE),
+            ('GB', 20.0, 0.0, 25.0, NULL, FALSE);
+        """,
+    )
     rows = run_views(
         tmp_path,
         warehouse,
         ["kpi_taxes"],
-        "SELECT taxe, valeur, unite FROM kpi_taxes WHERE code_pays = 'DE' ORDER BY 1",
+        "SELECT code_pays, taxe, valeur, origine_donnees, est_retenue FROM kpi_taxes "
+        "WHERE code_pays IN ('DE', 'GB') ORDER BY 1, 2, 4",
     )
-    assert len(rows) == 5
-    assert ("TVA standard", 19.0, "%") in rows
-    assert ("Éco-contribution", 0.0, "€/paire") in rows
+    douane = "Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)"
+    # DE: real values kept, the simulated TVA and IS shown for comparison ; no reduced kids' rate
+    # -> standard rate ; taxes only in the simulated set (import via France, eco-fee) are kept.
+    # GB: real 0 % kids' rate ; no EU customs duty published -> no row ; no simulated GB row.
+    assert rows == [
+        ("DE", "Droit d'import (origine Asie, via la France)", 0.0, "SIMULE", True),
+        ("DE", douane, 16.8, "REEL", True),
+        ("DE", "Impôt sur les sociétés", 30.06, "REEL", True),
+        ("DE", "Impôt sur les sociétés", 29.9, "SIMULE", False),
+        ("DE", "TVA chaussures enfant", 19.0, "REEL", True),
+        ("DE", "TVA chaussures enfant", 19.0, "SIMULE", False),
+        ("DE", "TVA standard", 19.0, "REEL", True),
+        ("DE", "TVA standard", 19.0, "SIMULE", False),
+        ("DE", "Éco-contribution", 0.0, "SIMULE", True),
+        ("GB", "Impôt sur les sociétés", 25.0, "REEL", True),
+        ("GB", "TVA chaussures enfant", 0.0, "REEL", True),
+        ("GB", "TVA standard", 20.0, "REEL", True),
+    ]
 
 
 def test_category_penetration_keeps_the_reference_year(tmp_path):
@@ -469,6 +495,9 @@ def summary(silver, tmp_path_factory):
             date_reference DATE);
         CREATE TABLE osrm_distances (id_hub VARCHAR, id_zone VARCHAR, commune_hub VARCHAR,
             ville VARCHAR, distance_route_km DOUBLE, duree_h DOUBLE);
+        CREATE TABLE taxes_reference (code_pays VARCHAR, taux_tva_standard_pct DOUBLE,
+            taux_tva_reduite_chaussures_enfant_pct DOUBLE, taux_impot_societes_pct DOUBLE,
+            droit_douane_ue_chaussures_ch64_pct DOUBLE, est_simule BOOLEAN);
         CREATE TABLE eurostat_series (code_pays VARCHAR, indicateur VARCHAR, annee INTEGER,
             valeur DOUBLE, statut_eurostat VARCHAR, est_simule BOOLEAN);
         """)
