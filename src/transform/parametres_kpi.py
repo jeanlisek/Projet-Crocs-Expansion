@@ -32,6 +32,7 @@ SECTIONS = (
     "business_case_allemagne",
     "city_scoring",
     "sensibilite_payback",
+    "impact_origine",
     "collecte.crocs.tva_pct",
 )
 

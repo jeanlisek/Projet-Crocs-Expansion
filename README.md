@@ -222,7 +222,7 @@ Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signa
 - **Durée OSRM : un temps de conduite, pas un délai de livraison.** `duree_h` est le temps de trajet d'une voiture, sans pause, sans chargement et sans les règles de conduite des poids lourds. Le délai de livraison reste celui du jeu simulé.
 - **Points de départ et d'arrivée.** Chaque hub est placé au centre de sa commune, son adresse exacte étant une hypothèse du scénario. Chaque ville est placée au point médian de ses magasins de chaussures, c'est-à-dire dans son centre commerçant.
 - **Dates différentes.** Les magasins sont relevés le 12/11/2026, la population est celle du 31/12/2024 (dernière publiée par Destatis, sur la base du recensement de 2022).
-- **Droit de douane : payé à l'entrée dans l'UE, identique en France et en Allemagne.** Le droit de pays tiers sur les chaussures du code NC 6402 99 est de 16,8 % (TARIC, 12/11/2026). Il est acquitté une fois, quand la marchandise entre dans l'UE, quel que soit le pays où elle est vendue : il ne différencie donc pas la France de l'Allemagne. Le taux préférentiel de l'accord de libre-échange UE-Vietnam (pays de fabrication du catalogue simulé) n'a pas été vérifié : le droit réellement payé peut être plus bas.
+- **Droit de douane : payé à l'entrée dans l'UE, identique en France et en Allemagne.** Le droit de pays tiers sur les chaussures du code NC 6402 99 est de 16,8 % (TARIC, 12/11/2026). Il est acquitté une fois, quand la marchandise entre dans l'UE, quel que soit le pays où elle est vendue : il ne différencie donc pas la France de l'Allemagne. Pour les chaussures fabriquées au Vietnam, l'accord UE-Vietnam ramène ce droit à 0 % (TARIC, préférence tarifaire, depuis le 01/08/2020) ; la vue `impact_origine` mesure l'effet de cette préférence sur la marge et le payback. Le code retenu pour un sabot ajouré type Classic Clog (6402 99 39) vient de la lecture des libellés de la nomenclature : aucune décision de classement officielle (EBTI) n'a été trouvée, et les codes voisins ont le même droit.
 - **Impôt sur les sociétés : deux définitions.** Le taux allemand de 30,06 % (OCDE, 2025) inclut une taxe professionnelle moyenne, variable selon la commune ; le taux français de 25 % est le taux national seul. Ils ne se comparent pas directement (voir `note` dans `data/manual/taxes_reference.csv`).
 - **Une autre mesure que le jeu simulé.** La densité réelle compte tous les magasins de chaussures, toutes enseignes confondues, alors que la colonne simulée comptait les points de vente de neuf concurrents nommés. Les deux chiffres ne se comparent pas terme à terme.
 
@@ -249,6 +249,16 @@ Seuils fixés **avant** l'analyse, pour ne pas les ajuster au résultat :
 | Coût d'occupation | ≤ 15 % du CA magasin, jugé sur le scénario central (CONVENTION) |
 | Payback, scénario pessimiste | ≤ 36 mois |
 | % catalogue éligible | ≥ 80 % |
+
+**Règle de combinaison** (CONVENTION, formalisée lors de la synthèse le 12/11/2026 ; les seuils ci-dessus ne changent pas) :
+
+| Situation | Verdict |
+|---|---|
+| Tous les critères sont GO | **GO** |
+| Un critère NO-GO est levé par une condition chiffrée réaliste, lue dans la vue `sensibilite_payback` | **GO conditionnel** |
+| Sinon | **NO-GO** |
+
+Le verdict retenu et ses conditions sont consignés dans `config/hypotheses.yaml` (section `decision`).
 
 ### 4.3 Hors périmètre (roadmap)
 
