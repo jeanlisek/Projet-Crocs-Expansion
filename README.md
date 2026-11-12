@@ -281,6 +281,7 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 
 | Commande | Rôle |
 |---|---|
-| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : la simulation ; chaque tâche y ajoute son étape (collecte, silver, gold, KPIs, commentaires IA, exports) |
+| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation puis silver ; chaque tâche y ajoute son étape (collecte, gold, KPIs, commentaires IA, exports) |
+| `make silver` | Type et contrôle les tables de `data/bronze/`, les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
 | `make format` | Reformate `src/` et `tests/` avec `black` |
