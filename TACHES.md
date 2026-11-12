@@ -21,7 +21,7 @@ Les numéros sont des identifiants ; l'ordre est donné par les phases.
 
 | # | Décision | Proposition |
 |---|---|---|
-| D1 | Outil de dashboard | Power BI si au moins un membre a Windows, sinon Looker Studio |
+| D1 | Outil de dashboard | **Décidé le 12/11/2026 : Power BI.** (Proposition de départ : Power BI si au moins un membre a Windows, sinon Looker Studio) |
 | D2 | Seuils Go / No-Go | Ceux du README (section 4.2) |
 | D3 | Recalibrage de la rentabilité magasin | Oui (voir l'audit, point 1) |
 | D4 | Sources réelles | Eurostat (T4), prix et catalogue crocs.fr / crocs.de (T3), OpenStreetMap (T16, T17), taxes officielles (T18) |
