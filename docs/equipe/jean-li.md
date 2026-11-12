@@ -10,7 +10,7 @@
 | T1 | Dépôt, CI, Makefile, requirements | ✅ Fait | — | Tout |
 | T5 | Bronze → silver + journal de nettoyage | ✅ Fait (squelette, tables réelles à brancher) | T3, T4, T16, T17, T18 pour les tables réelles | T6 |
 | T6 | Silver → gold (DuckDB) + tests de qualité | ✅ Fait | T2, T5 | T7 |
-| T10 | Exports pour le dashboard | À faire | T7, T9 | T11 |
+| T10 | Exports pour le dashboard | Fait | T7, T9 | T11 |
 | T16 | OpenStreetMap : magasins de chaussures par ville allemande | ✅ Fait | — | Densité concurrentielle réelle |
 | T17 | Coordonnées réelles et distances routières (OSRM) | ✅ Fait | — | Distance aux hubs réelle |
 | T14 | README final | Vendredi matin | T13 | Livrable 1 |
@@ -27,7 +27,7 @@
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T6 sur `feature/T6-gold`, créée depuis ce `develop` à jour. Construis `src/transform/build_gold.py` : charge les Parquet de `data/silver/` dans `data/gold/warehouse.duckdb` selon le modèle en constellation du README (section 3.2). Si des tables réelles existent dans `REAL_TABLES`, charge-les à côté des tables simulées, sans les fusionner. Ajoute `tests/test_qualite_gold.py` : unicité au grain, aucune clé orpheline, prix > 0, codes pays dans `dim_pays`. Cible `make gold`, ajoutée à `all`. Montre-moi le résultat avant le commit.
 
 **Merger une branche d'un coéquipier**
-> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Récupère `origin/feature/<branche>`. Lance `make lint` et `make test` dessus. Si tout passe, merge dans `develop` en `--no-ff`, push, et vérifie la CI avec `/opt/homebrew/bin/gh run list --limit 2`. Sinon, montre-moi ce qui casse sans corriger le code du coéquipier.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Récupère `origin/feature/<branche>`. D'abord, vérifie les auteurs avec `git log --format="%an <%ae>" develop..<branche>` : si un commit n'est pas au nom du coéquipier ou si son e-mail est vide, arrête-toi et dis-le-moi. Ensuite, lance `make lint` et `make test` dessus. Si tout passe, merge dans `develop` en `--no-ff`, push, et vérifie la CI avec `/opt/homebrew/bin/gh run list --limit 2`. Sinon, montre-moi ce qui casse sans corriger le code du coéquipier.
 
 **T16 : OpenStreetMap**
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T16 sur `feature/T16-osm`, créée depuis ce `develop` à jour. Lis d'abord la politique d'usage de l'API Overpass et montre-moi ce qu'elle autorise. Ne lance aucune requête avant mon accord. Crée ensuite `src/collect/osm.py` : pour chaque ville allemande de `dim_zone_chalandise`, relève les magasins `shop=shoes` dans la limite administrative de la ville, avec le tag `brand` quand il existe. User-agent explicite, ≥ 2 s entre requêtes, réponses brutes datées dans `data/bronze/`. Commence par 2 villes et montre-moi le résultat avant d'élargir. Calcule la densité pour 100 000 habitants et dis-moi quelle population tu utilises et si elle est réelle ou simulée. Déclare la table dans `REAL_TABLES`, puis vérifie que `make silver` et `make gold` passent. Blocage ou limite atteinte : arrête-toi et dis-le-moi, sans contourner.

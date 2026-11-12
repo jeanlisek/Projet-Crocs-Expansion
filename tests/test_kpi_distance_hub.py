@@ -39,7 +39,9 @@ def test_each_city_gets_its_nearest_hub_and_the_gap_with_the_simulated_distance(
 ):
     sql_dir = tmp_path / "kpi"
     sql_dir.mkdir()
-    (sql_dir / f"{VIEW}.sql").write_text((SQL_DIR / f"{VIEW}.sql").read_text(encoding="utf-8"))
+    (sql_dir / f"{VIEW}.sql").write_text(
+        (SQL_DIR / f"{VIEW}.sql").read_text(encoding="utf-8"), encoding="utf-8"
+    )
     run_kpi.run(warehouse, sql_dir)
 
     con = duckdb.connect(str(warehouse), read_only=True)

@@ -9,11 +9,12 @@ MANUAL_DIR := data/manual
 SILVER_DIR := data/silver
 WAREHOUSE := data/gold/warehouse.duckdb
 SQL_KPI_DIR := sql/kpi
+EXPORTS_DIR := data/gold/exports
 CODE_DIRS := src tests
 
-.PHONY: all install simulate collect silver gold kpi format lint test
+.PHONY: all install simulate collect silver gold kpi exports format lint test
 
-all: simulate silver gold kpi
+all: simulate silver gold kpi exports
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -41,6 +42,11 @@ gold:
 kpi:
 	$(PYTHON) -m src.transform.parametres_kpi --warehouse $(WAREHOUSE)
 	$(PYTHON) -m src.transform.run_kpi --warehouse $(WAREHOUSE) --sql-dir $(SQL_KPI_DIR)
+
+# Writes the tables and views read by the dashboard as CSV files (UTF-8, versioned). The
+# views of later tasks (business case, city scoring, AI commentary) are skipped until they exist.
+exports:
+	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR)
 
 format:
 	$(PYTHON) -m black $(CODE_DIRS)

@@ -8,7 +8,13 @@ on:
 
 jobs:
   qualite-et-tests:
-    runs-on: ubuntu-latest
+    # Les tests tournent sur les deux systèmes de l'équipe ; fail-fast désactivé pour voir
+    # le résultat de chacun même si l'autre échoue.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -23,10 +29,13 @@ jobs:
           pip install -r requirements.txt
           pip install black flake8 pytest
 
+      # Format et lint ne dépendent pas du système : une seule fois, sous Linux.
       - name: Vérifier le format (black)
+        if: matrix.os == 'ubuntu-latest'
         run: black --check src tests
 
       - name: Vérifier le lint (flake8)
+        if: matrix.os == 'ubuntu-latest'
         run: flake8 src tests --max-line-length 100
 
       - name: Lancer les tests (pytest)

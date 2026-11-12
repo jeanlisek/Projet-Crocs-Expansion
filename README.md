@@ -34,7 +34,7 @@ Chaque membre commence par sa fiche : [`docs/equipe/`](docs/equipe/).
 
 **Crocs France** est la filiale française du groupe coté Crocs, Inc. (Nasdaq : CROX). Elle exploite un réseau intégré de magasins aux marques Crocs et HEYDUDE.
 
-En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deichmann…). Dans nos données, elle y pèse 13,9 % du segment casual moulé & sandales en 2025. Le Comex se demande s'il faut **ouvrir un réseau de magasins en propre** sur la période 2027-2029.
+En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deichmann…). Dans nos données, elle y pèse 14,0 % du segment casual moulé & sandales en 2025. Le Comex se demande s'il faut **ouvrir un réseau de magasins en propre** sur la période 2027-2029.
 
 > **Scénario fictif, limite assumée.** En réalité, Crocs, Inc. possède déjà quelques boutiques en Allemagne. Nous traitons cette présence réelle comme un indice que le marché existe, pas comme une donnée de l'étude.
 
@@ -42,9 +42,9 @@ En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deich
 
 | Élément | Valeur |
 |---|---|
-| Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports |
-| E-commerce | crocs.fr, environ 24 % du CA HT |
-| CA net TTC | 59 M€ (2023) → 75 M€ (2024) → 81 M€ (2025) |
+| Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports. Trois ont fermé entre 2023 et 2025 : 45 sont ouverts |
+| E-commerce | crocs.fr, environ 37 % du CA HT |
+| CA net TTC | 40 M€ (2023) → 50 M€ (2024) → 53 M€ (2025) |
 | Logistique | Hubs de Moissy-Cramayel (IDF) et Saint-Quentin-Fallavier (Lyon), centre de distribution EMEA à Dordrecht (Pays-Bas) |
 
 ### Catalogue
@@ -267,7 +267,7 @@ _À compléter après l'analyse, selon la décision._
 | Transformation | `pandas` |
 | Entrepôt | DuckDB (bronze / silver / gold) |
 | Brique IA | API d’un modèle de langage (LLM) : commentaires pré-générés par valeur de filtre, chiffres vérifiés par code |
-| Dashboard | Power BI ou Looker Studio |
+| Dashboard | Power BI |
 | Qualité | `pytest`, `black`, `flake8`, GitHub Actions |
 | Orchestration | `Makefile` |
 
@@ -309,10 +309,11 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 
 | Commande | Rôle |
 |---|---|
-| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold puis vues KPI ; chaque tâche y ajoute son étape (collecte, commentaires IA, exports) |
+| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold, vues KPI puis exports ; chaque tâche y ajoute son étape (collecte, commentaires IA) |
 | `make collect` | Reconstruit les tables réelles de T16 et T17 (magasins OpenStreetMap, population Destatis, distances OSRM). Les réponses brutes sont versionnées dans `data/bronze/` : la cible n'appelle le réseau que pour une ville ou un trajet qui n'y est pas encore. Elle ne fait pas partie de `make all` |
 | `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
 | `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
+| `make exports` | Écrit en CSV UTF-8, dans `data/gold/exports/` (versionné), les tables et vues lues par le dashboard. `business_case`, `city_scoring` et `ai_commentary` sont exportés dès qu'ils existent dans l'entrepôt, et sautés sans erreur d'ici là |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
 | `make format` | Reformate `src/` et `tests/` avec `black` |
