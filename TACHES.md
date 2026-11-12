@@ -35,7 +35,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | Fait |
-| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | À faire |
+| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | Fait (128 paires FR/DE, 100 % du catalogue France présent sur crocs.de ; `kpi_indice_prix` et `kpi_catalogue_eligible` lisent ces tables pour l'Allemagne) |
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
 | T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | Fait |
 | T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | Fait |
@@ -58,7 +58,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | Fait |
-| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | À faire |
+| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (chiffres provisoires : corrections d'Alexis en cours, voir `docs/ENSEIGNEMENTS.md`, section 4) |
 | T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
 
 ### 5. Restitution

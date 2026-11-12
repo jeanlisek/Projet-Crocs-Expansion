@@ -124,6 +124,25 @@ collecte:                  # T16, T17 : appels aux services ouverts
     attente_apres_refus_s: 30        # CONVENTION : même pause que pour Overpass après une erreur du serveur
     essais_max: 3                    # CONVENTION : au-delà, le script s'arrête
     delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
+  crocs:                   # T3 : prix des sites Crocs, robots.txt lu le 12/11/2026 (identique FR et DE)
+    sites:
+      FR: https://www.crocs.fr
+      DE: https://www.crocs.de
+    categories:            # CONVENTION : les trois pages « silhouette » des sites, sans filtre ni tri
+      Sabots:              # (accessoires et Jibbitz exclus : le KPI porte sur les chaussures)
+        FR: /c/silhouette/sabots
+        DE: /c/silhouette/clogs
+      Sandales:
+        FR: /c/silhouette/sandales
+        DE: /c/silhouette/sandalen
+      Chaussures:
+        FR: /c/silhouette/chaussures
+        DE: /c/silhouette/schuhe
+    nb_modeles_par_categorie: 5      # CONVENTION : modèles communs FR/DE relevés en page produit, par catégorie
+    tva_pct:               # FAIT : taux normal, qui s'applique aussi aux chaussures enfant (README, section 2)
+      FR: 20               # Code général des impôts, art. 278
+      DE: 19               # Umsatzsteuergesetz, § 12 Abs. 1
+    delai_reponse_s: 30              # CONVENTION : durée maximale d'une requête
 
 kpi:                   # T7 (Alexis) : périmètre temporel des vues sql/kpi/
   annee_reference: 2025  # CONVENTION : dernière année complète (2026 est partiel, README 2.5 règle 8)

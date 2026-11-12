@@ -35,9 +35,15 @@ lignes AS (
     WHERE k.id_concurrent <> 'C99'
     -- Prix
     UNION ALL
-    SELECT 'Indice prix relatif (HT, base pays de référence = 100)', 'Prix', k.code_pays, k.indice_prix, 'indice',
-        printf('%g à %g', s.indice_min, s.indice_max),
-        CASE WHEN k.indice_prix BETWEEN s.indice_min AND s.indice_max THEN 'GO' ELSE 'NO-GO' END,
+    SELECT CASE WHEN k.est_retenue THEN 'Indice prix relatif (HT, base pays de référence = 100)'
+            ELSE 'Indice prix relatif (comparaison, jeu simulé)' END,
+        'Prix', k.code_pays, k.indice_prix, 'indice',
+        CASE WHEN k.est_retenue THEN printf('%g à %g', s.indice_min, s.indice_max) END,
+        CASE
+            WHEN NOT k.est_retenue THEN 'INFO'
+            WHEN k.indice_prix BETWEEN s.indice_min AND s.indice_max THEN 'GO'
+            ELSE 'NO-GO'
+        END,
         'CALCUL', k.origine_donnees
     FROM kpi_indice_prix AS k, s
     UNION ALL
@@ -80,9 +86,15 @@ lignes AS (
         NULL, 'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_penetration_categories AS k
     UNION ALL
-    SELECT '% du catalogue éligible', 'Assortiment', k.code_pays, k.catalogue_eligible_pct, '%',
-        printf('≥ %g %%', s.catalogue_min),
-        CASE WHEN k.catalogue_eligible_pct >= s.catalogue_min THEN 'GO' ELSE 'NO-GO' END,
+    SELECT CASE WHEN k.est_retenue THEN '% du catalogue éligible'
+            ELSE '% du catalogue éligible (comparaison, jeu simulé)' END,
+        'Assortiment', k.code_pays, k.catalogue_eligible_pct, '%',
+        CASE WHEN k.est_retenue THEN printf('≥ %g %%', s.catalogue_min) END,
+        CASE
+            WHEN NOT k.est_retenue THEN 'INFO'
+            WHEN k.catalogue_eligible_pct >= s.catalogue_min THEN 'GO'
+            ELSE 'NO-GO'
+        END,
         'CALCUL', k.origine_donnees
     FROM kpi_catalogue_eligible AS k, s
     -- Rentabilité : benchmark du réseau France (l'Allemagne par scénario vient de T8)

@@ -8,7 +8,8 @@ number is written twice:
 - parametres_kpi: numeric values (thresholds, periods, scenarios, cost rates...);
 - parametres_kpi_texte: text values (formats kept, location type of each format...).
 Nested keys are flattened with a dot and list items are numbered from 1:
-go_no_go.indice_prix_min, business_case_allemagne.scenarios.central.montee_en_charge.1...
+go_no_go.indice_prix_min, business_case_allemagne.scenarios.central.montee_en_charge.1,
+collecte.crocs.tva_pct.FR (VAT rates of the real Crocs prices, task T3)...
 Empty values (null) are left out.
 """
 
@@ -24,7 +25,15 @@ from src.transform.build_gold import DEFAULT_WAREHOUSE
 
 TABLE = "parametres_kpi"
 TEXT_TABLE = "parametres_kpi_texte"
-SECTIONS = ("go_no_go", "kpi", "business_case_allemagne", "city_scoring", "sensibilite_payback")
+# Dotted path of each section read; a nested one keeps its full path as key prefix.
+SECTIONS = (
+    "go_no_go",
+    "kpi",
+    "business_case_allemagne",
+    "city_scoring",
+    "sensibilite_payback",
+    "collecte.crocs.tva_pct",
+)
 
 
 def flatten(value, prefix: str):
@@ -39,11 +48,18 @@ def flatten(value, prefix: str):
         yield prefix, value
 
 
+def section(config: dict, path: str):
+    """Value found by following a dotted path of keys: "collecte.crocs.tva_pct"."""
+    for key in path.split("."):
+        config = config[key]
+    return config
+
+
 def load(config_path: Path = CONFIG_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Return (numeric parameters, text parameters), each with columns parametre, valeur."""
     with config_path.open(encoding="utf-8") as file:
         config = yaml.safe_load(file)
-    leaves = [leaf for section in SECTIONS for leaf in flatten(config[section], section)]
+    leaves = [leaf for path in SECTIONS for leaf in flatten(section(config, path), path)]
     numbers = [
         (key, float(value))
         for key, value in leaves

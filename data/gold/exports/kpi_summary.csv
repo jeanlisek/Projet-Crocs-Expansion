@@ -1,10 +1,11 @@
 kpi,axe,pays,valeur,unite,seuil,statut_go,statut_epistemique,origine_donnees
 % du catalogue éligible,Assortiment,BE,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
-% du catalogue éligible,Assortiment,DE,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
+% du catalogue éligible,Assortiment,DE,100.0,%,≥ 80 %,GO,CALCUL,REEL
 % du catalogue éligible,Assortiment,ES,96.6,%,≥ 80 %,GO,CALCUL,SIMULE
 % du catalogue éligible,Assortiment,GB,91.16,%,≥ 80 %,GO,CALCUL,SIMULE
 % du catalogue éligible,Assortiment,IT,80.95,%,≥ 80 %,GO,CALCUL,SIMULE
 % du catalogue éligible,Assortiment,NL,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
+"% du catalogue éligible (comparaison, jeu simulé)",Assortiment,DE,97.96,%,,INFO,CALCUL,SIMULE
 "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : Centre commercial",Rentabilité,FR,17.38,%,,INFO,CALCUL,SIMULE
 "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : Centre-ville",Rentabilité,FR,26.94,%,,INFO,CALCUL,SIMULE
 "Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre commercial",Rentabilité,DE,14.94,%,≤ 15 %,GO,CALCUL,SIMULE
@@ -84,11 +85,12 @@ Impôt sur les sociétés,Logistique,GB,25.0,%,,INFO,HYPOTHÈSE,SIMULE
 Impôt sur les sociétés,Logistique,IT,27.9,%,,INFO,HYPOTHÈSE,SIMULE
 Impôt sur les sociétés,Logistique,NL,25.8,%,,INFO,HYPOTHÈSE,SIMULE
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,BE,99.17,indice,95 à 110,GO,CALCUL,SIMULE
-"Indice prix relatif (HT, base pays de référence = 100)",Prix,DE,100.34,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,DE,100.85,indice,95 à 110,GO,CALCUL,REEL
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,ES,99.17,indice,95 à 110,GO,CALCUL,SIMULE
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,GB,107.29,indice,95 à 110,GO,CALCUL,SIMULE
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,IT,98.36,indice,95 à 110,GO,CALCUL,SIMULE
 "Indice prix relatif (HT, base pays de référence = 100)",Prix,NL,99.17,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (comparaison, jeu simulé)",Prix,DE,100.34,indice,,INFO,CALCUL,SIMULE
 Marge brute post-taxe,Prix,BE,70.78,%,≥ 66.91 %,GO,CALCUL,SIMULE
 Marge brute post-taxe,Prix,DE,70.47,%,≥ 66.91 %,GO,CALCUL,SIMULE
 Marge brute post-taxe,Prix,ES,69.04,%,≥ 66.91 %,GO,CALCUL,SIMULE
