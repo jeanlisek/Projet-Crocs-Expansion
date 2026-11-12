@@ -63,6 +63,7 @@ REAL_RELATIONSHIPS = [
     ("osrm_distances", "id_hub", "dim_hub_logistique"),
     ("osrm_distances", "id_zone", "dim_zone_chalandise"),
     ("eurostat_pays", "code_pays", "dim_pays"),
+    ("eurostat_series", "code_pays", "dim_pays"),
 ]
 
 # Silver only knows dates (no time of day): they are stored as DATE in the warehouse.

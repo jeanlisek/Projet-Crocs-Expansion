@@ -69,3 +69,22 @@ def test_compare_with_simulated_converts_population_to_millions():
     simulated = pd.DataFrame([{"code_pays": "FR", "population_millions": 68.4}])
     gap = eurostat.compare_with_simulated(table, simulated).iloc[0]
     assert (gap["reel"], gap["ecart"]) == (69.11, 0.71)
+
+
+def test_history_rows_keep_every_published_year_and_no_empty_one():
+    rows = eurostat.history_rows(SERIES, raw(payload({"0": 7.4, "1": 7.7, "2": 4.3})), SETTINGS)
+    assert [(row["code_pays"], row["annee"], row["valeur"]) for row in rows] == [
+        ("FR", 2024, 7.4),
+        ("FR", 2025, 7.7),
+        ("GB", 2024, 4.3),  # 2025 is not published for GB: no row, nothing filled in
+    ]
+
+
+def test_latest_year_of_the_history_is_the_value_of_eurostat_pays():
+    answer = raw(payload({"0": 7.4, "1": 7.7, "2": 4.3}))
+    latest = {
+        row["code_pays"]: row["valeur"] for row in eurostat.series_rows(SERIES, answer, SETTINGS)
+    }
+    history = eurostat.history_rows(SERIES, answer, SETTINGS)
+    last = {row["code_pays"]: row["valeur"] for row in sorted(history, key=lambda r: r["annee"])}
+    assert latest == last

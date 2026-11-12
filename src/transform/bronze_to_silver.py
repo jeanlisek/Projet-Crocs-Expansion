@@ -567,6 +567,26 @@ REAL_TABLES: dict[str, TableSpec] = {
         expected_nulls=("annee", "valeur", "statut_eurostat", "note"),
         simulated=False,
     ),
+    # T4, same raw answers: every year published since `annee_depuis`, for growth rates (the
+    # sector growth KPI is a CAGR). A year Eurostat does not publish has no row.
+    "eurostat_series": TableSpec(
+        columns={
+            "code_pays": STR,
+            "indicateur": STR,
+            "annee": INT,
+            "valeur": FLOAT,
+            "unite": STR,
+            "statut_eurostat": STR,
+            "jeu_donnees": STR,
+            "filtre": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("code_pays", "indicateur", "annee"),
+        # No flag when the value is final.
+        expected_nulls=("statut_eurostat",),
+        simulated=False,
+    ),
     # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }

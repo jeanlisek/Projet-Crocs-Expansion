@@ -5,8 +5,9 @@ Usage (from the repository root):
 
 One request per dataset, filtered on the countries of dim_pays and on the codes below; the
 raw JSON-stat answer is saved, dated, in data/bronze/, and a dataset already saved is never
-asked for again. The table eurostat_pays is rebuilt from the raw answers: one row per
-country and indicator, with the latest year published since `annee_depuis`. When Eurostat
+asked for again. Two tables are rebuilt from the raw answers: eurostat_pays, one row per
+country and indicator with the latest year published since `annee_depuis`, and
+eurostat_series, one row per country, indicator and year (for growth rates). When Eurostat
 publishes no value for a country (the United Kingdom left the EU statistical system in
 2020), the row is kept with an empty value and a TODO note: nothing is filled in.
 
@@ -39,6 +40,7 @@ DEFAULT_BRONZE_DIR = REPO_ROOT / "data" / "bronze"
 USER_AGENT = "Projet-Crocs-Expansion/1.0 (+https://github.com/jeanlisek/Projet-Crocs-Expansion)"
 SOURCE = "Eurostat, jeu {dataset} ({url}), mis à jour le {updated}, relevé du {day}"
 TABLE = "eurostat_pays"
+SERIES_TABLE = "eurostat_series"
 RAW_FILE = "eurostat_{dataset}_{day}.json"
 SIMULATED_COUNTRIES = "dim_pays"
 # Eurostat writes the United Kingdom UK (and Greece EL); the project uses ISO codes.
@@ -200,23 +202,39 @@ def check_codes(payload: dict, series: Series) -> str:
     return " ; ".join(labels)
 
 
-def series_rows(series: Series, raw: dict, settings: dict) -> list[dict]:
-    """One row per country: the latest year with a value, or an empty value and a TODO."""
+def country_years(series: Series, raw: dict, country: str) -> dict[int, tuple]:
+    """Every year Eurostat publishes for a series and a country: {year: (value, status)}."""
     payload = raw["payload"]
-    label = check_codes(payload, series)
     cube = values_by_key(payload)
     dimensions = payload["id"]
-    source = SOURCE.format(
-        dataset=series.dataset, url=raw["url"], updated=payload.get("updated"), day=raw["day"]
+    wanted = {**series.filters, "geo": eurostat_geo(country)}
+    years = {}
+    for key, (value, status) in cube.items():
+        codes = dict(zip(dimensions, key))
+        if value is not None and all(codes.get(dim) == code for dim, code in wanted.items()):
+            years[int(codes["time"])] = (value, status)
+    return years
+
+
+def series_source(series: Series, raw: dict) -> str:
+    return SOURCE.format(
+        dataset=series.dataset,
+        url=raw["url"],
+        updated=raw["payload"].get("updated"),
+        day=raw["day"],
     )
+
+
+def series_filter(series: Series) -> str:
+    return ";".join(f"{dim}={code}" for dim, code in series.filters.items())
+
+
+def series_rows(series: Series, raw: dict, settings: dict) -> list[dict]:
+    """One row per country: the latest year with a value, or an empty value and a TODO."""
+    label = check_codes(raw["payload"], series)
     rows = []
     for country in settings["pays"]:
-        wanted = {**series.filters, "geo": eurostat_geo(country)}
-        years = {}
-        for key, (value, status) in cube.items():
-            codes = dict(zip(dimensions, key))
-            if value is not None and all(codes.get(dim) == code for dim, code in wanted.items()):
-                years[int(codes["time"])] = (value, status)
+        years = country_years(series, raw, country)
         year = max(years) if years else None
         value, status = years[year] if years else (None, None)
         rows.append(
@@ -225,16 +243,41 @@ def series_rows(series: Series, raw: dict, settings: dict) -> list[dict]:
                 "indicateur": series.indicator,
                 "libelle_eurostat": label,
                 "jeu_donnees": series.dataset,
-                "filtre": ";".join(f"{dim}={code}" for dim, code in series.filters.items()),
+                "filtre": series_filter(series),
                 "annee": year,
                 "valeur": value,
                 "unite": series.unit,
                 "statut_eurostat": status,
                 "note": None if years else NO_VALUE_NOTE.format(year=settings["annee_depuis"]),
                 "date_collecte": raw["day"],
-                "source": source,
+                "source": series_source(series, raw),
             }
         )
+    return rows
+
+
+def history_rows(series: Series, raw: dict, settings: dict) -> list[dict]:
+    """One row per country and year published since `annee_depuis`: the time series that a
+    growth rate needs (eurostat_pays keeps the latest year only). A year Eurostat does not
+    publish has no row: nothing is filled in."""
+    check_codes(raw["payload"], series)
+    rows = []
+    for country in settings["pays"]:
+        for year, (value, status) in sorted(country_years(series, raw, country).items()):
+            rows.append(
+                {
+                    "code_pays": country,
+                    "indicateur": series.indicator,
+                    "annee": year,
+                    "valeur": value,
+                    "unite": series.unit,
+                    "statut_eurostat": status,
+                    "jeu_donnees": series.dataset,
+                    "filtre": series_filter(series),
+                    "date_collecte": raw["day"],
+                    "source": series_source(series, raw),
+                }
+            )
     return rows
 
 
@@ -297,8 +340,15 @@ def collect(bronze_dir: Path = DEFAULT_BRONZE_DIR) -> pd.DataFrame:
     table = pd.DataFrame(rows)
     table["annee"] = table["annee"].astype("Int64")
     table.to_csv(bronze_dir / f"{TABLE}.csv", index=False, encoding="utf-8-sig")
+    history = pd.DataFrame(
+        [row for series in SERIES for row in history_rows(series, raws[series.dataset], eurostat)]
+    )
+    history.to_csv(bronze_dir / f"{SERIES_TABLE}.csv", index=False, encoding="utf-8-sig")
     missing = table[table["valeur"].isna()]
-    print(f"\n{sent} requête(s) envoyée(s) à Eurostat, {len(table)} ligne(s) dans {TABLE}.csv")
+    print(
+        f"\n{sent} requête(s) envoyée(s) à Eurostat, {len(table)} ligne(s) dans {TABLE}.csv,"
+        f" {len(history)} dans {SERIES_TABLE}.csv"
+    )
     for row in missing.itertuples():
         print(f"  TODO {row.code_pays} {row.indicateur} : aucune valeur publiée")
     return table
