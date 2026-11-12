@@ -500,7 +500,49 @@ REAL_TABLES: dict[str, TableSpec] = {
         primary_key=("id_hub", "id_zone"),
         simulated=False,
     ),
-    # TODO T3: Crocs prices scraped on crocs.fr and crocs.de (src/collect/scrape_crocs.py).
+    # T3: public pages of crocs.fr and crocs.de, collected by src/collect/scrape_crocs.py
+    # (`make collect`). Several dated snapshots: the dated raw files of data/bronze/ keep every
+    # reading; these two tables hold the latest one (date in `date_collecte`).
+    "crocs_catalogue": TableSpec(
+        columns={
+            "site": STR,
+            "categorie": STR,
+            "code_modele": STR,
+            "nom": STR,
+            "code_coloris": STR,
+            "coloris": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        # A model can be listed on several category pages: the category is part of the key.
+        primary_key=("site", "categorie", "code_modele", "code_coloris"),
+        simulated=False,
+    ),
+    "crocs_produits": TableSpec(
+        columns={
+            "site": STR,
+            "code_modele": STR,
+            "nom": STR,
+            "code_coloris": STR,
+            "coloris": STR,
+            "categorie": STR,
+            "silhouette": STR,
+            "categorie_site": STR,
+            "genre": STR,
+            "prix_affiche": FLOAT,
+            "prix_barre": FLOAT,
+            "devise": STR,
+            "disponible": BOOL,
+            "url": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("site", "code_modele", "code_coloris"),
+        # No crossed-out price when the colour is not on promotion.
+        expected_nulls=("prix_barre",),
+        outlier_checks={"prix_affiche": ("categorie",)},
+        simulated=False,
+    ),
     # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
     # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
@@ -682,7 +724,7 @@ def run(
                 print(f"ignoré (aucun TableSpec déclaré) : {path}")
 
     report = pd.DataFrame(findings, columns=REPORT_COLUMNS)
-    report.to_csv(silver_dir / REPORT_FILE, index=False)
+    report.to_csv(silver_dir / REPORT_FILE, index=False, encoding="utf-8")
     print(f"\nTables Parquet et {REPORT_FILE} écrits dans : {silver_dir.resolve()}")
     return report
 

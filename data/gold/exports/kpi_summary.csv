@@ -1,0 +1,249 @@
+kpi,axe,pays,valeur,unite,seuil,statut_go,statut_epistemique,origine_donnees
+% du catalogue éligible,Assortiment,BE,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
+% du catalogue éligible,Assortiment,DE,100.0,%,≥ 80 %,GO,CALCUL,REEL
+% du catalogue éligible,Assortiment,ES,96.6,%,≥ 80 %,GO,CALCUL,SIMULE
+% du catalogue éligible,Assortiment,GB,91.16,%,≥ 80 %,GO,CALCUL,SIMULE
+% du catalogue éligible,Assortiment,IT,80.95,%,≥ 80 %,GO,CALCUL,SIMULE
+% du catalogue éligible,Assortiment,NL,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
+"% du catalogue éligible (comparaison, jeu simulé)",Assortiment,DE,97.96,%,,INFO,CALCUL,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre commercial",Rentabilité,DE,14.94,%,≤ 15 %,GO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre-ville",Rentabilité,DE,16.86,%,≤ 15 %,NO-GO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario optimiste) : Centre commercial",Rentabilité,DE,12.8,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario optimiste) : Centre-ville",Rentabilité,DE,14.45,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario pessimiste) : Centre commercial",Rentabilité,DE,17.92,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario pessimiste) : Centre-ville",Rentabilité,DE,20.23,%,,INFO,HYPOTHÈSE,SIMULE
+Coût d'occupation (loyer ÷ CA) : Centre commercial,Rentabilité,FR,15.23,%,,INFO,CALCUL,SIMULE
+Coût d'occupation (loyer ÷ CA) : Centre-ville,Rentabilité,FR,23.64,%,,INFO,CALCUL,SIMULE
+Coût d'occupation (loyer ÷ CA) : Gare / Aéroport,Rentabilité,FR,28.93,%,,INFO,CALCUL,SIMULE
+Coût d'occupation (loyer ÷ CA) : Outlet,Rentabilité,FR,13.53,%,,INFO,CALCUL,SIMULE
+Coût d'occupation (loyer ÷ CA) : Tous formats,Rentabilité,FR,18.48,%,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,BE,459.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,DE,752.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,ES,632.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,GB,862.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,IT,831.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre commercial,Réseau,NL,558.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,BE,1537.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,DE,2506.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,ES,2043.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,GB,2773.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,IT,2804.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (prime),Réseau,NL,1873.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,BE,581.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,DE,957.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,ES,785.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,GB,1077.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,IT,1029.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Centre-ville (secondaire),Réseau,NL,689.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,BE,1139.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,DE,1879.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,ES,1539.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,GB,2128.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,IT,2015.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Gare / Aéroport,Réseau,NL,1330.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,BE,213.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,DE,359.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,ES,290.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,GB,387.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,IT,386.0,€/m²/an,,INFO,CALCUL,SIMULE
+Coût moyen au m² (loyer + charges) : Outlet,Réseau,NL,256.0,€/m²/an,,INFO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,BE,3.46,%,≥ 2 %,GO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,DE,3.89,%,≥ 2 %,GO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,ES,5.33,%,≥ 2 %,GO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,FR,3.03,%,≥ 2 %,INFO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,GB,3.92,%,≥ 2 %,GO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,IT,3.6,%,≥ 2 %,GO,CALCUL,SIMULE
+Croissance du secteur (TCAM 2022-2025),Marché,NL,3.97,%,≥ 2 %,GO,CALCUL,SIMULE
+Densité concurrentielle,Réseau,BE,6.76,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+Densité concurrentielle,Réseau,DE,7.69,pour 100 000 hab.,,INFO,CALCUL,REEL
+Densité concurrentielle,Réseau,ES,6.5,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+Densité concurrentielle,Réseau,GB,6.08,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+Densité concurrentielle,Réseau,IT,6.42,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+Densité concurrentielle,Réseau,NL,5.48,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+"Densité concurrentielle (comparaison, jeu simulé)",Réseau,DE,6.86,pour 100 000 hab.,,INFO,CALCUL,SIMULE
+Distance moyenne au hub le plus proche,Logistique,BE,147.8,km,,INFO,CALCUL,SIMULE
+Distance moyenne au hub le plus proche,Logistique,DE,517.2,km,,INFO,CALCUL,REEL
+Distance moyenne au hub le plus proche,Logistique,ES,1113.0,km,,INFO,CALCUL,SIMULE
+Distance moyenne au hub le plus proche,Logistique,GB,663.2,km,,INFO,CALCUL,SIMULE
+Distance moyenne au hub le plus proche,Logistique,IT,768.0,km,,INFO,CALCUL,SIMULE
+Distance moyenne au hub le plus proche,Logistique,NL,90.3,km,,INFO,CALCUL,SIMULE
+"Distance moyenne au hub le plus proche (comparaison, jeu simulé)",Logistique,DE,515.3,km,,INFO,CALCUL,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,BE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,DE,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,ES,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,FR,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,GB,16.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,IT,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+"Droit d'import (origine Asie, via la France)",Logistique,NL,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,BE,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,DE,29.9,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,ES,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,FR,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,GB,25.0,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,IT,27.9,%,,INFO,HYPOTHÈSE,SIMULE
+Impôt sur les sociétés,Logistique,NL,25.8,%,,INFO,HYPOTHÈSE,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,BE,99.17,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,DE,100.85,indice,95 à 110,GO,CALCUL,REEL
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,ES,99.17,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,GB,107.29,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,IT,98.36,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (HT, base pays de référence = 100)",Prix,NL,99.17,indice,95 à 110,GO,CALCUL,SIMULE
+"Indice prix relatif (comparaison, jeu simulé)",Prix,DE,100.34,indice,,INFO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,BE,70.78,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,DE,70.47,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,ES,69.04,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,FR,71.91,%,,INFO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,GB,67.22,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,IT,69.41,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Marge brute post-taxe,Prix,NL,70.89,%,≥ 66.91 %,GO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,BE,7.6,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,DE,8.9,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,ES,7.14,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,FR,6.92,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,GB,6.68,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,IT,8.84,%,,INFO,CALCUL,SIMULE
+Part de marché Adidas (Adilette),Marché,NL,9.11,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,BE,15.11,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,DE,22.72,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,ES,10.37,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,FR,13.48,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,GB,13.47,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,IT,14.37,%,,INFO,CALCUL,SIMULE
+Part de marché Birkenstock,Marché,NL,16.69,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,BE,16.26,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,DE,13.97,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,ES,16.85,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,FR,24.03,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,GB,17.65,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,IT,15.31,%,,INFO,CALCUL,SIMULE
+Part de marché Crocs,Marché,NL,14.91,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,BE,8.4,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,DE,2.26,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,ES,7.86,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,FR,8.82,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,GB,1.99,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,IT,7.02,%,,INFO,CALCUL,SIMULE
+Part de marché Decathlon,Marché,NL,4.17,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,BE,5.65,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,DE,12.49,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,ES,3.16,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,FR,1.98,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,GB,0.13,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,IT,1.4,%,,INFO,CALCUL,SIMULE
+Part de marché Deichmann (MDD),Marché,NL,6.2,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,BE,7.5,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,DE,4.75,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,ES,14.68,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,FR,8.87,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,GB,5.98,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,IT,11.83,%,,INFO,CALCUL,SIMULE
+Part de marché Havaianas,Marché,NL,7.26,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,BE,2.8,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,DE,2.28,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,ES,1.02,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,FR,3.54,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,GB,5.78,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,IT,2.36,%,,INFO,CALCUL,SIMULE
+Part de marché Hunter / Aigle,Marché,NL,4.03,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,BE,5.75,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,DE,3.59,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,ES,10.14,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,FR,5.05,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,GB,4.97,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,IT,7.98,%,,INFO,CALCUL,SIMULE
+Part de marché Inditex (Zara/Bershka),Marché,NL,5.41,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,BE,5.9,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,DE,6.13,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,ES,5.74,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,FR,6.06,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,GB,9.32,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,IT,6.81,%,,INFO,CALCUL,SIMULE
+Part de marché Nike (Slides),Marché,NL,6.6,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,BE,5.65,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,DE,4.26,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,ES,5.57,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,FR,4.26,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,GB,9.87,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,IT,1.88,%,,INFO,CALCUL,SIMULE
+Part de marché Primark,Marché,NL,6.93,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,BE,7.0,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,DE,6.97,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,ES,5.72,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,FR,6.23,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,GB,8.88,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,IT,5.82,%,,INFO,CALCUL,SIMULE
+Part de marché Skechers,Marché,NL,7.98,%,,INFO,CALCUL,SIMULE
+Payback (scénario central) : Centre commercial,Rentabilité,DE,93.9,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario central) : Centre-ville,Rentabilité,DE,66.1,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario optimiste) : Centre commercial,Rentabilité,DE,37.0,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario optimiste) : Centre-ville,Rentabilité,DE,29.8,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario pessimiste) : Centre commercial,Rentabilité,DE,,mois,≤ 36 mois,NO-GO,HYPOTHÈSE,SIMULE
+Payback (scénario pessimiste) : Centre-ville,Rentabilité,DE,,mois,≤ 36 mois,NO-GO,HYPOTHÈSE,SIMULE
+Payback : Centre commercial,Rentabilité,FR,15.8,mois,,INFO,CALCUL,SIMULE
+Payback : Centre-ville,Rentabilité,FR,17.6,mois,,INFO,CALCUL,SIMULE
+Payback : Gare / Aéroport,Rentabilité,FR,20.2,mois,,INFO,CALCUL,SIMULE
+Payback : Outlet,Rentabilité,FR,38.3,mois,,INFO,CALCUL,SIMULE
+Payback : Tous formats,Rentabilité,FR,18.1,mois,,INFO,CALCUL,SIMULE
+Point mort par magasin : Centre commercial,Rentabilité,DE,565010.0,€ de CA HT/an,,INFO,HYPOTHÈSE,SIMULE
+Point mort par magasin : Centre commercial,Rentabilité,FR,412861.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Point mort par magasin : Centre-ville,Rentabilité,DE,525098.0,€ de CA HT/an,,INFO,HYPOTHÈSE,SIMULE
+Point mort par magasin : Centre-ville,Rentabilité,FR,449532.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Point mort par magasin : Gare / Aéroport,Rentabilité,FR,434732.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Point mort par magasin : Outlet,Rentabilité,FR,421823.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Point mort par magasin : Tous formats,Rentabilité,FR,425954.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,BE,15.0,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,DE,13.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,ES,6.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,FR,12.2,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,GB,17.8,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,IT,7.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Bottes,Assortiment,NL,17.6,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,BE,6.5,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,DE,6.0,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,ES,5.5,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,FR,7.6,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,GB,9.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,IT,5.0,%,,INFO,CALCUL,SIMULE
+Pénétration : Chaussures toile,Assortiment,NL,7.0,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,BE,3.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,DE,3.1,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,ES,4.3,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,FR,4.7,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,GB,4.6,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,IT,3.6,%,,INFO,CALCUL,SIMULE
+Pénétration : Jibbitz,Assortiment,NL,2.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,BE,12.3,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,DE,10.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,ES,15.3,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,FR,14.5,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,GB,13.1,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,IT,11.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Sabots,Assortiment,NL,10.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,BE,32.7,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,DE,33.4,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,ES,46.3,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,FR,37.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,GB,32.9,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,IT,42.7,%,,INFO,CALCUL,SIMULE
+Pénétration : Sandales,Assortiment,NL,30.9,%,,INFO,CALCUL,SIMULE
+TVA chaussures enfant,Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,GB,0.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA chaussures enfant,Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,BE,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,DE,19.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,ES,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,FR,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,GB,20.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,IT,22.0,%,,INFO,HYPOTHÈSE,SIMULE
+TVA standard,Logistique,NL,21.0,%,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,BE,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,DE,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,ES,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,FR,0.07,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,GB,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,IT,0.0,€/paire,,INFO,HYPOTHÈSE,SIMULE
+Éco-contribution,Logistique,NL,0.03,€/paire,,INFO,HYPOTHÈSE,SIMULE

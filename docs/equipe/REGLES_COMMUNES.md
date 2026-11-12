@@ -22,26 +22,28 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 
 > État au 12/11/2026. **À tenir à jour à chaque merge dans `develop`**, par la personne qui merge.
 
-`make all` enchaîne quatre étapes. La collecte (`make collect`) n'en fait pas partie : ses résultats sont déjà dans le dépôt.
+`make all` enchaîne cinq étapes. La collecte (`make collect`) n'en fait pas partie : ses résultats sont déjà dans le dépôt.
 
 | Étape | Commande | Ce qu'elle produit | Où |
 |---|---|---|---|
 | 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV. Jeu recalibré par T2 le 12/11/2026 : paramètres des magasins dans `config/hypotheses.yaml`, 3 magasins fermés (`date_fermeture`), zones insulaires signalées (`zone_insulaire`) | `data/bronze/*.csv` |
 | 2. Silver | `make silver` | Les tables de `data/bronze/` et de `data/manual/`, typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
-| 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 23 tables (19 simulées, 4 réelles), 23 clés primaires, 28 relations | `data/gold/warehouse.duckdb` |
-| 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Deux vues à ce jour : `densite_concurrentielle` (T16) et `distance_hub` (T17) | Vues dans `data/gold/warehouse.duckdb` |
+| 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 25 tables (19 simulées, 6 réelles), 25 clés primaires, 28 relations | `data/gold/warehouse.duckdb` |
+| 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. La cible écrit d'abord la table `parametres_kpi` (seuils et périodes de `config/hypotheses.yaml`), puis crée 22 vues : les 16 de T7 (une par KPI du README, deux vues de base et `kpi_summary`, la synthèse au contrat : 248 lignes, 7 pays), `densite_concurrentielle` (T16), `distance_hub` (T17) et les 4 de T8 (`business_case`, `business_case_annuel`, `business_case_hypotheses`, `city_scoring`) | Vues dans `data/gold/warehouse.duckdb` |
+| 5. Exports | `make exports` | Les tables et vues lues par le dashboard, en CSV UTF-8 (T10) : `kpi_summary`, `densite_concurrentielle`, `distance_hub`, `dim_pays`, `dim_zone_chalandise`, `dim_concurrent`, `dim_produit`, `dim_temps`, `fact_marche`, `fact_parts_de_marche`, `fact_immobilier`, `fact_prix_releves`. `business_case` et `city_scoring` (T8) y sont depuis le 12/11/2026, soit 14 fichiers. `ai_commentary` s'y ajoutera dès qu'il existera dans l'entrepôt ; d'ici là, la cible le saute sans échouer | `data/gold/exports/*.csv` |
 
-Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`. Deux exceptions en entrée, toutes deux versionnées :
+Les fichiers des étapes 1 à 4 ne sont pas versionnés : chacun les reconstruit chez soi avec `make all`. Les exports de l'étape 5 le sont, pour que le dashboard se branche dessus après un simple `git pull` ; si `make all` les modifie chez vous alors que vous n'avez touché ni aux données ni aux vues, prévenez Jean-Li au lieu de les commiter. Deux exceptions en entrée, toutes deux versionnées :
 
 - `data/manual/`, qui contient les saisies manuelles sourcées ;
-- les fichiers `osm_*`, `destatis_*` et `osrm_*` de `data/bronze/`. Ce sont des instantanés datés du 12/11/2026 : le serveur Overpass est instable (une requête sur deux en erreur ce jour-là), le classeur Destatis est la pièce officielle d'où viennent les populations, et les serveurs publics OSRM et Nominatim n'acceptent qu'un usage léger. Les versionner évite à chacun de refaire la collecte et garantit que tout le monde calcule sur les mêmes données.
+- les fichiers `osm_*`, `destatis_*`, `osrm_*` et `crocs_*` de `data/bronze/`. Ce sont des instantanés datés du 12/11/2026 : les prix et le catalogue de crocs.fr et crocs.de changent d'un jour à l'autre et ne peuvent pas être relevés une seconde fois à l'identique, le serveur Overpass est instable (une requête sur deux en erreur ce jour-là), le classeur Destatis est la pièce officielle d'où viennent les populations, et les serveurs publics OSRM et Nominatim n'acceptent qu'un usage léger. Les versionner évite à chacun de refaire la collecte et garantit que tout le monde calcule sur les mêmes données.
 
 - **Les relations de l'entrepôt** : 23 pour les tables simulées, celles du diagramme du README (section 3.2), et 5 pour les tables réelles (`REAL_RELATIONSHIPS`). Elles sont déclarées en clés étrangères dans `RELATIONSHIPS` (`src/transform/build_gold.py`) : l'entrepôt refuse un doublon ou une clé orpheline.
-- **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`). Quatre y sont à ce jour : `osm_villes`, `osm_magasins_chaussures` et `destatis_population_villes` (T16), `osrm_distances` (T17). Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion. Tant que son fichier n'existe pas, elle est ignorée avec un message, sans arrêter le pipeline.
+- **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`). Six y sont à ce jour : `crocs_catalogue` et `crocs_produits` (T3), `osm_villes`, `osm_magasins_chaussures` et `destatis_population_villes` (T16), `osrm_distances` (T17). Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion. Tant que son fichier n'existe pas, elle est ignorée avec un message, sans arrêter le pipeline.
 - **Deux dossiers d'entrée** : un fichier collecté par un script va dans `data/bronze/` (non versionné) ; un fichier saisi à la main depuis une source officielle va dans `data/manual/` (versionné) et se déclare avec `directory=MANUAL`. Dans les deux cas, le fichier s'appelle `<nom de la table>.csv`.
-- **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville ou un trajet absent de `data/bronze/`.
+- **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville, un trajet ou une page des sites Crocs absent de `data/bronze/`.
 - **Jeu simulé recalibré (T2)** : le recalibrage a changé les valeurs de 11 des 19 tables simulées, pas seulement celles des magasins et des ventes : le tirage aléatoire des tables suivantes a été décalé. Aucune table n'a disparu. Relancez `make all` après votre `git pull`. Les chiffres du README, du dictionnaire et du journal de nettoyage ont été recalculés sur ce jeu le 12/11/2026 ; un chiffre du jeu v1 recopié ailleurs (slides, dashboard) est à refaire. Le générateur est gelé : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
-- **Tâches faites** : T1, T2, T5 (squelette, tables réelles à brancher), T6, T16, T17. Le suivi complet est dans `TACHES.md`.
+- **`kpi_summary`** : les KPIs de rentabilité (coût d'occupation, point mort, payback) y figurent pour la France, comme benchmark, et pour l'Allemagne, par scénario et par format, depuis T8. L'indice prix et le « % du catalogue éligible » de l'Allemagne y sont réels (`origine_donnees` = REEL, tables de T3) ; la valeur simulée reste sur une ligne « (comparaison, jeu simulé) », sans seuil ni verdict, comme pour la densité concurrentielle et la distance au hub. Les autres pays gardent la mesure simulée. Les premiers enseignements sont consignés dans `docs/ENSEIGNEMENTS.md`.
+- **Tâches faites** : T1, T2, T3, T5 (squelette, tables réelles à brancher), T6, T7, T8 (chiffres provisoires), T10, T16, T17. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
 
@@ -72,6 +74,7 @@ Puis prévenir Jean-Li, qui merge dans `develop`. **Personne ne pousse sur `main
 7. **Scraping** : lire `robots.txt` d'abord, user-agent explicite, ≥ 2 s entre requêtes, données produit publiques seulement. Blocage ou CAPTCHA : on s'arrête, jamais de contournement.
 8. **Secrets** (clé API) dans `.env`, jamais commité. Le dépôt est **public**.
 9. **Le générateur est gelé** : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
+10. **Encodage** : toute lecture ou écriture de fichier précise `encoding="utf-8"` (le projet tourne aussi sous Windows).
 
 ## Périmètre de chacun
 

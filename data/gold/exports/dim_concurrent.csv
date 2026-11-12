@@ -1,0 +1,13 @@
+id_concurrent,nom_concurrent,type_acteur,positionnement_prix,prix_moyen_eur,pays_origine,source,est_simule
+C00,Crocs,Marque (nous),Moyen,50,USA,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C01,Birkenstock,Marque premium,Premium,110,Allemagne,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C02,Havaianas,Marque,Entrée/Moyen,30,Brésil,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C03,Skechers,Marque,Moyen,60,USA,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C04,Adidas (Adilette),Équipementier sport,Moyen,35,Allemagne,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C05,Nike (Slides),Équipementier sport,Moyen,40,USA,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C06,Deichmann (MDD),Distributeur spécialisé,Entrée,18,Allemagne,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C07,Primark,Distributeur mode discount,Entrée,8,Irlande,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C08,Decathlon,Distributeur sport,Entrée,15,France,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C09,Inditex (Zara/Bershka),Distributeur mode,Entrée/Moyen,30,Espagne,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C10,Hunter / Aigle,Spécialiste bottes,Premium,120,Royaume-Uni/France,Générateur Python src/simulate/generate_data.py (seed 2027),True
+C99,Autres / MDD,Divers,Divers,25,-,Générateur Python src/simulate/generate_data.py (seed 2027),True

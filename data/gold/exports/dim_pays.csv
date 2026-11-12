@@ -1,0 +1,8 @@
+code_pays,nom_pays,devise,taux_change_vs_eur,population_millions,pib_habitant_spa_ue100,taux_chomage_pct,indice_niveau_prix_chaussures_ue100,indice_confiance_conso,langue_principale,membre_ue,union_douaniere_avec_fr,est_pays_reference,source,est_simule
+BE,Belgique,EUR,1.0,11.8,117,5.9,106,-10,français/néerlandais,True,True,False,Générateur Python src/simulate/generate_data.py (seed 2027),True
+DE,Allemagne,EUR,1.0,83.5,116,3.5,100,-21,allemand,True,True,False,Générateur Python src/simulate/generate_data.py (seed 2027),True
+ES,Espagne,EUR,1.0,48.6,91,11.0,92,-12,espagnol,True,True,False,Générateur Python src/simulate/generate_data.py (seed 2027),True
+FR,France,EUR,1.0,68.4,101,7.4,103,-18,français,True,True,True,Générateur Python src/simulate/generate_data.py (seed 2027),True
+GB,Royaume-Uni,GBP,0.85,68.3,98,4.6,108,-19,anglais,False,False,False,Générateur Python src/simulate/generate_data.py (seed 2027),True
+IT,Italie,EUR,1.0,58.9,97,6.3,101,-15,italien,True,True,False,Générateur Python src/simulate/generate_data.py (seed 2027),True
+NL,Pays-Bas,EUR,1.0,18.0,130,3.8,104,-25,néerlandais,True,True,False,Générateur Python src/simulate/generate_data.py (seed 2027),True

@@ -1,0 +1,13 @@
+id_zone,ville,id_hub_le_plus_proche,commune_hub_le_plus_proche,distance_reelle_km,duree_conduite_h,id_hub_le_plus_proche_simule,distance_simulee_km,meme_hub,ecart_km,ecart_pct,origine_donnees
+Z001,Berlin,H03,Dordrecht,703.7,7.64,H03,749,True,-45.3,-6.0,REEL
+Z002,Hamburg,H03,Dordrecht,512.5,5.69,H03,508,True,4.5,0.9,REEL
+Z003,München,H02,Saint-Quentin-Fallavier,738.2,8.14,H02,705,True,33.2,4.7,REEL
+Z004,Köln,H03,Dordrecht,239.2,2.9,H03,232,True,7.2,3.1,REEL
+Z005,Frankfurt,H03,Dordrecht,436.2,4.87,H03,422,True,14.2,3.4,REEL
+Z006,Stuttgart,H03,Dordrecht,594.5,6.49,H02,581,False,13.5,2.3,REEL
+Z007,Düsseldorf,H03,Dordrecht,208.3,2.58,H03,198,True,10.3,5.2,REEL
+Z008,Leipzig,H03,Dordrecht,677.5,7.07,H03,667,True,10.5,1.6,REEL
+Z009,Dortmund,H03,Dordrecht,246.5,3.01,H03,243,True,3.5,1.4,REEL
+Z010,Nürnberg,H03,Dordrecht,652.4,6.95,H03,651,True,1.4,0.2,REEL
+Z011,Hannover,H03,Dordrecht,423.0,4.89,H03,437,True,-14.0,-3.2,REEL
+Z012,Dresden,H03,Dordrecht,773.8,8.01,H03,791,True,-17.2,-2.2,REEL

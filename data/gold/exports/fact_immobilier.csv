@@ -1,0 +1,1061 @@
+id_zone,annee,type_emplacement,loyer_m2_an_eur,charges_m2_an_eur,taux_vacance_pct,source,est_simule
+Z001,2023,Centre commercial,758,99,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2023,Centre-ville (prime),2531,339,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2023,Centre-ville (secondaire),907,103,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2023,Gare / Aéroport,1861,254,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2023,Outlet,355,47,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2024,Centre commercial,789,111,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2024,Centre-ville (prime),2483,372,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2024,Centre-ville (secondaire),957,98,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2024,Gare / Aéroport,1736,216,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2024,Outlet,343,42,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2025,Centre commercial,741,88,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2025,Centre-ville (prime),2571,408,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2025,Centre-ville (secondaire),972,167,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2025,Gare / Aéroport,1939,330,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2025,Outlet,381,62,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2026,Centre commercial,798,85,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2026,Centre-ville (prime),2481,399,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2026,Centre-ville (secondaire),1030,130,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2026,Gare / Aéroport,1872,206,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z001,2026,Outlet,386,54,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2023,Centre commercial,819,91,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2023,Centre-ville (prime),2580,322,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2023,Centre-ville (secondaire),984,160,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2023,Gare / Aéroport,2167,231,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2023,Outlet,367,38,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2024,Centre commercial,840,112,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2024,Centre-ville (prime),2741,326,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2024,Centre-ville (secondaire),1029,145,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2024,Gare / Aéroport,2086,224,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2024,Outlet,382,42,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2025,Centre commercial,784,84,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2025,Centre-ville (prime),2628,412,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2025,Centre-ville (secondaire),1079,119,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2025,Gare / Aéroport,2191,229,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2025,Outlet,404,72,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2026,Centre commercial,843,130,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2026,Centre-ville (prime),2786,429,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2026,Centre-ville (secondaire),1017,109,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2026,Gare / Aéroport,2231,247,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z002,2026,Outlet,397,70,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2023,Centre commercial,953,141,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2023,Centre-ville (prime),3251,531,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2023,Centre-ville (secondaire),1204,212,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2023,Gare / Aéroport,2281,366,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2023,Outlet,451,48,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2024,Centre commercial,1039,134,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2024,Centre-ville (prime),3604,513,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2024,Centre-ville (secondaire),1289,144,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2024,Gare / Aéroport,2680,345,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2024,Outlet,469,75,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2025,Centre commercial,1000,150,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2025,Centre-ville (prime),3569,385,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2025,Centre-ville (secondaire),1253,195,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2025,Gare / Aéroport,2807,337,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2025,Outlet,484,65,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2026,Centre commercial,1151,138,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2026,Centre-ville (prime),3548,485,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2026,Centre-ville (secondaire),1291,180,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2026,Gare / Aéroport,2650,421,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z003,2026,Outlet,519,75,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2023,Centre commercial,798,82,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2023,Centre-ville (prime),2368,330,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2023,Centre-ville (secondaire),915,165,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2023,Gare / Aéroport,1779,255,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2023,Outlet,369,57,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2024,Centre commercial,729,129,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2024,Centre-ville (prime),2643,312,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2024,Centre-ville (secondaire),1009,168,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2024,Gare / Aéroport,1956,313,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2024,Outlet,369,46,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2025,Centre commercial,830,116,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2025,Centre-ville (prime),2663,377,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2025,Centre-ville (secondaire),1076,179,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2025,Gare / Aéroport,1890,245,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2025,Outlet,377,47,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2026,Centre commercial,869,131,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2026,Centre-ville (prime),2628,441,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2026,Centre-ville (secondaire),1048,163,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2026,Gare / Aéroport,1996,233,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z004,2026,Outlet,384,67,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2023,Centre commercial,765,90,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2023,Centre-ville (prime),2730,292,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2023,Centre-ville (secondaire),1030,177,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2023,Gare / Aéroport,1862,186,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2023,Outlet,341,56,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2024,Centre commercial,740,94,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2024,Centre-ville (prime),2780,337,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2024,Centre-ville (secondaire),1036,162,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2024,Gare / Aéroport,2017,356,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2024,Outlet,398,47,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2025,Centre commercial,863,118,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2025,Centre-ville (prime),2607,434,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2025,Centre-ville (secondaire),1055,113,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2025,Gare / Aéroport,2035,286,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2025,Outlet,387,41,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2026,Centre commercial,801,98,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2026,Centre-ville (prime),2699,293,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2026,Centre-ville (secondaire),1085,112,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2026,Gare / Aéroport,2055,263,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z005,2026,Outlet,374,47,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2023,Centre commercial,656,73,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2023,Centre-ville (prime),2162,281,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2023,Centre-ville (secondaire),847,150,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2023,Gare / Aéroport,1558,230,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2023,Outlet,329,52,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2024,Centre commercial,640,77,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2024,Centre-ville (prime),2198,352,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2024,Centre-ville (secondaire),838,140,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2024,Gare / Aéroport,1599,160,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2024,Outlet,313,43,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2025,Centre commercial,745,131,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2025,Centre-ville (prime),2389,398,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2025,Centre-ville (secondaire),812,128,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2025,Gare / Aéroport,1636,187,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2025,Outlet,327,54,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2026,Centre commercial,745,101,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2026,Centre-ville (prime),2430,248,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2026,Centre-ville (secondaire),864,92,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2026,Gare / Aéroport,1829,264,8.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z006,2026,Outlet,338,54,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2023,Centre commercial,873,98,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2023,Centre-ville (prime),2638,434,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2023,Centre-ville (secondaire),1143,150,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2023,Gare / Aéroport,2013,213,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2023,Outlet,401,71,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2024,Centre commercial,911,136,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2024,Centre-ville (prime),3043,483,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2024,Centre-ville (secondaire),1105,128,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2024,Gare / Aéroport,2147,305,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2024,Outlet,405,61,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2025,Centre commercial,849,124,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2025,Centre-ville (prime),3074,393,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2025,Centre-ville (secondaire),1105,176,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2025,Gare / Aéroport,2262,311,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2025,Outlet,422,73,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2026,Centre commercial,900,158,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2026,Centre-ville (prime),3143,545,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2026,Centre-ville (secondaire),1171,189,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2026,Gare / Aéroport,2111,260,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z007,2026,Outlet,409,70,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2023,Centre commercial,311,52,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2023,Centre-ville (prime),1032,112,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2023,Centre-ville (secondaire),403,44,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2023,Gare / Aéroport,794,123,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2023,Outlet,164,22,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2024,Centre commercial,349,37,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2024,Centre-ville (prime),1055,122,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2024,Centre-ville (secondaire),396,50,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2024,Gare / Aéroport,812,85,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2024,Outlet,156,18,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2025,Centre commercial,335,42,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2025,Centre-ville (prime),1097,187,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2025,Centre-ville (secondaire),456,77,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2025,Gare / Aéroport,865,94,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2025,Outlet,165,27,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2026,Centre commercial,356,45,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2026,Centre-ville (prime),1116,118,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2026,Centre-ville (secondaire),443,58,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2026,Gare / Aéroport,867,136,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z008,2026,Outlet,177,24,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2023,Centre commercial,405,49,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2023,Centre-ville (prime),1242,167,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2023,Centre-ville (secondaire),499,76,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2023,Gare / Aéroport,950,134,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2023,Outlet,177,28,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2024,Centre commercial,426,64,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2024,Centre-ville (prime),1348,137,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2024,Centre-ville (secondaire),489,57,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2024,Gare / Aéroport,938,136,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2024,Outlet,186,26,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2025,Centre commercial,385,55,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2025,Centre-ville (prime),1398,188,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2025,Centre-ville (secondaire),544,88,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2025,Gare / Aéroport,1011,175,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2025,Outlet,185,23,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2026,Centre commercial,415,49,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2026,Centre-ville (prime),1468,210,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2026,Centre-ville (secondaire),542,66,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2026,Gare / Aéroport,1018,128,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z009,2026,Outlet,204,33,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2023,Centre commercial,426,75,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2023,Centre-ville (prime),1404,226,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2023,Centre-ville (secondaire),580,104,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2023,Gare / Aéroport,1072,176,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2023,Outlet,223,33,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2024,Centre commercial,435,59,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2024,Centre-ville (prime),1487,240,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2024,Centre-ville (secondaire),567,77,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2024,Gare / Aéroport,1129,181,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2024,Outlet,201,23,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2025,Centre commercial,506,66,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2025,Centre-ville (prime),1485,235,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2025,Centre-ville (secondaire),570,66,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2025,Gare / Aéroport,1115,152,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2025,Outlet,231,28,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2026,Centre commercial,519,67,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2026,Centre-ville (prime),1534,265,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2026,Centre-ville (secondaire),594,103,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2026,Gare / Aéroport,1228,152,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z010,2026,Outlet,217,24,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2023,Centre commercial,462,78,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2023,Centre-ville (prime),1381,237,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2023,Centre-ville (secondaire),607,64,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2023,Gare / Aéroport,1134,193,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2023,Outlet,224,38,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2024,Centre commercial,458,61,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2024,Centre-ville (prime),1469,253,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2024,Centre-ville (secondaire),609,76,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2024,Gare / Aéroport,1194,140,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2024,Outlet,224,29,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2025,Centre commercial,493,75,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2025,Centre-ville (prime),1461,190,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2025,Centre-ville (secondaire),616,100,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2025,Gare / Aéroport,1190,179,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2025,Outlet,235,26,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2026,Centre commercial,519,91,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2026,Centre-ville (prime),1742,259,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2026,Centre-ville (secondaire),582,69,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2026,Gare / Aéroport,1154,191,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z011,2026,Outlet,211,27,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2023,Centre commercial,385,60,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2023,Centre-ville (prime),1107,165,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2023,Centre-ville (secondaire),431,57,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2023,Gare / Aéroport,880,151,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2023,Outlet,172,27,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2024,Centre commercial,341,43,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2024,Centre-ville (prime),1241,178,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2024,Centre-ville (secondaire),472,84,6.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2024,Gare / Aéroport,914,114,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2024,Outlet,170,29,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2025,Centre commercial,397,48,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2025,Centre-ville (prime),1327,196,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2025,Centre-ville (secondaire),475,65,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2025,Gare / Aéroport,918,160,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2025,Outlet,163,23,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2026,Centre commercial,365,49,5.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2026,Centre-ville (prime),1370,177,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2026,Centre-ville (secondaire),516,78,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2026,Gare / Aéroport,899,157,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z012,2026,Outlet,189,30,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2023,Centre commercial,1001,124,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2023,Centre-ville (prime),3121,472,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2023,Centre-ville (secondaire),1142,132,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2023,Gare / Aéroport,2515,294,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2023,Outlet,461,56,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2024,Centre commercial,993,154,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2024,Centre-ville (prime),3056,317,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2024,Centre-ville (secondaire),1216,215,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2024,Gare / Aéroport,2540,440,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2024,Outlet,447,74,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2025,Centre commercial,1087,112,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2025,Centre-ville (prime),3290,468,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2025,Centre-ville (secondaire),1268,175,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2025,Gare / Aéroport,2609,289,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2025,Outlet,440,72,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2026,Centre commercial,988,170,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2026,Centre-ville (prime),3270,445,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2026,Centre-ville (secondaire),1343,161,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2026,Gare / Aéroport,2685,297,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z013,2026,Outlet,519,70,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2023,Centre commercial,968,162,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2023,Centre-ville (prime),3574,568,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2023,Centre-ville (secondaire),1198,154,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2023,Gare / Aéroport,2511,437,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2023,Outlet,492,86,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2024,Centre commercial,1074,155,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2024,Centre-ville (prime),3504,383,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2024,Centre-ville (secondaire),1252,159,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2024,Gare / Aéroport,2741,391,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2024,Outlet,460,53,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2025,Centre commercial,1111,196,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2025,Centre-ville (prime),3653,383,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2025,Centre-ville (secondaire),1419,245,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2025,Gare / Aéroport,2536,291,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2025,Outlet,505,71,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2026,Centre commercial,1077,118,12.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2026,Centre-ville (prime),3415,535,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2026,Centre-ville (secondaire),1281,141,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2026,Gare / Aéroport,2706,302,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z014,2026,Outlet,490,74,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2023,Centre commercial,459,61,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2023,Centre-ville (prime),1500,171,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2023,Centre-ville (secondaire),604,86,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2023,Gare / Aéroport,1088,177,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2023,Outlet,220,29,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2024,Centre commercial,466,73,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2024,Centre-ville (prime),1428,168,5.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2024,Centre-ville (secondaire),561,97,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2024,Gare / Aéroport,1149,148,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2024,Outlet,222,23,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2025,Centre commercial,464,57,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2025,Centre-ville (prime),1655,215,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2025,Centre-ville (secondaire),631,92,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2025,Gare / Aéroport,1228,183,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2025,Outlet,228,37,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2026,Centre commercial,486,85,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2026,Centre-ville (prime),1627,288,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2026,Centre-ville (secondaire),602,92,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2026,Gare / Aéroport,1204,187,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z015,2026,Outlet,234,31,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2023,Centre commercial,410,44,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2023,Centre-ville (prime),1253,136,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2023,Centre-ville (secondaire),494,77,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2023,Gare / Aéroport,942,112,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2023,Outlet,179,20,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2024,Centre commercial,384,57,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2024,Centre-ville (prime),1255,133,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2024,Centre-ville (secondaire),534,76,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2024,Gare / Aéroport,929,117,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2024,Outlet,178,28,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2025,Centre commercial,398,67,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2025,Centre-ville (prime),1293,226,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2025,Centre-ville (secondaire),490,83,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2025,Gare / Aéroport,967,138,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2025,Outlet,206,34,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2026,Centre commercial,439,55,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2026,Centre-ville (prime),1500,156,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2026,Centre-ville (secondaire),517,66,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2026,Gare / Aéroport,1097,159,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z016,2026,Outlet,209,30,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2023,Centre commercial,283,32,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2023,Centre-ville (prime),971,115,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2023,Centre-ville (secondaire),380,38,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2023,Gare / Aéroport,709,117,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2023,Outlet,138,15,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2024,Centre commercial,289,39,5.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2024,Centre-ville (prime),1070,121,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2024,Centre-ville (secondaire),420,66,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2024,Gare / Aéroport,806,83,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2024,Outlet,153,24,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2025,Centre commercial,298,31,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2025,Centre-ville (prime),1095,168,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2025,Centre-ville (secondaire),376,51,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2025,Gare / Aéroport,779,131,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2025,Outlet,143,22,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2026,Centre commercial,346,58,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2026,Centre-ville (prime),1069,171,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2026,Centre-ville (secondaire),418,74,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2026,Gare / Aéroport,841,145,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z017,2026,Outlet,157,23,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2023,Centre commercial,465,69,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2023,Centre-ville (prime),1726,222,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2023,Centre-ville (secondaire),621,108,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2023,Gare / Aéroport,1266,192,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2023,Outlet,240,38,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2024,Centre commercial,457,78,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2024,Centre-ville (prime),1747,289,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2024,Centre-ville (secondaire),630,112,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2024,Gare / Aéroport,1132,148,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2024,Outlet,218,31,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2025,Centre commercial,486,80,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2025,Centre-ville (prime),1638,277,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2025,Centre-ville (secondaire),630,78,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2025,Gare / Aéroport,1334,209,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2025,Outlet,236,27,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2026,Centre commercial,541,82,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2026,Centre-ville (prime),1625,167,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2026,Centre-ville (secondaire),618,74,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2026,Gare / Aéroport,1281,222,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z018,2026,Outlet,249,25,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2023,Centre commercial,493,69,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2023,Centre-ville (prime),1697,223,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2023,Centre-ville (secondaire),665,89,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2023,Gare / Aéroport,1347,147,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2023,Outlet,228,26,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2024,Centre commercial,538,80,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2024,Centre-ville (prime),1666,171,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2024,Centre-ville (secondaire),643,82,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2024,Gare / Aéroport,1348,226,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2024,Outlet,258,44,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2025,Centre commercial,569,57,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2025,Centre-ville (prime),1646,261,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2025,Centre-ville (secondaire),636,88,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2025,Gare / Aéroport,1357,201,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2025,Outlet,240,37,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2026,Centre commercial,529,76,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2026,Centre-ville (prime),1714,269,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2026,Centre-ville (secondaire),686,104,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2026,Gare / Aéroport,1330,208,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z019,2026,Outlet,270,29,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2023,Centre commercial,471,78,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2023,Centre-ville (prime),1566,249,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2023,Centre-ville (secondaire),575,67,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2023,Gare / Aéroport,1150,141,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2023,Outlet,216,37,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2024,Centre commercial,487,60,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2024,Centre-ville (prime),1539,277,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2024,Centre-ville (secondaire),618,71,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2024,Gare / Aéroport,1188,154,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2024,Outlet,214,34,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2025,Centre commercial,495,85,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2025,Centre-ville (prime),1636,188,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2025,Centre-ville (secondaire),618,85,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2025,Gare / Aéroport,1131,116,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2025,Outlet,213,26,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2026,Centre commercial,519,71,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2026,Centre-ville (prime),1678,187,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2026,Centre-ville (secondaire),605,104,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2026,Gare / Aéroport,1138,203,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z020,2026,Outlet,240,38,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2023,Centre commercial,323,38,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2023,Centre-ville (prime),1044,117,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2023,Centre-ville (secondaire),436,74,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2023,Gare / Aéroport,783,81,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2023,Outlet,162,29,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2024,Centre commercial,351,63,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2024,Centre-ville (prime),1089,144,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2024,Centre-ville (secondaire),411,43,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2024,Gare / Aéroport,867,141,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2024,Outlet,147,16,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2025,Centre commercial,325,44,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2025,Centre-ville (prime),1091,112,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2025,Centre-ville (secondaire),418,50,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2025,Gare / Aéroport,819,142,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2025,Outlet,173,21,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2026,Centre commercial,375,40,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2026,Centre-ville (prime),1188,119,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2026,Centre-ville (secondaire),423,43,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2026,Gare / Aéroport,916,146,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z021,2026,Outlet,155,18,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2023,Centre commercial,290,48,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2023,Centre-ville (prime),932,131,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2023,Centre-ville (secondaire),375,46,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2023,Gare / Aéroport,788,84,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2023,Outlet,141,14,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2024,Centre commercial,308,54,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2024,Centre-ville (prime),949,143,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2024,Centre-ville (secondaire),392,41,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2024,Gare / Aéroport,768,121,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2024,Outlet,154,21,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2025,Centre commercial,319,42,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2025,Centre-ville (prime),1016,115,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2025,Centre-ville (secondaire),373,40,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2025,Gare / Aéroport,840,86,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2025,Outlet,151,22,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2026,Centre commercial,348,37,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2026,Centre-ville (prime),1025,137,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2026,Centre-ville (secondaire),425,47,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2026,Gare / Aéroport,837,121,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z022,2026,Outlet,150,22,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2023,Centre commercial,1074,132,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2023,Centre-ville (prime),4061,591,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2023,Centre-ville (secondaire),1329,218,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2023,Gare / Aéroport,2919,412,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2023,Outlet,503,69,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2024,Centre commercial,1174,129,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2024,Centre-ville (prime),4156,469,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2024,Centre-ville (secondaire),1381,154,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2024,Gare / Aéroport,3105,395,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2024,Outlet,569,95,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2025,Centre commercial,1286,160,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2025,Centre-ville (prime),4283,736,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2025,Centre-ville (secondaire),1631,180,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2025,Gare / Aéroport,3047,451,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2025,Outlet,581,70,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2026,Centre commercial,1255,218,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2026,Centre-ville (prime),3902,430,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2026,Centre-ville (secondaire),1556,249,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2026,Gare / Aéroport,2936,407,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z023,2026,Outlet,559,86,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2023,Centre commercial,1670,268,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2023,Centre-ville (prime),5407,558,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2023,Centre-ville (secondaire),2085,252,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2023,Gare / Aéroport,4029,576,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2023,Outlet,707,111,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2024,Centre commercial,1602,172,8.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2024,Centre-ville (prime),5344,626,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2024,Centre-ville (secondaire),2127,293,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2024,Gare / Aéroport,3687,513,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2024,Outlet,715,126,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2025,Centre commercial,1672,275,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2025,Centre-ville (prime),5711,1006,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2025,Centre-ville (secondaire),1968,317,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2025,Gare / Aéroport,4056,599,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2025,Outlet,731,128,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2026,Centre commercial,1805,187,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2026,Centre-ville (prime),5271,937,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2026,Centre-ville (secondaire),2243,338,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2026,Gare / Aéroport,4344,734,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z024,2026,Outlet,834,84,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2023,Centre commercial,537,87,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2023,Centre-ville (prime),1907,213,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2023,Centre-ville (secondaire),720,83,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2023,Gare / Aéroport,1367,203,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2023,Outlet,261,39,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2024,Centre commercial,534,92,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2024,Centre-ville (prime),1722,182,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2024,Centre-ville (secondaire),750,95,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2024,Gare / Aéroport,1299,211,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2024,Outlet,258,29,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2025,Centre commercial,610,94,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2025,Centre-ville (prime),1847,192,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2025,Centre-ville (secondaire),776,100,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2025,Gare / Aéroport,1379,243,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2025,Outlet,282,38,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2026,Centre commercial,564,97,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2026,Centre-ville (prime),1842,302,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2026,Centre-ville (secondaire),696,83,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2026,Gare / Aéroport,1490,195,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z025,2026,Outlet,274,44,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2023,Centre commercial,512,89,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2023,Centre-ville (prime),1690,228,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2023,Centre-ville (secondaire),682,86,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2023,Gare / Aéroport,1270,137,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2023,Outlet,248,32,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2024,Centre commercial,530,74,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2024,Centre-ville (prime),1674,283,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2024,Centre-ville (secondaire),690,112,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2024,Gare / Aéroport,1233,141,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2024,Outlet,256,26,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2025,Centre commercial,498,58,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2025,Centre-ville (prime),1800,215,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2025,Centre-ville (secondaire),677,82,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2025,Gare / Aéroport,1353,160,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2025,Outlet,266,38,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2026,Centre commercial,560,58,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2026,Centre-ville (prime),1968,220,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2026,Centre-ville (secondaire),706,107,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2026,Gare / Aéroport,1454,238,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z026,2026,Outlet,238,33,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2023,Centre commercial,338,40,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2023,Centre-ville (prime),1234,133,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2023,Centre-ville (secondaire),461,56,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2023,Gare / Aéroport,889,155,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2023,Outlet,157,24,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2024,Centre commercial,395,50,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2024,Centre-ville (prime),1302,151,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2024,Centre-ville (secondaire),475,53,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2024,Gare / Aéroport,967,135,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2024,Outlet,163,17,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2025,Centre commercial,374,53,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2025,Centre-ville (prime),1308,164,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2025,Centre-ville (secondaire),453,60,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2025,Gare / Aéroport,899,94,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2025,Outlet,183,24,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2026,Centre commercial,389,56,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2026,Centre-ville (prime),1395,188,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2026,Centre-ville (secondaire),488,76,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2026,Gare / Aéroport,926,131,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z027,2026,Outlet,180,29,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2023,Centre commercial,374,41,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2023,Centre-ville (prime),1261,138,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2023,Centre-ville (secondaire),475,48,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2023,Gare / Aéroport,923,96,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2023,Outlet,185,21,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2024,Centre commercial,381,50,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2024,Centre-ville (prime),1404,164,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2024,Centre-ville (secondaire),546,88,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2024,Gare / Aéroport,967,119,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2024,Outlet,183,24,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2025,Centre commercial,423,59,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2025,Centre-ville (prime),1349,199,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2025,Centre-ville (secondaire),500,81,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2025,Gare / Aéroport,1072,153,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2025,Outlet,204,26,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2026,Centre commercial,442,48,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2026,Centre-ville (prime),1338,218,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2026,Centre-ville (secondaire),571,69,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2026,Gare / Aéroport,995,160,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z028,2026,Outlet,185,32,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2023,Centre commercial,574,101,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2023,Centre-ville (prime),2034,339,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2023,Centre-ville (secondaire),741,115,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2023,Gare / Aéroport,1383,218,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2023,Outlet,281,36,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2024,Centre commercial,599,61,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2024,Centre-ville (prime),1975,291,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2024,Centre-ville (secondaire),711,127,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2024,Gare / Aéroport,1566,225,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2024,Outlet,274,39,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2025,Centre commercial,609,95,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2025,Centre-ville (prime),1988,214,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2025,Centre-ville (secondaire),776,116,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2025,Gare / Aéroport,1503,159,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2025,Outlet,289,48,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2026,Centre commercial,570,64,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2026,Centre-ville (prime),2142,311,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2026,Centre-ville (secondaire),781,103,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2026,Gare / Aéroport,1482,189,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z029,2026,Outlet,284,33,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2023,Centre commercial,891,122,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2023,Centre-ville (prime),2954,507,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2023,Centre-ville (secondaire),1057,188,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2023,Gare / Aéroport,2209,273,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2023,Outlet,394,45,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2024,Centre commercial,897,95,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2024,Centre-ville (prime),2917,512,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2024,Centre-ville (secondaire),1110,140,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2024,Gare / Aéroport,2124,257,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2024,Outlet,425,70,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2025,Centre commercial,843,116,6.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2025,Centre-ville (prime),3209,324,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2025,Centre-ville (secondaire),1145,124,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2025,Gare / Aéroport,2132,235,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2025,Outlet,400,47,6.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2026,Centre commercial,920,149,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2026,Centre-ville (prime),3170,493,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2026,Centre-ville (secondaire),1170,136,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2026,Gare / Aéroport,2327,408,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z030,2026,Outlet,437,72,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2023,Centre commercial,567,101,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2023,Centre-ville (prime),1776,275,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2023,Centre-ville (secondaire),688,87,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2023,Gare / Aéroport,1457,196,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2023,Outlet,245,31,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2024,Centre commercial,523,71,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2024,Centre-ville (prime),1739,274,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2024,Centre-ville (secondaire),666,90,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2024,Gare / Aéroport,1397,155,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2024,Outlet,256,40,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2025,Centre commercial,592,105,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2025,Centre-ville (prime),1825,315,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2025,Centre-ville (secondaire),737,112,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2025,Gare / Aéroport,1456,191,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2025,Outlet,270,46,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2026,Centre commercial,601,100,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2026,Centre-ville (prime),2061,269,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2026,Centre-ville (secondaire),738,119,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2026,Gare / Aéroport,1421,152,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z031,2026,Outlet,259,29,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2023,Centre commercial,342,53,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2023,Centre-ville (prime),1016,123,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2023,Centre-ville (secondaire),386,56,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2023,Gare / Aéroport,790,99,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2023,Outlet,164,20,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2024,Centre commercial,364,59,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2024,Centre-ville (prime),1041,113,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2024,Centre-ville (secondaire),423,64,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2024,Gare / Aéroport,804,123,4.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2024,Outlet,159,20,7.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2025,Centre commercial,335,54,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2025,Centre-ville (prime),1220,138,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2025,Centre-ville (secondaire),409,48,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2025,Gare / Aéroport,842,127,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2025,Outlet,165,19,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2026,Centre commercial,373,52,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2026,Centre-ville (prime),1169,137,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2026,Centre-ville (secondaire),484,51,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2026,Gare / Aéroport,939,105,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z032,2026,Outlet,156,18,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2023,Centre commercial,527,59,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2023,Centre-ville (prime),2047,336,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2023,Centre-ville (secondaire),770,81,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2023,Gare / Aéroport,1482,175,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2023,Outlet,266,34,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2024,Centre commercial,540,67,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2024,Centre-ville (prime),2062,334,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2024,Centre-ville (secondaire),695,71,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2024,Gare / Aéroport,1437,257,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2024,Outlet,258,35,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2025,Centre commercial,614,82,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2025,Centre-ville (prime),1984,289,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2025,Centre-ville (secondaire),795,126,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2025,Gare / Aéroport,1610,248,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2025,Outlet,289,40,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2026,Centre commercial,607,95,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2026,Centre-ville (prime),2139,345,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2026,Centre-ville (secondaire),744,115,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2026,Gare / Aéroport,1565,188,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z033,2026,Outlet,285,46,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2023,Centre commercial,550,86,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2023,Centre-ville (prime),1687,272,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2023,Centre-ville (secondaire),708,71,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2023,Gare / Aéroport,1245,216,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2023,Outlet,232,30,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2024,Centre commercial,548,88,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2024,Centre-ville (prime),1715,205,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2024,Centre-ville (secondaire),715,92,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2024,Gare / Aéroport,1371,187,8.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2024,Outlet,267,27,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2025,Centre commercial,603,78,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2025,Centre-ville (prime),1940,302,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2025,Centre-ville (secondaire),692,78,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2025,Gare / Aéroport,1310,152,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2025,Outlet,263,42,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2026,Centre commercial,610,80,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2026,Centre-ville (prime),2059,285,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2026,Centre-ville (secondaire),732,88,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2026,Gare / Aéroport,1433,193,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z034,2026,Outlet,292,38,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2023,Centre commercial,375,46,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2023,Centre-ville (prime),1311,163,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2023,Centre-ville (secondaire),528,75,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2023,Gare / Aéroport,947,163,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2023,Outlet,182,20,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2024,Centre commercial,374,56,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2024,Centre-ville (prime),1409,154,4.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2024,Centre-ville (secondaire),547,83,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2024,Gare / Aéroport,981,109,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2024,Outlet,185,21,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2025,Centre commercial,422,66,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2025,Centre-ville (prime),1386,181,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2025,Centre-ville (secondaire),539,86,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2025,Gare / Aéroport,1073,161,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2025,Outlet,195,25,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2026,Centre commercial,439,60,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2026,Centre-ville (prime),1303,196,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2026,Centre-ville (secondaire),500,69,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2026,Gare / Aéroport,1107,120,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z035,2026,Outlet,184,26,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2023,Centre commercial,255,35,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2023,Centre-ville (prime),862,121,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2023,Centre-ville (secondaire),351,53,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2023,Gare / Aéroport,690,101,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2023,Outlet,129,23,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2024,Centre commercial,280,50,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2024,Centre-ville (prime),871,88,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2024,Centre-ville (secondaire),331,37,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2024,Gare / Aéroport,675,117,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2024,Outlet,133,22,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2025,Centre commercial,290,39,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2025,Centre-ville (prime),926,141,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2025,Centre-ville (secondaire),374,53,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2025,Gare / Aéroport,712,86,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2025,Outlet,140,24,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2026,Centre commercial,311,42,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2026,Centre-ville (prime),964,154,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2026,Centre-ville (secondaire),364,38,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2026,Gare / Aéroport,693,86,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z036,2026,Outlet,138,18,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2023,Centre commercial,170,20,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2023,Centre-ville (prime),597,84,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2023,Centre-ville (secondaire),228,40,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2023,Gare / Aéroport,416,73,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2023,Outlet,87,13,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2024,Centre commercial,197,25,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2024,Centre-ville (prime),647,88,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2024,Centre-ville (secondaire),226,30,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2024,Gare / Aéroport,462,67,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2024,Outlet,82,14,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2025,Centre commercial,182,19,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2025,Centre-ville (prime),668,87,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2025,Centre-ville (secondaire),236,30,5.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2025,Gare / Aéroport,506,78,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2025,Outlet,85,10,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2026,Centre commercial,181,26,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2026,Centre-ville (prime),597,107,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2026,Centre-ville (secondaire),246,39,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2026,Gare / Aéroport,476,59,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z037,2026,Outlet,85,10,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2023,Centre commercial,320,55,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2023,Centre-ville (prime),1018,122,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2023,Centre-ville (secondaire),383,48,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2023,Gare / Aéroport,758,136,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2023,Outlet,134,22,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2024,Centre commercial,328,34,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2024,Centre-ville (prime),980,148,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2024,Centre-ville (secondaire),370,51,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2024,Gare / Aéroport,798,139,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2024,Outlet,154,19,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2025,Centre commercial,325,36,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2025,Centre-ville (prime),1131,185,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2025,Centre-ville (secondaire),429,50,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2025,Gare / Aéroport,807,89,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2025,Outlet,141,23,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2026,Centre commercial,299,46,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2026,Centre-ville (prime),1121,196,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2026,Centre-ville (secondaire),432,71,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2026,Gare / Aéroport,794,119,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z038,2026,Outlet,144,25,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2023,Centre commercial,870,131,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2023,Centre-ville (prime),2969,492,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2023,Centre-ville (secondaire),1101,168,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2023,Gare / Aéroport,2344,354,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2023,Outlet,427,44,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2024,Centre commercial,923,96,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2024,Centre-ville (prime),3076,385,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2024,Centre-ville (secondaire),1134,188,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2024,Gare / Aéroport,2329,370,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2024,Outlet,442,58,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2025,Centre commercial,896,142,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2025,Centre-ville (prime),3244,454,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2025,Centre-ville (secondaire),1158,138,6.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2025,Gare / Aéroport,2465,267,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2025,Outlet,414,59,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2026,Centre commercial,978,161,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2026,Centre-ville (prime),3464,396,12.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2026,Centre-ville (secondaire),1265,151,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2026,Gare / Aéroport,2540,314,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z039,2026,Outlet,483,81,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2023,Centre commercial,485,62,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2023,Centre-ville (prime),1472,212,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2023,Centre-ville (secondaire),573,80,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2023,Gare / Aéroport,1103,158,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2023,Outlet,210,26,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2024,Centre commercial,477,83,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2024,Centre-ville (prime),1609,225,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2024,Centre-ville (secondaire),604,98,12.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2024,Gare / Aéroport,1182,181,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2024,Outlet,210,31,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2025,Centre commercial,485,54,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2025,Centre-ville (prime),1621,201,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2025,Centre-ville (secondaire),599,93,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2025,Gare / Aéroport,1097,112,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2025,Outlet,222,22,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2026,Centre commercial,493,66,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2026,Centre-ville (prime),1742,219,6.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2026,Centre-ville (secondaire),593,83,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2026,Gare / Aéroport,1145,135,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z040,2026,Outlet,242,36,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2023,Centre commercial,369,37,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2023,Centre-ville (prime),1299,207,7.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2023,Centre-ville (secondaire),501,69,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2023,Gare / Aéroport,923,117,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2023,Outlet,180,27,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2024,Centre commercial,390,61,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2024,Centre-ville (prime),1331,226,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2024,Centre-ville (secondaire),469,61,5.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2024,Gare / Aéroport,1043,186,12.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2024,Outlet,194,22,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2025,Centre commercial,425,54,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2025,Centre-ville (prime),1363,239,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2025,Centre-ville (secondaire),526,71,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2025,Gare / Aéroport,943,111,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2025,Outlet,192,20,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2026,Centre commercial,436,73,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2026,Centre-ville (prime),1368,231,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2026,Centre-ville (secondaire),528,66,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2026,Gare / Aéroport,1007,171,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z041,2026,Outlet,195,21,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2023,Centre commercial,470,59,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2023,Centre-ville (prime),1664,278,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2023,Centre-ville (secondaire),592,99,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2023,Gare / Aéroport,1205,203,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2023,Outlet,222,38,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2024,Centre commercial,474,75,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2024,Centre-ville (prime),1621,199,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2024,Centre-ville (secondaire),597,63,6.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2024,Gare / Aéroport,1299,166,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2024,Outlet,221,32,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2025,Centre commercial,518,89,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2025,Centre-ville (prime),1685,218,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2025,Centre-ville (secondaire),646,91,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2025,Gare / Aéroport,1190,193,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2025,Outlet,235,33,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2026,Centre commercial,553,66,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2026,Centre-ville (prime),1669,236,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2026,Centre-ville (secondaire),677,87,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2026,Gare / Aéroport,1365,245,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z042,2026,Outlet,241,28,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2023,Centre commercial,278,29,4.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2023,Centre-ville (prime),1046,120,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2023,Centre-ville (secondaire),379,66,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2023,Gare / Aéroport,806,115,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2023,Outlet,130,20,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2024,Centre commercial,293,39,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2024,Centre-ville (prime),1096,136,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2024,Centre-ville (secondaire),419,44,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2024,Gare / Aéroport,806,83,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2024,Outlet,146,26,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2025,Centre commercial,326,47,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2025,Centre-ville (prime),984,139,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2025,Centre-ville (secondaire),380,41,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2025,Gare / Aéroport,731,85,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2025,Outlet,155,25,12.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2026,Centre commercial,314,38,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2026,Centre-ville (prime),1028,151,8.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2026,Centre-ville (secondaire),393,61,8.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2026,Gare / Aéroport,746,98,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z043,2026,Outlet,141,20,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2023,Centre commercial,268,31,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2023,Centre-ville (prime),949,111,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2023,Centre-ville (secondaire),324,36,11.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2023,Gare / Aéroport,687,91,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2023,Outlet,118,15,4.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2024,Centre commercial,289,47,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2024,Centre-ville (prime),935,117,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2024,Centre-ville (secondaire),338,52,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2024,Gare / Aéroport,647,89,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2024,Outlet,137,16,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2025,Centre commercial,278,35,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2025,Centre-ville (prime),984,108,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2025,Centre-ville (secondaire),343,46,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2025,Gare / Aéroport,712,72,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2025,Outlet,135,21,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2026,Centre commercial,281,45,12.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2026,Centre-ville (prime),975,174,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2026,Centre-ville (secondaire),390,60,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2026,Gare / Aéroport,761,117,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z044,2026,Outlet,136,24,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2023,Centre commercial,1976,293,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2023,Centre-ville (prime),6846,754,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2023,Centre-ville (secondaire),2369,384,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2023,Gare / Aéroport,5010,770,7.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2023,Outlet,854,98,5.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2024,Centre commercial,1973,343,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2024,Centre-ville (prime),6140,935,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2024,Centre-ville (secondaire),2733,408,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2024,Gare / Aéroport,5330,949,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2024,Outlet,980,175,9.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2025,Centre commercial,2164,293,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2025,Centre-ville (prime),6288,708,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2025,Centre-ville (secondaire),2748,306,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2025,Gare / Aéroport,5098,750,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2025,Outlet,930,124,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2026,Centre commercial,2166,329,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2026,Centre-ville (prime),7099,974,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2026,Centre-ville (secondaire),2796,374,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2026,Gare / Aéroport,5457,728,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z045,2026,Outlet,939,154,10.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2023,Centre commercial,739,123,9.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2023,Centre-ville (prime),2361,288,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2023,Centre-ville (secondaire),941,119,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2023,Gare / Aéroport,1815,269,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2023,Outlet,308,44,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2024,Centre commercial,729,98,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2024,Centre-ville (prime),2317,341,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2024,Centre-ville (secondaire),950,126,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2024,Gare / Aéroport,1803,320,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2024,Outlet,313,47,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2025,Centre commercial,702,91,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2025,Centre-ville (prime),2514,336,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2025,Centre-ville (secondaire),878,105,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2025,Gare / Aéroport,1711,176,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2025,Outlet,341,59,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2026,Centre commercial,756,79,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2026,Centre-ville (prime),2487,401,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2026,Centre-ville (secondaire),910,146,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2026,Gare / Aéroport,2005,249,4.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z046,2026,Outlet,344,45,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2023,Centre commercial,616,99,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2023,Centre-ville (prime),1974,324,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2023,Centre-ville (secondaire),766,101,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2023,Gare / Aéroport,1518,206,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2023,Outlet,271,48,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2024,Centre commercial,609,78,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2024,Centre-ville (prime),2110,244,11.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2024,Centre-ville (secondaire),782,88,11.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2024,Gare / Aéroport,1600,283,13.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2024,Outlet,300,44,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2025,Centre commercial,638,68,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2025,Centre-ville (prime),2370,314,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2025,Centre-ville (secondaire),814,105,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2025,Gare / Aéroport,1732,240,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2025,Outlet,284,51,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2026,Centre commercial,683,93,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2026,Centre-ville (prime),2089,257,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2026,Centre-ville (secondaire),879,101,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2026,Gare / Aéroport,1774,310,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z047,2026,Outlet,319,38,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2023,Centre commercial,520,84,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2023,Centre-ville (prime),1852,271,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2023,Centre-ville (secondaire),676,88,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2023,Gare / Aéroport,1272,170,7.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2023,Outlet,272,47,10.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2024,Centre commercial,521,94,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2024,Centre-ville (prime),1825,323,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2024,Centre-ville (secondaire),676,71,4.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2024,Gare / Aéroport,1310,196,9.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2024,Outlet,244,35,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2025,Centre commercial,588,100,13.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2025,Centre-ville (prime),1981,214,10.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2025,Centre-ville (secondaire),742,116,11.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2025,Gare / Aéroport,1390,198,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2025,Outlet,267,46,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2026,Centre commercial,557,95,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2026,Centre-ville (prime),1919,283,8.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2026,Centre-ville (secondaire),775,85,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2026,Gare / Aéroport,1389,157,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z048,2026,Outlet,289,49,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2023,Centre commercial,600,95,5.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2023,Centre-ville (prime),1912,250,8.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2023,Centre-ville (secondaire),666,88,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2023,Gare / Aéroport,1418,163,8.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2023,Outlet,278,36,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2024,Centre commercial,590,74,12.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2024,Centre-ville (prime),2005,240,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2024,Centre-ville (secondaire),766,119,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2024,Gare / Aéroport,1412,220,8.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2024,Outlet,275,29,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2025,Centre commercial,598,76,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2025,Centre-ville (prime),2127,304,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2025,Centre-ville (secondaire),784,139,6.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2025,Gare / Aéroport,1608,197,5.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2025,Outlet,265,43,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2026,Centre commercial,618,73,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2026,Centre-ville (prime),2141,228,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2026,Centre-ville (secondaire),800,134,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2026,Gare / Aéroport,1440,204,10.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z049,2026,Outlet,308,36,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2023,Centre commercial,483,79,5.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2023,Centre-ville (prime),1512,205,6.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2023,Centre-ville (secondaire),566,65,11.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2023,Gare / Aéroport,1166,120,13.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2023,Outlet,215,22,9.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2024,Centre commercial,498,63,6.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2024,Centre-ville (prime),1611,164,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2024,Centre-ville (secondaire),658,113,4.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2024,Gare / Aéroport,1323,203,11.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2024,Outlet,235,34,9.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2025,Centre commercial,522,82,4.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2025,Centre-ville (prime),1625,170,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2025,Centre-ville (secondaire),611,99,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2025,Gare / Aéroport,1303,154,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2025,Outlet,227,26,7.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2026,Centre commercial,518,78,14.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2026,Centre-ville (prime),1733,193,12.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2026,Centre-ville (secondaire),693,122,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2026,Gare / Aéroport,1220,171,10.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z050,2026,Outlet,232,37,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2023,Centre commercial,514,52,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2023,Centre-ville (prime),1574,257,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2023,Centre-ville (secondaire),668,68,9.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2023,Gare / Aéroport,1231,145,12.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2023,Outlet,223,34,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2024,Centre commercial,520,56,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2024,Centre-ville (prime),1803,288,10.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2024,Centre-ville (secondaire),687,82,13.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2024,Gare / Aéroport,1242,180,13.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2024,Outlet,228,28,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2025,Centre commercial,527,79,10.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2025,Centre-ville (prime),1691,195,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2025,Centre-ville (secondaire),692,124,13.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2025,Gare / Aéroport,1440,259,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2025,Outlet,241,39,8.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2026,Centre commercial,548,94,7.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2026,Centre-ville (prime),1722,203,8.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2026,Centre-ville (secondaire),751,85,4.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2026,Gare / Aéroport,1371,162,13.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z051,2026,Outlet,261,46,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2023,Centre commercial,560,65,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2023,Centre-ville (prime),2016,224,11.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2023,Centre-ville (secondaire),794,113,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2023,Gare / Aéroport,1492,243,6.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2023,Outlet,270,30,4.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2024,Centre commercial,582,103,7.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2024,Centre-ville (prime),2195,324,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2024,Centre-ville (secondaire),746,95,5.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2024,Gare / Aéroport,1554,244,11.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2024,Outlet,270,31,6.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2025,Centre commercial,618,106,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2025,Centre-ville (prime),2258,358,11.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2025,Centre-ville (secondaire),759,110,12.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2025,Gare / Aéroport,1462,256,7.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2025,Outlet,282,31,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2026,Centre commercial,610,85,13.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2026,Centre-ville (prime),2281,400,9.4,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2026,Centre-ville (secondaire),797,97,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2026,Gare / Aéroport,1636,236,12.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z052,2026,Outlet,321,44,5.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2023,Centre commercial,382,41,9.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2023,Centre-ville (prime),1330,159,6.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2023,Centre-ville (secondaire),463,68,10.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2023,Gare / Aéroport,1001,119,7.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2023,Outlet,171,30,8.0,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2024,Centre commercial,381,60,7.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2024,Centre-ville (prime),1323,166,10.9,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2024,Centre-ville (secondaire),472,48,13.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2024,Gare / Aéroport,978,107,11.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2024,Outlet,179,29,12.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2025,Centre commercial,434,73,9.3,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2025,Centre-ville (prime),1307,197,8.5,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2025,Centre-ville (secondaire),487,72,10.8,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2025,Gare / Aéroport,1003,174,5.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2025,Outlet,197,33,6.1,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2026,Centre commercial,410,48,13.7,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2026,Centre-ville (prime),1457,255,5.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2026,Centre-ville (secondaire),558,75,12.2,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2026,Gare / Aéroport,1074,178,8.6,Générateur Python src/simulate/generate_data.py (seed 2027),True
+Z053,2026,Outlet,191,34,9.0,Générateur Python src/simulate/generate_data.py (seed 2027),True

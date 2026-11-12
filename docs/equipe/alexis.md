@@ -8,14 +8,14 @@
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
 | T2 | Recalibrer la rentabilité des magasins | ✅ Fait | — | Business case crédible |
-| T7 | Vues KPI + `kpi_summary` | Jeudi après-midi | T6 (faite) | IA, dashboard |
-| T8 | Business case Allemagne : 3 scénarios + scoring des villes | Jeudi soir | T7 | Recommandation |
+| T7 | Vues KPI + `kpi_summary` | ✅ Fait | T6 (faite) | IA, dashboard |
+| T8 | Business case Allemagne : 3 scénarios + scoring des villes | ✅ Fait (corrections en cours) | T7 | Recommandation |
 
 ## Pourquoi T2 est urgent
 
 Dans le jeu v1, un magasin rembourse son investissement en 3 à 6 mois, pour un CA de 9 à 19 k€/m² ; seuls les outlets font exception (19 mois, 5 000 €/m²). Le Go serait acquis d'avance, et le jury le verrait (voir `docs/AUDIT_JEU_DE_DONNEES_V1.md`, point 1).
 
-Après recalibrage (T2, mergée le 12/11/2026), le payback médian va de 16 à 23 mois selon le format, pour un CA de 3 500 à 9 700 €/m².
+Après recalibrage (T2, mergée le 12/11/2026), le payback médian va de 16 à 37 mois selon le format, pour un CA de 3 500 à 9 700 €/m².
 
 > **Le générateur est gelé** : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
 

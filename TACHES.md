@@ -21,7 +21,7 @@ Les numéros sont des identifiants ; l'ordre est donné par les phases.
 
 | # | Décision | Proposition |
 |---|---|---|
-| D1 | Outil de dashboard | Power BI si au moins un membre a Windows, sinon Looker Studio |
+| D1 | Outil de dashboard | **Décidé le 12/11/2026 : Power BI.** (Proposition de départ : Power BI si au moins un membre a Windows, sinon Looker Studio) |
 | D2 | Seuils Go / No-Go | Ceux du README (section 4.2) |
 | D3 | Recalibrage de la rentabilité magasin | Oui (voir l'audit, point 1) |
 | D4 | Sources réelles | Eurostat (T4), prix et catalogue crocs.fr / crocs.de (T3), OpenStreetMap (T16, T17), taxes officielles (T18) |
@@ -35,7 +35,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | Fait |
-| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | À faire |
+| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | Fait (128 paires FR/DE, 100 % du catalogue France présent sur crocs.de ; `kpi_indice_prix` et `kpi_catalogue_eligible` lisent ces tables pour l'Allemagne) |
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
 | T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | Fait |
 | T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | Fait |
@@ -57,15 +57,15 @@ Les phases suivent l'ordre de la démarche du cours.
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | À faire |
-| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | À faire |
+| T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | Fait |
+| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (chiffres provisoires : corrections d'Alexis en cours, voir `docs/ENSEIGNEMENTS.md`, section 4) |
 | T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
 
 ### 5. Restitution
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | À faire |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` ; `business_case`, `city_scoring` et `ai_commentary` s'exportent dès qu'ils existent) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | À faire |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |

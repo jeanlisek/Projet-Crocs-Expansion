@@ -38,7 +38,9 @@ def warehouse(tmp_path):
 def test_density_is_shops_per_100000_inhabitants_of_the_official_population(warehouse, tmp_path):
     sql_dir = tmp_path / "kpi"
     sql_dir.mkdir()
-    (sql_dir / f"{VIEW}.sql").write_text((SQL_DIR / f"{VIEW}.sql").read_text(encoding="utf-8"))
+    (sql_dir / f"{VIEW}.sql").write_text(
+        (SQL_DIR / f"{VIEW}.sql").read_text(encoding="utf-8"), encoding="utf-8"
+    )
     run_kpi.run(warehouse, sql_dir)
 
     con = duckdb.connect(str(warehouse), read_only=True)
