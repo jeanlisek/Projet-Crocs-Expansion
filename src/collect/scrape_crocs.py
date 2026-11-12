@@ -1,20 +1,28 @@
 """Collect the public prices of the Crocs websites of France and Germany (task T3).
 
 Usage (from the repository root):
-    python -m src.collect.scrape_crocs [--sites FR DE] [--nb-modeles N] [--bronze DIR]
+    python -m src.collect.scrape_crocs [--bronze DIR]
 
-For each site, the start category page (no filter, no sorting) gives the list of models in
-the order the site shows them; the first N models are kept. Each model page holds every
-colour of the model with, per size, the displayed price and the reference price. The useful
-part of each model page is saved, dated, in data/bronze/; a model already saved for a site
-is never asked for again. The table crocs_produits (one row per site, model and colour) is
-then rebuilt from those raw files.
+Two steps, both from public pages, each answer saved dated in data/bronze/ and never asked
+for again:
+
+1. Catalogue. Every page of the three "silhouette" categories of each site (sabots, sandals,
+   shoes; no filter, no sorting; `?page=N` for the next pages). A category page lists each
+   model with the colours it shows. Table crocs_catalogue: one row per site, category,
+   model and colour.
+2. Prices. For each category, the first models of the French list that crocs.de also sells
+   are read on both sites. A model page holds every colour with, per size, the displayed
+   price and the reference price. Table crocs_produits: one row per site, model and colour.
+
+The share of the French catalogue (model + colour) also listed on crocs.de, per category,
+is then printed (KPI "% catalogue éligible", task T3).
 
 robots.txt of www.crocs.fr and www.crocs.de, read on 2026-11-12 (the same file on both
 sites): category pages (/c/) and model pages (/p/) are allowed for every user-agent; search,
 the API, the account pages and category URLs with filters or sorting are not. The file sets
-no crawl delay. Before each request, this script reads robots.txt again and checks the URL
-against it; it sends an explicit User-Agent, waits at least the project delay between two
+no crawl delay. Each run reads robots.txt again before its first page and checks every URL
+against it (pagination uses `?page=N`, which it allows; the search API is never called); it
+sends an explicit User-Agent, waits at least the project delay between two
 requests, and stops at the first refusal (HTTP 403 or 429, CAPTCHA page): no retry, no
 workaround (project rule 7).
 """
@@ -38,9 +46,12 @@ DEFAULT_BRONZE_DIR = REPO_ROOT / "data" / "bronze"
 # Identifies the client: project name and public repository.
 USER_AGENT = "Projet-Crocs-Expansion/1.0 (+https://github.com/jeanlisek/Projet-Crocs-Expansion)"
 SOURCE = "Site {url}, page produit publique, relevé du {day}"
+LISTING_SOURCE = "Site {url}, pages de la catégorie {path}, relevé du {day}"
 
-TABLE = "crocs_produits"
+PRODUCTS_TABLE = "crocs_produits"
+CATALOGUE_TABLE = "crocs_catalogue"
 RAW_FILE = "crocs_{site}_{model}_{day}.json"
+LISTING_FILE = "crocs_liste_{site}_{category}_{day}.json"
 # Statuses that mean the site refuses the client: the script stops, it does not retry.
 REFUSAL_STATUSES = (401, 403, 429)
 # Words of a bot-protection page served with a 200 status.
@@ -132,7 +143,7 @@ class Client:
         self.session.headers["User-Agent"] = USER_AGENT
         self.last_request = None
         self.requests_sent = 0
-        self.rules = parse_robots(self._get("/robots.txt").text)
+        self.rules = None  # robots.txt is read before the first page: no page, no request
 
     def _get(self, path: str) -> requests.Response:
         if self.last_request is not None:
@@ -152,6 +163,8 @@ class Client:
         return response
 
     def page(self, path: str) -> str:
+        if self.rules is None:
+            self.rules = parse_robots(self._get("/robots.txt").text)
         if not is_allowed(self.rules, self.base_url + path):
             raise Refused(f"{self.base_url}{path} : interdit par robots.txt")
         return self._get(path).text
@@ -235,7 +248,7 @@ def colour_rows(product: dict, site: str, base_url: str, slug: str, day: str) ->
                 "nom": product["name"],
                 "code_coloris": colour,
                 "coloris": names.get(colour),
-                "categorie": product.get("silhouette"),
+                "silhouette": product.get("silhouette"),
                 "categorie_site": product.get("primaryCategoryId"),
                 "genre": product.get("gender"),
                 "prix_affiche": cheapest["price"],
@@ -250,82 +263,292 @@ def colour_rows(product: dict, site: str, base_url: str, slug: str, day: str) ->
     return rows
 
 
+def listing_rows(listing: dict, base_url: str) -> list[dict]:
+    """One row per model and colour shown on the pages of a category. A model can come in
+    several hits (one per group of colours): their colours are merged."""
+    rows, seen = [], set()
+    for hit in listing["hits"]:
+        for colour in hit.get("colorVariations") or []:
+            key = (hit["productId"], colour["id"])
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append(
+                {
+                    "site": listing["site"],
+                    "categorie": listing["categorie"],
+                    "code_modele": hit["productId"],
+                    "nom": hit["name"],
+                    "code_coloris": colour["id"],
+                    "coloris": colour.get("name"),
+                    "date_collecte": listing["day"],
+                    "source": LISTING_SOURCE.format(
+                        url=base_url, path=listing["path"], day=listing["day"]
+                    ),
+                }
+            )
+    return rows
+
+
+def category_listing(html: str) -> dict:
+    """The listing object of a category page: hits of the page, number of pages."""
+    return _enclosing_object(flight_data(html), '"hits":[', '{"hits"')
+
+
+def kept_hit(hit: dict) -> dict:
+    """The fields of a listed model kept in the raw file."""
+    return {
+        "productId": hit["productId"],
+        "name": hit.get("name"),
+        "slug": hit.get("slug"),
+        "primaryCategoryId": hit.get("primaryCategoryId"),
+        "pricing": hit.get("pricing"),
+        "colorVariations": [
+            {"id": colour["id"], "name": colour.get("name")}
+            for colour in hit.get("colorVariations") or []
+        ],
+    }
+
+
+# --- KPI ------------------------------------------------------------------------------------
+
+
+def model_category(catalogue: pd.DataFrame, categories: list[str]) -> pd.Series:
+    """One category per model. The category pages overlap (most models of the "shoes" page
+    are also on the sabots or sandals page): a model takes the first category of the
+    configuration order whose French list holds it, then the German list if France has none.
+    The categories are thus exclusive and add up to the total."""
+    rank = {category: position for position, category in enumerate(categories)}
+    listed = catalogue.assign(
+        rang=catalogue["categorie"].map(rank), pays_rang=(catalogue["site"] != "FR").astype(int)
+    ).sort_values(["pays_rang", "rang"])
+    return listed.drop_duplicates("code_modele").set_index("code_modele")["categorie"]
+
+
+def catalogue_share(catalogue: pd.DataFrame, categories: list[str]) -> pd.DataFrame:
+    """Share of the French catalogue (model + colour) also listed on crocs.de, per category
+    (exclusive, see model_category) and in total. A reference counts as present when the
+    same model and colour codes are listed in any category of crocs.de. The shares are
+    recomputed from the counts (rule 6): the total is not an average of the categories."""
+    keys = ["code_modele", "code_coloris"]
+    german = set(map(tuple, catalogue.loc[catalogue["site"] == "DE", keys].to_numpy()))
+    french = catalogue.loc[catalogue["site"] == "FR", keys].drop_duplicates()
+    french = french.assign(
+        categorie=french["code_modele"].map(model_category(catalogue, categories)),
+        present_de=[tuple(key) in german for key in french[keys].to_numpy()],
+    )
+    groups = [(category, french[french["categorie"] == category]) for category in categories]
+    groups.append(("Total", french))
+    table = pd.DataFrame(
+        [
+            {
+                "categorie": category,
+                "nb_references_fr": len(group),
+                "nb_presentes_de": int(group["present_de"].sum()),
+                "nb_modeles_fr": group["code_modele"].nunique(),
+                "nb_modeles_presents_de": group.loc[group["present_de"], "code_modele"].nunique(),
+            }
+            for category, group in groups
+        ]
+    )
+    table["part_catalogue_pct"] = (
+        100 * table["nb_presentes_de"] / table["nb_references_fr"]
+    ).round(1)
+    return table
+
+
+def price_pairs(products: pd.DataFrame, vat_pct: dict) -> pd.DataFrame:
+    """FR/DE pairs on the same model and colour codes, with prices before tax. Only colours
+    that can be ordered on both sites are paired: a sold-out colour keeps an old price and
+    its `?cid=` link opens another colour (checked on 2026-11-12). The reference price is
+    the crossed-out price when there is one, the displayed price otherwise: it is the price
+    outside promotion that the README index compares (section 2)."""
+    keys = ["code_modele", "code_coloris"]
+    columns = [*keys, "nom", "categorie", "coloris", "prix_affiche", "prix_barre", "url"]
+    available = products[products["disponible"].astype(str) == "True"]
+    french = available.loc[available["site"] == "FR", columns]
+    german = available.loc[available["site"] == "DE", [*keys, "prix_affiche", "prix_barre", "url"]]
+    pairs = french.merge(german, on=keys, suffixes=("_fr", "_de"))
+    for site in ("fr", "de"):
+        rate = 1 + vat_pct[site.upper()] / 100
+        reference = pairs[f"prix_barre_{site}"].fillna(pairs[f"prix_affiche_{site}"])
+        pairs[f"prix_reference_ht_{site}"] = (reference / rate).round(2)
+        pairs[f"prix_affiche_ht_{site}"] = (pairs[f"prix_affiche_{site}"] / rate).round(2)
+    return pairs
+
+
+def price_index(pairs: pd.DataFrame) -> pd.DataFrame:
+    """Price index DE vs FR = mean over the pairs of (price before tax DE / FR) x 100, as the
+    README defines it (section 2), per category and in total; on reference prices (the KPI)
+    and, for information, on displayed prices."""
+    pairs = pairs.assign(
+        ratio_reference=pairs["prix_reference_ht_de"] / pairs["prix_reference_ht_fr"],
+        ratio_affiche=pairs["prix_affiche_ht_de"] / pairs["prix_affiche_ht_fr"],
+    )
+    groups = [(category, group) for category, group in pairs.groupby("categorie", sort=False)]
+    groups.append(("Total", pairs))
+    return pd.DataFrame(
+        [
+            {
+                "categorie": category,
+                "nb_paires": len(group),
+                "nb_modeles": group["code_modele"].nunique(),
+                "nb_paires_prix_ttc_identique": int(
+                    (group["prix_affiche_fr"] == group["prix_affiche_de"]).sum()
+                ),
+                "indice_prix_ht_reference": round(100 * group["ratio_reference"].mean(), 2),
+                "indice_prix_ht_affiche": round(100 * group["ratio_affiche"].mean(), 2),
+            }
+            for category, group in groups
+        ]
+    )
+
+
 # --- Collection -----------------------------------------------------------------------------
 
 
-def cached_product(bronze_dir: Path, site: str, model: str) -> Path | None:
-    """Most recent raw file already saved for a model of a site, if any."""
-    files = sorted(bronze_dir.glob(RAW_FILE.format(site=site, model=model, day="*")))
+def cached(bronze_dir: Path, pattern: str, **names) -> Path | None:
+    """Most recent raw file already saved for these names, if any."""
+    files = sorted(bronze_dir.glob(pattern.format(day="*", **names)))
     return files[-1] if files else None
 
 
-def rebuild_table(bronze_dir: Path, settings: dict) -> pd.DataFrame:
-    """Rebuild crocs_produits from every raw file of data/bronze/."""
+def collect_listing(client: Client, site: str, category: str, path: str, bronze_dir: Path):
+    """Save every page of a category (first page, then `?page=N`); return the raw file."""
+    path_cached = cached(bronze_dir, LISTING_FILE, site=site, category=category)
+    if path_cached is not None:
+        print(f"{site} {category:10s} déjà en cache ({path_cached.name})")
+        return path_cached
+    first = category_listing(client.page(path))
+    hits = [kept_hit(hit) for hit in first["hits"]]
+    for page_number in range(1, first["nbPages"]):
+        listing = category_listing(client.page(f"{path}?page={page_number}"))
+        hits.extend(kept_hit(hit) for hit in listing["hits"])
+    day = date.today().isoformat()
+    raw = {
+        "site": site,
+        "categorie": category,
+        "path": path,
+        "day": day,
+        "nbHits": first["nbHits"],
+        "nbPages": first["nbPages"],
+        "hits": hits,
+    }
+    raw_path = bronze_dir / LISTING_FILE.format(site=site, category=category, day=day)
+    raw_path.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
+    print(
+        f"{site} {category:10s} {first['nbPages']:>2d} page(s), {first['nbHits']:>4d} modèles"
+        f" annoncés, {len(hits):>4d} lus   ({raw_path.name})"
+    )
+    return raw_path
+
+
+def collect_product(client: Client, site: str, model: str, slug: str, bronze_dir: Path):
+    """Save the useful part of a model page, unless it is already saved."""
+    if cached(bronze_dir, RAW_FILE, site=site, model=model) is not None:
+        return False
+    product = product_data(client.page(slug), model)
+    day = date.today().isoformat()
+    raw = {"site": site, "slug": slug, "day": day, "product": product}
+    path = bronze_dir / RAW_FILE.format(site=site, model=model, day=day)
+    path.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
+    print(f"{site} {model:>8s}   {product['name']}   ({path.name})")
+    return True
+
+
+def rebuild_catalogue(bronze_dir: Path, settings: dict) -> pd.DataFrame:
+    """Rebuild crocs_catalogue from the most recent listing of each site and category."""
+    crocs = settings["crocs"]
     rows = []
-    for path in sorted(bronze_dir.glob(RAW_FILE.format(site="*", model="*", day="*"))):
-        raw = json.loads(path.read_text(encoding="utf-8"))
-        site = raw["site"]
-        rows.extend(
-            colour_rows(
-                raw["product"],
-                site,
-                settings["crocs"]["sites"][site]["url"],
-                raw["slug"],
-                raw["day"],
-            )
-        )
+    for site, base_url in crocs["sites"].items():
+        for category in crocs["categories"]:
+            path = cached(bronze_dir, LISTING_FILE, site=site, category=category)
+            if path is not None:
+                rows.extend(listing_rows(json.loads(path.read_text(encoding="utf-8")), base_url))
     table = pd.DataFrame(rows)
-    table.to_csv(bronze_dir / f"{TABLE}.csv", index=False, encoding="utf-8-sig")
+    table.to_csv(bronze_dir / f"{CATALOGUE_TABLE}.csv", index=False, encoding="utf-8-sig")
     return table
 
 
-def collect_site(site: str, settings: dict, nb_models: int, bronze_dir: Path) -> int:
-    """Save the first `nb_models` models of a site's start category; return requests sent."""
+def rebuild_products(bronze_dir: Path, settings: dict, catalogue: pd.DataFrame) -> pd.DataFrame:
+    """Rebuild crocs_produits from the raw model pages, with the category of model_category."""
     crocs = settings["crocs"]
-    site_settings = crocs["sites"][site]
-    client = Client(
-        site_settings["url"], settings["delai_entre_requetes_s"], crocs["delai_reponse_s"]
-    )
-    models = category_models(client.page(site_settings["categorie_depart"]))[:nb_models]
-    for model in models:
-        model_id = model["productId"]
-        cached = cached_product(bronze_dir, site, model_id)
-        if cached is not None:
-            print(f"{site} {model_id:>8s}   déjà en cache ({cached.name})")
-            continue
-        product = product_data(client.page(model["slug"]), model_id)
-        day = date.today().isoformat()
-        raw = {"site": site, "slug": model["slug"], "day": day, "product": product}
-        path = bronze_dir / RAW_FILE.format(site=site, model=model_id, day=day)
-        path.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
-        print(f"{site} {model_id:>8s}   {product['name']}   ({path.name})")
-    return client.requests_sent
+    rows = []
+    for site, base_url in crocs["sites"].items():
+        for path in sorted(bronze_dir.glob(RAW_FILE.format(site=site, model="*", day="*"))):
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            rows.extend(colour_rows(raw["product"], site, base_url, raw["slug"], raw["day"]))
+    table = pd.DataFrame(rows)
+    if not table.empty:
+        # The latest reading of each model wins when it was read on several days.
+        table = table.sort_values("date_collecte").drop_duplicates(
+            ["site", "code_modele", "code_coloris"], keep="last"
+        )
+        category = model_category(catalogue, list(crocs["categories"]))
+        table.insert(5, "categorie", table["code_modele"].map(category))
+    table.to_csv(bronze_dir / f"{PRODUCTS_TABLE}.csv", index=False, encoding="utf-8-sig")
+    return table
 
 
-def collect(
-    bronze_dir: Path = DEFAULT_BRONZE_DIR, sites: list[str] | None = None, nb_models=None
-) -> pd.DataFrame:
+def models_to_price(
+    catalogue: pd.DataFrame, categories: list[str], per_category: int
+) -> list[tuple[str, str]]:
+    """Per category, the first `per_category` models of the French lists (site order) that
+    crocs.de lists with at least one same colour."""
+    keys = ["code_modele", "code_coloris"]
+    german = catalogue.loc[catalogue["site"] == "DE", keys].drop_duplicates()
+    common = catalogue[catalogue["site"] == "FR"].merge(german, on=keys)
+    common = common.assign(classe=common["code_modele"].map(model_category(catalogue, categories)))
+    chosen = []
+    for category in categories:
+        models = common.loc[common["classe"] == category, "code_modele"].drop_duplicates()
+        chosen.extend((category, model) for model in models.head(per_category))
+    return chosen
+
+
+def collect(bronze_dir: Path = DEFAULT_BRONZE_DIR, per_category: int | None = None):
     settings = load_config()
     crocs = settings["crocs"]
-    sites = sites or list(crocs["sites"])
-    nb_models = nb_models or crocs["nb_modeles_par_site"]
-    sent = 0
+    per_category = per_category or crocs["nb_modeles_par_categorie"]
+    clients, sent = {}, 0
+    slugs: dict[tuple[str, str], str] = {}
     try:
-        for site in sites:
-            sent += collect_site(site, settings, nb_models, bronze_dir)
+        for site, base_url in crocs["sites"].items():
+            clients[site] = Client(
+                base_url, settings["delai_entre_requetes_s"], crocs["delai_reponse_s"]
+            )
+            for category, paths in crocs["categories"].items():
+                raw_path = collect_listing(clients[site], site, category, paths[site], bronze_dir)
+                for hit in json.loads(raw_path.read_text(encoding="utf-8"))["hits"]:
+                    slugs.setdefault((site, hit["productId"]), hit["slug"])
+        catalogue = rebuild_catalogue(bronze_dir, settings)
+        print()
+        for category, model in models_to_price(catalogue, list(crocs["categories"]), per_category):
+            for site in crocs["sites"]:
+                collect_product(clients[site], site, model, slugs[(site, model)], bronze_dir)
     finally:
-        table = rebuild_table(bronze_dir, settings)
-        print(f"\n{sent} requête(s) envoyée(s), {len(table)} ligne(s) dans {TABLE}.csv")
-    return table
+        sent = sum(client.requests_sent for client in clients.values())
+        catalogue = rebuild_catalogue(bronze_dir, settings)
+        products = rebuild_products(bronze_dir, settings, catalogue)
+        print(
+            f"\n{sent} requête(s) envoyée(s) ; {len(catalogue)} ligne(s) dans"
+            f" {CATALOGUE_TABLE}.csv, {len(products)} dans {PRODUCTS_TABLE}.csv"
+        )
+    categories = list(crocs["categories"])
+    print("\nPart du catalogue France (modèle + coloris) présente sur crocs.de :")
+    print(catalogue_share(catalogue, categories).to_string(index=False))
+    pairs = price_pairs(products, crocs["tva_pct"])
+    print("\nIndice prix HT DE / FR (base 100 = France), paires modèle + coloris :")
+    print(price_index(pairs).to_string(index=False))
+    return catalogue, products
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--sites", nargs="+", choices=("FR", "DE"))
-    parser.add_argument("--nb-modeles", type=int)
+    parser.add_argument("--nb-modeles-par-categorie", type=int)
     parser.add_argument("--bronze", type=Path, default=DEFAULT_BRONZE_DIR)
     args = parser.parse_args()
-    collect(args.bronze, args.sites, args.nb_modeles)
+    collect(args.bronze, args.nb_modeles_par_categorie)
 
 
 if __name__ == "__main__":

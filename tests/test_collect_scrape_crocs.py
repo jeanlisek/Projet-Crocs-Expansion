@@ -2,6 +2,8 @@
 
 import json
 
+import pandas as pd
+
 from src.collect import scrape_crocs as sc
 
 ROBOTS = """User-Agent: *
@@ -105,3 +107,88 @@ def test_colour_rows_one_row_per_colour_with_lowest_price():
     # Reference price equal to the displayed one: nothing is crossed out.
     assert by_colour["530"]["prix_barre"] is None
     assert by_colour["530"]["coloris"] is None
+
+
+def test_listing_rows_merge_the_colours_of_a_model_listed_twice():
+    listing = {
+        "site": "FR",
+        "categorie": "Sabots",
+        "path": "/c/silhouette/sabots",
+        "day": "2026-11-12",
+        "hits": [
+            {"productId": "10001", "name": "Classic Clog", "colorVariations": [{"id": "001"}]},
+            {
+                "productId": "10001",
+                "name": "Classic Clog",
+                "colorVariations": [{"id": "001"}, {"id": "530", "name": "Lavender"}],
+            },
+        ],
+    }
+    rows = sc.listing_rows(listing, "https://www.crocs.fr")
+    assert [(row["code_modele"], row["code_coloris"]) for row in rows] == [
+        ("10001", "001"),
+        ("10001", "530"),
+    ]
+
+
+def catalogue(rows):
+    return pd.DataFrame(rows, columns=["site", "categorie", "code_modele", "code_coloris"])
+
+
+CATEGORIES = ["Sabots", "Sandales", "Chaussures"]
+
+
+def test_model_category_is_exclusive_and_follows_the_configuration_order():
+    table = catalogue(
+        [
+            ("FR", "Chaussures", "A", "1"),
+            ("FR", "Sabots", "A", "1"),
+            ("FR", "Chaussures", "B", "1"),
+            ("DE", "Sandales", "C", "1"),
+        ]
+    )
+    assert sc.model_category(table, CATEGORIES).to_dict() == {
+        "A": "Sabots",
+        "B": "Chaussures",
+        "C": "Sandales",
+    }
+
+
+def test_catalogue_share_recomputes_the_total_from_the_counts():
+    table = catalogue(
+        [
+            ("FR", "Sabots", "A", "1"),
+            ("FR", "Sabots", "A", "2"),
+            ("FR", "Sabots", "A", "3"),
+            ("FR", "Sandales", "B", "1"),
+            ("DE", "Chaussures", "A", "1"),  # any German category counts
+            ("DE", "Sabots", "B", "9"),  # same model, other colour: not present
+        ]
+    )
+    share = sc.catalogue_share(table, CATEGORIES).set_index("categorie")
+    assert share.loc["Sabots", "part_catalogue_pct"] == round(100 / 3, 1)
+    assert share.loc["Sandales", "nb_presentes_de"] == 0
+    # 1 reference out of 4, not the mean of 33.3 % and 0 %.
+    assert share.loc["Total", "part_catalogue_pct"] == 25.0
+
+
+def test_price_pairs_and_index_before_tax_on_orderable_colours_only():
+    columns = ["site", "code_modele", "code_coloris", "nom", "categorie", "coloris"]
+    base = dict(zip(columns[3:], ["Classic Clog", "Sabots", "Black"]))
+    products = pd.DataFrame(
+        [
+            {"site": "FR", "code_modele": "A", "code_coloris": "1", **base, "prix_affiche": 40.0,
+             "prix_barre": 60.0, "disponible": True, "url": "fr"},
+            {"site": "DE", "code_modele": "A", "code_coloris": "1", **base, "prix_affiche": 40.0,
+             "prix_barre": 60.0, "disponible": True, "url": "de"},
+            {"site": "FR", "code_modele": "A", "code_coloris": "2", **base, "prix_affiche": 60.0,
+             "prix_barre": None, "disponible": False, "url": "fr"},
+            {"site": "DE", "code_modele": "A", "code_coloris": "2", **base, "prix_affiche": 60.0,
+             "prix_barre": None, "disponible": True, "url": "de"},
+        ]
+    )  # fmt: skip
+    pairs = sc.price_pairs(products, {"FR": 20, "DE": 19})
+    assert list(pairs["code_coloris"]) == ["1"]  # colour 2 is sold out in France
+    index = sc.price_index(pairs).set_index("categorie")
+    # Same price incl. VAT: (60 / 1.19) / (60 / 1.20) x 100.
+    assert index.loc["Total", "indice_prix_ht_reference"] == round(100 * 1.20 / 1.19, 2)
