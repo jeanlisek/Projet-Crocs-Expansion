@@ -24,6 +24,8 @@
 
 Le détail des tâches est dans [`TACHES.md`](TACHES.md).
 
+Chaque membre commence par sa fiche : [`docs/equipe/`](docs/equipe/).
+
 ---
 
 ## 1. Présentation de l'entreprise

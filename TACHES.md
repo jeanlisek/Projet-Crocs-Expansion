@@ -1,5 +1,7 @@
 # Répartition des tâches
 
+**Chaque membre commence par sa fiche** : [`docs/equipe/`](docs/equipe/).
+
 > **Échéance : oral le vendredi 13/11.** Bilan intermédiaire jeudi à 18h30.
 > Répartition proposée, à ajuster selon les profils de chacun.
 
@@ -22,23 +24,23 @@
 
 ## Tâches
 
-| ID | Tâche | Responsable | Dépend de | Fini quand |
-|---|---|---|---|---|
-| T1 | Dépôt : arborescence, `develop`, CI, `Makefile`, `requirements.txt` | Jean-Li | — | La CI passe au vert sur `develop` |
-| T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart |
-| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés |
-| T4 | API Eurostat → `dim_pays` réel | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées |
-| T5 | Bronze → silver : nettoyage + journal | Jean-Li | T3, T4 | `docs/JOURNAL_NETTOYAGE.md` : anomalie → décision → justification |
-| T6 | Silver → gold dans DuckDB + tests de qualité | Jean-Li | T2, T5 | `tests/test_qualite.py` passe : unicité, intégrité, validité, cohérence |
-| T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) |
-| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` |
-| T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code |
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` |
-| T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA |
-| T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours |
-| T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes |
-| T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies |
-| T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée |
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
+| T1 | Dépôt : arborescence, `develop`, CI, `Makefile`, `requirements.txt` | Jean-Li | — | La CI passe au vert sur `develop` | Fait |
+| T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | À faire |
+| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés | À faire |
+| T4 | API Eurostat → `dim_pays` réel | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées | À faire |
+| T5 | Bronze → silver : nettoyage + journal | Jean-Li | T3, T4 | `docs/JOURNAL_NETTOYAGE.md` : anomalie → décision → justification | Fait (squelette, tables réelles à brancher) |
+| T6 | Silver → gold dans DuckDB + tests de qualité | Jean-Li | T2, T5 | `tests/test_qualite_gold.py` passe : unicité, intégrité, validité, cohérence | À faire |
+| T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | À faire |
+| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | À faire |
+| T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | À faire |
+| T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
+| T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | À faire |
+| T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
+| T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies | À faire |
+| T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | À faire |
 
 ## Planning
 
