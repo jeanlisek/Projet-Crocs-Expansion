@@ -50,7 +50,7 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 
 | Fichier | Contenu | Lignes au 12/11/2026 |
 |---|---|---|
-| `kpi_summary.csv` | Tous les KPIs, par pays, avec seuil et statut Go / No-Go (contrat de `REGLES_COMMUNES.md`) | 232 |
+| `kpi_summary.csv` | Tous les KPIs, par pays, avec seuil et statut Go / No-Go (contrat de `REGLES_COMMUNES.md`) | 287 |
 | `densite_concurrentielle.csv` | Magasins de chaussures pour 100 000 habitants, 12 villes allemandes (réel) | 12 |
 | `distance_hub.csv` | Distance routière au hub le plus proche, 12 villes allemandes (réel) | 12 |
 | `dim_pays.csv` | Les 7 pays | 7 |
@@ -61,9 +61,14 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 | `fact_marche.csv` | Taille et croissance du marché par pays, année et segment | 154 |
 | `fact_parts_de_marche.csv` | Parts de marché par pays, année et concurrent | 420 |
 | `fact_immobilier.csv` | Loyers et charges par ville, année et type d'emplacement | 1 060 |
-| `fact_prix_releves.csv` | Relevés de prix par pays, enseigne et produit | 4 153 |
+| `fact_prix_releves.csv` | Relevés de prix par pays, enseigne et produit (simulé) | 4 153 |
+| `business_case.csv` | Business case Allemagne : une ligne par scénario (pessimiste, central, optimiste) et par format | 6 |
+| `city_scoring.csv` | Score et rang des 12 villes allemandes, villes prioritaires | 12 |
+| `sensibilite_payback.csv` | Payback du magasin type (scénario pessimiste, centre commercial) selon le nombre d'ETP et le CA/m² : grille pour une carte de chaleur | 1 519 |
+| `eurostat_series.csv` | Séries annuelles Eurostat par pays et indicateur (dépenses en chaussures, prix, population, chômage...), réelles | 463 |
+| `crocs_produits.csv` | Prix relevés sur crocs.fr et crocs.de, par modèle et coloris, le 12/11/2026, réels | 577 |
 
-`business_case.csv`, `city_scoring.csv` (T8) et `ai_commentary.csv` (T9) apparaîtront dans le même dossier dès que ces tâches seront mergées. Ils n'y sont pas encore.
+`ai_commentary.csv` (T9) apparaîtra dans le même dossier dès que la tâche sera mergée. Il n'y est pas encore.
 
 ### Format des fichiers
 
@@ -106,13 +111,21 @@ Les libellés des menus peuvent varier un peu selon la version de Power BI Deskt
 | `dim_concurrent` | `fact_prix_releves` | `id_concurrent` |
 | `dim_produit` | `fact_prix_releves` | `id_produit` |
 | `dim_temps` | `fact_prix_releves` | `id_date` |
+| `dim_pays` | `business_case` | `code_pays` |
+| `dim_pays` | `sensibilite_payback` | `code_pays` |
+| `dim_pays` | `eurostat_series` | `code_pays` |
+| `dim_pays` | `crocs_produits` | `code_pays` = `site` |
+| `dim_zone_chalandise` | `city_scoring` | `id_zone` (une ligne par ville allemande : relation 1 à 1) |
 
 - Les filtres pays et ville se posent sur `dim_pays[nom_pays]` et `dim_zone_chalandise[ville]`, jamais sur la colonne d'une table de faits : c'est ce qui fait réagir tous les visuels d'une page au même filtre.
 - `ai_commentary` n'aura pas de relation : la zone de texte se filtre sur `page` et `valeur_filtre`.
 - Le nom d'un concurrent se lit dans `dim_concurrent[nom_concurrent]`, celui d'un mois ou d'une saison dans `dim_temps`.
 - `id_produit` est vide sur 1 157 des 4 153 relevés de prix : ce sont les produits des concurrents, absents du catalogue Crocs. Power BI les range sous une ligne « (Vide) » de `dim_produit` ; leur libellé reste dans `fact_prix_releves[libelle_produit]`.
 - **Tables annuelles** (`fact_marche`, `fact_parts_de_marche`, `fact_immobilier`) : elles ont une colonne `annee`, alors que `dim_temps` a une ligne par mois. `annee` n'y est donc pas unique et Power BI refuse une relation 1 à plusieurs sur cette colonne. Deux façons de faire : utiliser directement la colonne `annee` de la table de faits comme axe du visuel, ou, pour un filtre année commun à plusieurs tables, créer une table d'années dans Power BI (Modélisation > Nouvelle table : `dim_annee = DISTINCT(dim_temps[annee])`) et la relier en 1 à plusieurs à la colonne `annee` de chacune de ces tables.
-- La mention « données simulées » se pilote avec `est_simule` (tables) et `origine_donnees` (`kpi_summary`, `densite_concurrentielle`, `distance_hub`).
+- **`eurostat_series`** mélange onze indicateurs dans la même colonne `valeur` : filtrer toujours sur `indicateur` (par exemple `depenses_menages_chaussures_meur`) avant d'afficher ou d'additionner. `statut_eurostat` = `p` signale une valeur provisoire (toutes les valeurs allemandes des dépenses en chaussures de 2022 à 2025). Le Royaume-Uni n'a presque pas de données Eurostat.
+- **`crocs_produits`** : dans l'éditeur Power Query, passer `code_modele` et `code_coloris` en **Texte**, sinon Power BI lit `001` comme le nombre 1 et les paires FR / DE ne se retrouvent plus. Une paire FR / DE = même `code_modele` et même `code_coloris` ; seules les lignes `disponible` = vrai sont comparables.
+- **`sensibilite_payback`** se lit en carte de chaleur : `nb_etp` en lignes, `ratio_ca_m2_vs_france` en colonnes, `statut_go` en couleur. La ligne `est_cas_business_case` = vrai est le magasin type du business case.
+- La mention « données simulées » se pilote avec `est_simule` (tables) et `origine_donnees` (`kpi_summary`, `densite_concurrentielle`, `distance_hub`, `business_case`, `city_scoring`, `sensibilite_payback`).
 
 ## Les slides (7 à 9)
 
