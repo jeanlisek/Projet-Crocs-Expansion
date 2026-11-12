@@ -56,22 +56,41 @@ simulation_reseau_france:
 # la distance « vol d'oiseau × 1,25 » n'y a pas de sens). FAIT géographique.
 zones_insulaires: [Las Palmas, Palma]   # Grande Canarie ; Majorque
 
-business_case_allemagne:
+business_case_allemagne:   # T8 (Alexis) : compte de résultat d'un magasin type, vues business_case et city_scoring
   annee_premiere_ouverture: 2027
-  nb_magasins_cible_2029: null       # TODO T8
-  formats_retenus: [Centre commercial, Centre-ville]   # TODO T8 : à confirmer par le scoring
-  scenarios:
+  nb_magasins_cible_2029: 6          # HYPOTHESE à valider : 2 ouvertures par an de 2027 à 2029 (les 6 premières villes du scoring)
+  formats_retenus: [Centre commercial, Centre-ville]   # CONVENTION : formats les plus représentés du réseau France
+  emplacement_immobilier:            # format du magasin -> type d'emplacement de fact_immobilier (loyer + charges)
+    Centre commercial: Centre commercial
+    Centre-ville: Centre-ville (secondaire)   # HYPOTHESE : emplacement n°1 bis, proche du loyer France hors Paris ; le prime (~2 500 €/m²/an) est hors de portée
+  # Magasin type : surface, ETP, CA/m² et taux de marge = moyennes du réseau France au même format (CALCUL),
+  # taux de marge corrigé de l'écart de marge post-taxe Allemagne - France (T7 : TVA, transport depuis le hub).
+  scenarios:                         # montée en charge : part du CA de croisière en années 1, 2, 3 (100 % ensuite)
     pessimiste:
-      ca_m2_vs_france_meme_format: null   # TODO T8 (ex. ratio appliqué au CA/m² France)
+      ca_m2_vs_france_meme_format: 0.75   # HYPOTHESE : marque connue (14,0 % de part via revendeurs) mais réseau nouveau
+      montee_en_charge: [0.60, 0.80, 0.90]   # HYPOTHESE : démarrage lent, croisière non atteinte en année 3
     central:
-      ca_m2_vs_france_meme_format: null
+      ca_m2_vs_france_meme_format: 0.90   # HYPOTHESE
+      montee_en_charge: [0.70, 0.90, 1.00]   # HYPOTHESE : croisière atteinte en année 3
     optimiste:
-      ca_m2_vs_france_meme_format: null
-  couts_additionnels_pct_ca:
-    demarque: null          # TODO T8, HYPOTHESE
-    frais_bancaires: null   # TODO T8, HYPOTHESE
-    frais_siege: null       # TODO T8, HYPOTHESE
-  duree_amortissement_capex_ans: null   # TODO T8, CONVENTION
+      ca_m2_vs_france_meme_format: 1.05   # HYPOTHESE : pouvoir d'achat et taille de marché supérieurs à la France
+      montee_en_charge: [0.85, 1.00, 1.00]   # HYPOTHESE : notoriété existante, croisière dès l'année 2
+  couts_additionnels_pct_ca:         # coûts variables, en % du CA HT
+    demarque: 1.5           # HYPOTHESE : vol, casse, erreurs ; ordre de grandeur du commerce d'habillement-chaussures
+    frais_bancaires: 0.6    # HYPOTHESE : commissions sur paiements par carte
+    frais_siege: 4.0        # HYPOTHESE : quote-part des fonctions centrales (achats, marketing, IT, finance)
+    logistique: 2.0         # HYPOTHESE : stockage, préparation, réassort ; le transport hub -> ville est déjà dans l'écart de marge (T7)
+  investissement:            # aménagement (fact_couts_exploitation DE, €/m²) x surface + part fixe + marketing de lancement (DE)
+    part_fixe_eur: 45000    # CONVENTION : même part fixe que le réseau France (stock initial, pré-ouverture), voir simulation_reseau_france
+  duree_amortissement_capex_ans: 7   # CONVENTION : durée d'usage de l'agencement, alignée sur un bail commercial
+  horizon_annees: 10        # CONVENTION : au-delà, l'investissement est réputé non remboursé
+
+city_scoring:               # T8 : score des villes allemandes sur 100 ; chaque critère est ramené de 0 à 100 entre les 12 villes
+  poids:                    # CONVENTION fixée avant le calcul, somme = 100
+    potentiel: 40           # population de la zone de chalandise x indice de revenu (simulé)
+    loyer: 25               # loyer + charges des formats retenus : moins cher = mieux
+    densite_concurrentielle: 15   # magasins de chaussures pour 100 000 hab. (OSM, réel) : moins dense = mieux
+    distance_hub: 20        # distance routière au hub le plus proche (OSRM, réel) : plus proche = mieux
 
 nettoyage:                 # T5 : bronze -> silver
   iqr_multiplicateur: 1.5  # CONVENTION : méthode des quartiles (README 2.5, règle 10)

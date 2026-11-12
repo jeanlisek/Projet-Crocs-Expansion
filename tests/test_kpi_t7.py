@@ -101,7 +101,7 @@ def run_views(tmp_path, warehouse, views, query):
 
 
 def test_parameters_come_from_the_go_no_go_and_kpi_sections():
-    parameters = dict(parametres_kpi.load().itertuples(index=False))
+    parameters = dict(parametres_kpi.load()[0].itertuples(index=False))
     assert parameters["go_no_go.indice_prix_min"] == 95
     assert parameters["go_no_go.payback_pessimiste_max_mois"] == 36
     assert parameters["kpi.annee_reference"] == 2025
@@ -444,7 +444,12 @@ def test_summary_follows_the_contract(summary):
     assert set(frame["statut_go"]) <= {"GO", "NO-GO", "INFO"}
     assert set(frame["statut_epistemique"]) <= {"FAIT", "CALCUL", "HYPOTHÈSE", "CONVENTION"}
     assert set(frame["origine_donnees"]) <= {"REEL", "SIMULE", "MIXTE"}
-    assert frame["valeur"].map(math.isfinite).all()
+    # a value is a finite number, except a payback not reached within the horizon (NO-GO)
+    missing = frame["valeur"].isna()
+    assert frame.loc[~missing, "valeur"].map(math.isfinite).all()
+    unreached = frame[missing]
+    assert unreached["kpi"].str.startswith("Payback").all()
+    assert (unreached["statut_go"] != "GO").all()
     # a GO / NO-GO verdict always shows the threshold it was judged against
     judged = frame[frame["statut_go"] != "INFO"]
     assert not judged.empty and judged["seuil"].notna().all()
@@ -453,3 +458,15 @@ def test_summary_follows_the_contract(summary):
 def test_summary_has_no_duplicate_kpi_per_country(summary):
     frame, _ = summary
     assert not frame.duplicated(["kpi", "pays"]).any()
+
+
+def test_summary_judges_german_profitability_on_the_agreed_scenarios(summary):
+    frame, _ = summary
+    german = frame[(frame["pays"] == "DE") & (frame["axe"] == "Rentabilité")]
+    payback = german[german["kpi"].str.startswith("Payback")]
+    occupancy = german[german["kpi"].str.startswith("Coût d'occupation")]
+    assert len(payback) == 6 and len(occupancy) == 6  # 3 scenarios x 2 formats
+    judged_payback = payback[payback["statut_go"] != "INFO"]
+    assert judged_payback["kpi"].str.contains("pessimiste").all() and len(judged_payback) == 2
+    judged_occupancy = occupancy[occupancy["statut_go"] != "INFO"]
+    assert judged_occupancy["kpi"].str.contains("central").all() and len(judged_occupancy) == 2

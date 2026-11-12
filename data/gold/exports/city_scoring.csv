@@ -1,0 +1,13 @@
+id_zone,ville,potentiel_millions_ponderes,cout_m2_an_eur,densite_pour_100k_hab,distance_hub_km,note_potentiel,note_loyer,note_densite,note_distance,score,rang,est_prioritaire,origine_donnees
+Z001,Berlin,10.846,984.0,6.81,703.7,100.0,37.3,79.8,12.4,63.8,1,True,MIXTE
+Z002,Hamburg,4.466,1033.0,6.66,512.5,60.2,31.5,82.8,46.2,53.6,3,True,MIXTE
+Z003,München,2.635,1299.0,8.97,738.2,36.6,0.0,36.6,6.3,21.4,12,False,MIXTE
+Z004,Köln,2.668,1101.0,8.88,239.2,37.1,23.5,38.4,94.5,45.4,4,True,MIXTE
+Z005,Frankfurt,1.534,1075.0,7.41,436.2,12.3,26.6,67.8,59.7,33.7,8,False,MIXTE
+Z006,Stuttgart,1.175,908.0,9.3,594.5,0.4,46.3,30.0,31.7,22.6,11,False,MIXTE
+Z007,Düsseldorf,1.299,1127.0,9.7,208.3,4.9,20.4,22.0,100.0,30.4,9,False,MIXTE
+Z008,Leipzig,1.743,455.0,8.83,677.5,18.1,100.0,39.4,17.0,41.5,6,True,MIXTE
+Z009,Dortmund,1.352,536.0,5.8,246.5,6.7,90.4,100.0,93.2,58.9,2,True,MIXTE
+Z010,Nürnberg,1.165,604.0,5.85,652.4,0.0,82.3,99.0,21.5,39.7,7,False,MIXTE
+Z011,Hannover,1.267,642.0,7.09,423.0,3.8,77.8,74.2,62.0,44.5,5,True,MIXTE
+Z012,Dresden,1.311,493.0,10.8,773.8,5.3,95.6,0.0,0.0,26.0,10,False,MIXTE

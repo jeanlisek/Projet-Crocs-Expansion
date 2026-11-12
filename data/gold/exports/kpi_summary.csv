@@ -5,6 +5,12 @@ kpi,axe,pays,valeur,unite,seuil,statut_go,statut_epistemique,origine_donnees
 % du catalogue éligible,Assortiment,GB,91.16,%,≥ 80 %,GO,CALCUL,SIMULE
 % du catalogue éligible,Assortiment,IT,80.95,%,≥ 80 %,GO,CALCUL,SIMULE
 % du catalogue éligible,Assortiment,NL,97.96,%,≥ 80 %,GO,CALCUL,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre commercial",Rentabilité,DE,14.94,%,≤ 15 %,GO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre-ville",Rentabilité,DE,16.86,%,≤ 15 %,NO-GO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario optimiste) : Centre commercial",Rentabilité,DE,12.8,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario optimiste) : Centre-ville",Rentabilité,DE,14.45,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario pessimiste) : Centre commercial",Rentabilité,DE,17.92,%,,INFO,HYPOTHÈSE,SIMULE
+"Coût d'occupation (loyer + charges ÷ CA, scénario pessimiste) : Centre-ville",Rentabilité,DE,20.23,%,,INFO,HYPOTHÈSE,SIMULE
 Coût d'occupation (loyer ÷ CA) : Centre commercial,Rentabilité,FR,15.23,%,,INFO,CALCUL,SIMULE
 Coût d'occupation (loyer ÷ CA) : Centre-ville,Rentabilité,FR,23.64,%,,INFO,CALCUL,SIMULE
 Coût d'occupation (loyer ÷ CA) : Gare / Aéroport,Rentabilité,FR,28.93,%,,INFO,CALCUL,SIMULE
@@ -165,12 +171,20 @@ Part de marché Skechers,Marché,FR,6.23,%,,INFO,CALCUL,SIMULE
 Part de marché Skechers,Marché,GB,8.88,%,,INFO,CALCUL,SIMULE
 Part de marché Skechers,Marché,IT,5.82,%,,INFO,CALCUL,SIMULE
 Part de marché Skechers,Marché,NL,7.98,%,,INFO,CALCUL,SIMULE
+Payback (scénario central) : Centre commercial,Rentabilité,DE,93.9,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario central) : Centre-ville,Rentabilité,DE,66.1,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario optimiste) : Centre commercial,Rentabilité,DE,37.0,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario optimiste) : Centre-ville,Rentabilité,DE,29.8,mois,,INFO,HYPOTHÈSE,SIMULE
+Payback (scénario pessimiste) : Centre commercial,Rentabilité,DE,,mois,≤ 36 mois,NO-GO,HYPOTHÈSE,SIMULE
+Payback (scénario pessimiste) : Centre-ville,Rentabilité,DE,,mois,≤ 36 mois,NO-GO,HYPOTHÈSE,SIMULE
 Payback : Centre commercial,Rentabilité,FR,15.8,mois,,INFO,CALCUL,SIMULE
 Payback : Centre-ville,Rentabilité,FR,17.6,mois,,INFO,CALCUL,SIMULE
 Payback : Gare / Aéroport,Rentabilité,FR,20.2,mois,,INFO,CALCUL,SIMULE
 Payback : Outlet,Rentabilité,FR,38.3,mois,,INFO,CALCUL,SIMULE
 Payback : Tous formats,Rentabilité,FR,18.1,mois,,INFO,CALCUL,SIMULE
+Point mort par magasin : Centre commercial,Rentabilité,DE,565010.0,€ de CA HT/an,,INFO,HYPOTHÈSE,SIMULE
 Point mort par magasin : Centre commercial,Rentabilité,FR,412861.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
+Point mort par magasin : Centre-ville,Rentabilité,DE,525098.0,€ de CA HT/an,,INFO,HYPOTHÈSE,SIMULE
 Point mort par magasin : Centre-ville,Rentabilité,FR,449532.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
 Point mort par magasin : Gare / Aéroport,Rentabilité,FR,434732.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
 Point mort par magasin : Outlet,Rentabilité,FR,421823.0,€ de CA HT/an,,INFO,CALCUL,SIMULE
