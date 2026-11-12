@@ -46,9 +46,15 @@ simule AS (
     SELECT code_pays, 'Éco-contribution', eco_contribution_par_paire_eur, '€/paire', est_simule FROM fact_fiscalite
 ),
 lignes AS (
-    SELECT code_pays, taxe, valeur, unite, note, est_simule FROM reel
-    UNION ALL
-    SELECT code_pays, taxe, valeur, unite, NULL, est_simule FROM simule
+    -- famille : taxes comparables entre réel et simulé. Le droit d'import simulé (0 % dans l'UE,
+    -- déjà acquitté à l'entrée) se compare au droit de douane UE réel : il passe en comparaison
+    -- quand le réel existe, pour ne pas sembler le contredire.
+    SELECT *, CASE WHEN taxe LIKE 'Droit%' THEN 'Droits de douane' ELSE taxe END AS famille
+    FROM (
+        SELECT code_pays, taxe, valeur, unite, note, est_simule FROM reel
+        UNION ALL
+        SELECT code_pays, taxe, valeur, unite, NULL, est_simule FROM simule
+    )
 )
 SELECT
     code_pays,
@@ -57,5 +63,5 @@ SELECT
     unite,
     note,
     CASE WHEN est_simule THEN 'SIMULE' ELSE 'REEL' END AS origine_donnees,
-    NOT est_simule OR NOT bool_or(NOT est_simule) OVER (PARTITION BY code_pays, taxe) AS est_retenue
+    NOT est_simule OR NOT bool_or(NOT est_simule) OVER (PARTITION BY code_pays, famille) AS est_retenue
 FROM lignes;

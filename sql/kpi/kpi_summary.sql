@@ -31,7 +31,8 @@ lignes AS (
     UNION ALL
     -- Confirmation sur données réelles (Eurostat) : autre périmètre, ligne INFO sans seuil
     SELECT 'Croissance des dépenses des ménages en chaussures (Eurostat, TCAM ' || k.annee_debut || '-'
-            || k.annee_fin || ', toutes chaussures, en valeur, inflation comprise)',
+            || k.annee_fin || ', toutes chaussures, en valeur, inflation comprise'
+            || CASE WHEN k.statuts_eurostat LIKE '%p%' THEN ', données provisoires' ELSE '' END || ')',
         'Marché', k.code_pays, k.tcam_pct, '%', NULL, 'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_croissance_depenses_chaussures AS k
     UNION ALL

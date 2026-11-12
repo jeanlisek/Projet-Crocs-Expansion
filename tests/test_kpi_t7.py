@@ -335,10 +335,11 @@ def test_taxes_prefer_the_official_reference_and_keep_the_simulated_for_comparis
     )
     douane = "Droit de douane UE sur les chaussures (chapitre 64, payé une fois à l'entrée)"
     # DE: real values kept, the simulated TVA and IS shown for comparison ; no reduced kids' rate
-    # -> standard rate ; taxes only in the simulated set (import via France, eco-fee) are kept.
+    # -> standard rate ; the simulated import duty is compared with the real EU duty ; the
+    # eco-fee, only in the simulated set, is kept.
     # GB: real 0 % kids' rate ; no EU customs duty published -> no row ; no simulated GB row.
     assert rows == [
-        ("DE", "Droit d'import (origine Asie, via la France)", 0.0, "SIMULE", True),
+        ("DE", "Droit d'import (origine Asie, via la France)", 0.0, "SIMULE", False),
         ("DE", douane, 16.8, "REEL", True),
         ("DE", "Impôt sur les sociétés", 30.06, "REEL", True),
         ("DE", "Impôt sur les sociétés", 29.9, "SIMULE", False),
@@ -500,6 +501,11 @@ def summary(silver, tmp_path_factory):
             droit_douane_ue_chaussures_ch64_pct DOUBLE, est_simule BOOLEAN);
         CREATE TABLE eurostat_series (code_pays VARCHAR, indicateur VARCHAR, annee INTEGER,
             valeur DOUBLE, statut_eurostat VARCHAR, est_simule BOOLEAN);
+        INSERT INTO eurostat_series VALUES
+            ('DE', 'depenses_menages_chaussures_meur', 2022, 1000.0, NULL, FALSE),
+            ('DE', 'depenses_menages_chaussures_meur', 2025, 1331.0, 'p', FALSE),
+            ('FR', 'depenses_menages_chaussures_meur', 2022, 1000.0, NULL, FALSE),
+            ('FR', 'depenses_menages_chaussures_meur', 2025, 1000.0, NULL, FALSE);
         """)
     con.execute(CROCS_PRICES + CROCS_CATALOGUE)
     con.close()
@@ -591,3 +597,11 @@ def test_summary_judges_german_profitability_on_the_agreed_scenarios(summary):
     assert judged_payback["kpi"].str.contains("pessimiste").all() and len(judged_payback) == 2
     judged_occupancy = occupancy[occupancy["statut_go"] != "INFO"]
     assert judged_occupancy["kpi"].str.contains("central").all() and len(judged_occupancy) == 2
+
+
+def test_summary_flags_provisional_eurostat_data_and_compares_the_simulated_import_duty(summary):
+    frame, _ = summary
+    eurostat = frame[frame["kpi"].str.startswith("Croissance des dépenses")].set_index("pays")
+    assert eurostat.loc["DE", "kpi"].endswith("données provisoires)")
+    assert "provisoires" not in eurostat.loc["FR", "kpi"]
+    assert (eurostat["statut_go"] == "INFO").all() and (eurostat["origine_donnees"] == "REEL").all()
