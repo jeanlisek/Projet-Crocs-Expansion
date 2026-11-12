@@ -544,7 +544,31 @@ REAL_TABLES: dict[str, TableSpec] = {
         simulated=False,
     ),
     # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
-    # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
+    # T18: tax reference typed in by hand from the official sources (Commission européenne
+    # TEDB and TARIC, OECD, national texts), one row per country. The URLs of each row are in
+    # its `source_url` column, separated by a semicolon; `note` says what each rate covers.
+    "taxes_reference": TableSpec(
+        columns={
+            "code_pays": STR,
+            "taux_tva_standard_pct": FLOAT,
+            "taux_tva_reduite_chaussures_enfant_pct": FLOAT,
+            "taux_impot_societes_pct": FLOAT,
+            "droit_douane_ue_chaussures_ch64_pct": FLOAT,
+            "source_url": STR,
+            "date_consultation": DATE,
+            "note": STR,
+        },
+        primary_key=("code_pays",),
+        # No reduced VAT rate on children's footwear in most countries, and no EU customs duty
+        # for a country outside the EU customs union (GB): the cell is empty, the note says why.
+        expected_nulls=(
+            "taux_tva_reduite_chaussures_enfant_pct",
+            "droit_douane_ue_chaussures_ch64_pct",
+        ),
+        simulated=False,
+        source="Saisie manuelle depuis les sources officielles, URL par ligne dans source_url",
+        directory=MANUAL,
+    ),
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }
 

@@ -205,7 +205,7 @@ erDiagram
 | Tailles et parts de marché par marque | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | — | Sources payantes |
 | Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | — | Données internes inaccessibles |
 
-**État au 12/11/2026 : les sources de T3, de T16 et de T17 sont collectées** (prix et catalogue de crocs.fr et crocs.de ; magasins OpenStreetMap, population Destatis et distances routières OSRM, pour les 12 villes allemandes). Les autres lignes « Réel » décrivent ce que les tâches T4 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
+**État au 12/11/2026 : les sources de T3, de T16, de T17 et de T18 sont collectées** (prix et catalogue de crocs.fr et crocs.de ; magasins OpenStreetMap, population Destatis et distances routières OSRM, pour les 12 villes allemandes). Le référentiel des taxes de T18 est saisi à la main depuis les sources officielles (`data/manual/taxes_reference.csv`). Les autres lignes « Réel » décrivent ce que la tâche T4 doit rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
 
 **Mentions obligatoires**, à afficher sur le dashboard et sur la slide des sources :
 
@@ -222,6 +222,8 @@ Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signa
 - **Durée OSRM : un temps de conduite, pas un délai de livraison.** `duree_h` est le temps de trajet d'une voiture, sans pause, sans chargement et sans les règles de conduite des poids lourds. Le délai de livraison reste celui du jeu simulé.
 - **Points de départ et d'arrivée.** Chaque hub est placé au centre de sa commune, son adresse exacte étant une hypothèse du scénario. Chaque ville est placée au point médian de ses magasins de chaussures, c'est-à-dire dans son centre commerçant.
 - **Dates différentes.** Les magasins sont relevés le 12/11/2026, la population est celle du 31/12/2024 (dernière publiée par Destatis, sur la base du recensement de 2022).
+- **Droit de douane : payé à l'entrée dans l'UE, identique en France et en Allemagne.** Le droit de pays tiers sur les chaussures du code NC 6402 99 est de 16,8 % (TARIC, 12/11/2026). Il est acquitté une fois, quand la marchandise entre dans l'UE, quel que soit le pays où elle est vendue : il ne différencie donc pas la France de l'Allemagne. Le taux préférentiel de l'accord de libre-échange UE-Vietnam (pays de fabrication du catalogue simulé) n'a pas été vérifié : le droit réellement payé peut être plus bas.
+- **Impôt sur les sociétés : deux définitions.** Le taux allemand de 30,06 % (OCDE, 2025) inclut une taxe professionnelle moyenne, variable selon la commune ; le taux français de 25 % est le taux national seul. Ils ne se comparent pas directement (voir `note` dans `data/manual/taxes_reference.csv`).
 - **Une autre mesure que le jeu simulé.** La densité réelle compte tous les magasins de chaussures, toutes enseignes confondues, alors que la colonne simulée comptait les points de vente de neuf concurrents nommés. Les deux chiffres ne se comparent pas terme à terme.
 
 ---
