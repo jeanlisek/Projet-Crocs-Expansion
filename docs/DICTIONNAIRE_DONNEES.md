@@ -48,7 +48,7 @@ Clés : `id_date` (AAAAMM), `id_produit`, `id_magasin`, `code_pays` (ISO-2), `id
 
 | Table | Grain | Mesures |
 |---|---|---|
-| `fact_ventes_france` | mois × magasin × produit (243k lignes) | quantités, CA brut/net TTC, CA net HT, remise, coût des marchandises, marge brute, retours |
+| `fact_ventes_france` | mois × magasin × produit (261 832 lignes) | quantités, CA brut/net TTC, CA net HT, remise, coût des marchandises, marge brute, retours |
 | `fact_marche` | pays × année × segment | taille de marché (M€), taux de croissance, `est_projection` |
 | `fact_parts_de_marche` | pays × année × marque (segment casual moulé & sandales) | part de marché en valeur (%), CA estimé |
 | `fact_presence_concurrents` | zone × concurrent | nb de points de vente, dont magasins en propre |

@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 100
+# E203 and W503 conflict with black's formatting.
+extend-ignore = E203, W503
+exclude = .git, .venv, __pycache__, data
+# v1 generator, delivered as is (see pyproject.toml): only its layout is exempted,
+# real errors (unused imports, undefined names...) are still reported.
+# TODO T2: remove once the generator is formatted with black.
+per-file-ignores =
+    src/simulate/generate_data.py: E501, E127
