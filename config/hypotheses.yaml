@@ -67,14 +67,14 @@ business_case_allemagne:   # T8 (Alexis) : compte de résultat d'un magasin type
   # taux de marge corrigé de l'écart de marge post-taxe Allemagne - France (T7 : TVA, transport depuis le hub).
   scenarios:                         # montée en charge : part du CA de croisière en années 1, 2, 3 (100 % ensuite)
     pessimiste:
-      ca_m2_vs_france_meme_format: 0.75   # HYPOTHESE : marque connue (13,9 % de part via revendeurs) mais réseau nouveau
-      montee_en_charge: [0.60, 0.80, 0.90]
+      ca_m2_vs_france_meme_format: 0.75   # HYPOTHESE : marque connue (14,0 % de part via revendeurs) mais réseau nouveau
+      montee_en_charge: [0.60, 0.80, 0.90]   # HYPOTHESE : démarrage lent, croisière non atteinte en année 3
     central:
       ca_m2_vs_france_meme_format: 0.90   # HYPOTHESE
-      montee_en_charge: [0.70, 0.90, 1.00]
+      montee_en_charge: [0.70, 0.90, 1.00]   # HYPOTHESE : croisière atteinte en année 3
     optimiste:
       ca_m2_vs_france_meme_format: 1.05   # HYPOTHESE : pouvoir d'achat et taille de marché supérieurs à la France
-      montee_en_charge: [0.85, 1.00, 1.00]
+      montee_en_charge: [0.85, 1.00, 1.00]   # HYPOTHESE : notoriété existante, croisière dès l'année 2
   couts_additionnels_pct_ca:         # coûts variables, en % du CA HT
     demarque: 1.5           # HYPOTHESE : vol, casse, erreurs ; ordre de grandeur du commerce d'habillement-chaussures
     frais_bancaires: 0.6    # HYPOTHESE : commissions sur paiements par carte
