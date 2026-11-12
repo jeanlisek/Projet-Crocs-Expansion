@@ -1,0 +1,12 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+# generate_data.py is the v1 generator, delivered as is: black would rewrite its aligned data
+# tables (662 lines -> about 1650). It belongs to T2 (recalibration), so it is left untouched
+# here. TODO T2: format it when the generator is reworked, then remove this exclusion.
+extend-exclude = '''
+/src/simulate/generate_data\.py$
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
