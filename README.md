@@ -160,7 +160,7 @@ flowchart LR
 
 ### 3.2 Modèle en constellation
 
-Plusieurs tables de faits partagent les mêmes dimensions. `dim_zone_chalandise` se rattache à `dim_pays`, ce qui donne une branche en flocon.
+Plusieurs tables de faits partagent les mêmes dimensions. `dim_zone_chalandise` se rattache à `dim_pays` et `dim_magasin` à `dim_hub_logistique`, ce qui donne deux branches en flocon.
 
 ```mermaid
 erDiagram
@@ -170,9 +170,12 @@ erDiagram
     dim_pays ||--o{ fact_couts_exploitation : code_pays
     dim_pays ||--o{ fact_prix_releves : code_pays
     dim_pays ||--o{ fact_eligibilite_assortiment : code_pays
+    dim_pays ||--o{ fact_penetration_categories : code_pays
+    dim_pays ||--o{ fact_tendances_recherche : code_pays
     dim_pays ||--o{ dim_zone_chalandise : code_pays
     dim_temps ||--o{ fact_ventes_france : id_date
     dim_temps ||--o{ fact_prix_releves : id_date
+    dim_temps ||--o{ fact_tendances_recherche : id_date
     dim_produit ||--o{ fact_ventes_france : id_produit
     dim_produit ||--o{ fact_eligibilite_assortiment : id_produit
     dim_magasin ||--o{ fact_ventes_france : id_magasin
@@ -180,8 +183,10 @@ erDiagram
     dim_zone_chalandise ||--o{ fact_logistique : id_zone
     dim_zone_chalandise ||--o{ fact_presence_concurrents : id_zone
     dim_hub_logistique ||--o{ fact_logistique : id_hub
+    dim_hub_logistique ||--o{ dim_magasin : id_hub_rattachement
     dim_concurrent ||--o{ fact_parts_de_marche : id_concurrent
     dim_concurrent ||--o{ fact_presence_concurrents : id_concurrent
+    dim_concurrent ||--o{ fact_prix_releves : id_concurrent
 ```
 
 ### 3.3 Sources retenues
@@ -283,7 +288,9 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 
 | Commande | Rôle |
 |---|---|
-| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation puis silver ; chaque tâche y ajoute son étape (collecte, gold, KPIs, commentaires IA, exports) |
+| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold puis vues KPI ; chaque tâche y ajoute son étape (collecte, commentaires IA, exports) |
 | `make silver` | Type et contrôle les tables de `data/bronze/`, les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
+| `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
+| `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
 | `make format` | Reformate `src/` et `tests/` avec `black` |
