@@ -94,6 +94,14 @@ sensibilite_payback:        # T8-sensibilite : grille de lecture du payback, ne 
   ca_m2_ratio_max: 1.05     # CONVENTION : CA/m² du scénario optimiste
   ca_m2_ratio_pas: 0.01     # CONVENTION : pas de la grille
 
+impact_origine:             # Levier : droit de douane UE selon le pays de fabrication (vue impact_origine)
+  code_sh: "6402.99"        # CONVENTION : seul code SH du catalogue simulé vérifié dans TARIC (codes NC 6402 99 10 à 98)
+  pays_preferentiel: Vietnam   # CONVENTION : valeur de dim_produit.pays_origine qui bénéficie de la préférence
+  droit_preferentiel_pct: 0    # FAIT : TARIC, « Tariff preference » Viet Nam, 0 %, décision D0753/20, depuis le 01/08/2020, lu le 12/11/2026
+  # Le droit de pays tiers (16,8 %) n'est pas répété ici : la vue le lit dans taxes_reference (T18).
+  scenario: pessimiste      # CONVENTION : le scénario jugé par la grille Go / No-Go (README 4.2)
+  format: Centre commercial # CONVENTION : le format le mieux placé du business case
+
 city_scoring:               # T8 : score des villes allemandes sur 100 ; chaque critère est ramené de 0 à 100 entre les 12 villes
   poids:                    # CONVENTION fixée avant le calcul, somme = 100
     potentiel: 40           # population de la zone de chalandise x indice de revenu (simulé)
