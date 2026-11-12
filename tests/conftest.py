@@ -12,6 +12,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+from src.transform import bronze_to_silver
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GENERATOR = REPO_ROOT / "src" / "simulate" / "generate_data.py"
 
@@ -36,3 +38,11 @@ def tables(bronze_dir):
         path.stem: pd.read_csv(path, encoding="utf-8-sig")
         for path in sorted(bronze_dir.glob("*.csv"))
     }
+
+
+@pytest.fixture(scope="session")
+def silver(bronze_dir, tmp_path_factory):
+    """Run bronze -> silver once on the generated dataset: (silver directory, check report)."""
+    silver_dir = tmp_path_factory.mktemp("silver")
+    report = bronze_to_silver.run(bronze_dir, silver_dir)
+    return silver_dir, report
