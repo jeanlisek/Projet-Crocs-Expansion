@@ -682,7 +682,7 @@ def run(
                 print(f"ignoré (aucun TableSpec déclaré) : {path}")
 
     report = pd.DataFrame(findings, columns=REPORT_COLUMNS)
-    report.to_csv(silver_dir / REPORT_FILE, index=False)
+    report.to_csv(silver_dir / REPORT_FILE, index=False, encoding="utf-8")
     print(f"\nTables Parquet et {REPORT_FILE} écrits dans : {silver_dir.resolve()}")
     return report
 
