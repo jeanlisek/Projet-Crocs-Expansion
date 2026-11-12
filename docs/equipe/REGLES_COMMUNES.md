@@ -16,6 +16,25 @@
 
 Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make install`, `make simulate`, `make silver`, `make test`). Sous Windows, prévenir Jean-Li.
 
+## État du pipeline
+
+> État au 12/11/2026. **À tenir à jour à chaque merge dans `develop`**, par la personne qui merge.
+
+`make all` enchaîne quatre étapes :
+
+| Étape | Commande | Ce qu'elle produit | Où |
+|---|---|---|---|
+| 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV | `data/bronze/*.csv` |
+| 2. Silver | `make silver` | Les mêmes tables typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
+| 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 19 tables, 19 clés primaires, 23 relations | `data/gold/warehouse.duckdb` |
+| 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Le dossier est vide à ce jour : l'étape ne crée encore aucune vue | Vues dans `data/gold/warehouse.duckdb` |
+
+Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`.
+
+- **Les 23 relations de l'entrepôt** sont celles du diagramme du README (section 3.2). Elles sont déclarées en clés étrangères dans `RELATIONSHIPS` (`src/transform/build_gold.py`) : l'entrepôt refuse un doublon ou une clé orpheline.
+- **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`), vide à ce jour. Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion.
+- **Tâches faites** : T1, T5 (squelette, tables réelles à brancher), T6. Le suivi complet est dans `TACHES.md`.
+
 ## Git : le circuit
 
 ```bash
