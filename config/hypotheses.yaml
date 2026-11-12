@@ -97,6 +97,11 @@ collecte:                  # T16, T17 : appels aux services ouverts
     essais_max: 3                    # CONVENTION : au-delà, le script s'arrête
     delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
 
+kpi:                   # T7 (Alexis) : périmètre temporel des vues sql/kpi/
+  annee_reference: 2025  # CONVENTION : dernière année complète (2026 est partiel, README 2.5 règle 8)
+  tcam_annee_debut: 2022 # CONVENTION : TCAM 2022-2025 du segment (README 2.3)
+  tcam_annee_fin: 2025   # CONVENTION : idem ; les années projetées (est_projection) sont exclues
+
 go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0
   indice_prix_min: 95
