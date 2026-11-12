@@ -11,7 +11,7 @@ WAREHOUSE := data/gold/warehouse.duckdb
 SQL_KPI_DIR := sql/kpi
 CODE_DIRS := src tests
 
-.PHONY: all install simulate silver gold kpi format lint test
+.PHONY: all install simulate collect silver gold kpi format lint test
 
 all: simulate silver gold kpi
 
@@ -21,6 +21,12 @@ install:
 # Deterministic (fixed seed): rewrites the simulated CSV files in the bronze layer.
 simulate:
 	$(PYTHON) src/simulate/generate_data.py $(BRONZE_DIR)
+
+# Collects the real data from open services (network needed, not part of `all`). Answers
+# are cached in the bronze layer: what was already collected is never asked for again.
+collect:
+	$(PYTHON) -m src.collect.osm --bronze $(BRONZE_DIR)
+	$(PYTHON) -m src.collect.destatis --bronze $(BRONZE_DIR)
 
 # Types and checks the bronze and manual tables, writes them as Parquet with the check report.
 silver:

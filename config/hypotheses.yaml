@@ -27,7 +27,20 @@ business_case_allemagne:
 nettoyage:                 # T5 : bronze -> silver
   iqr_multiplicateur: 1.5  # CONVENTION : méthode des quartiles (README 2.5, règle 10)
 
-go_no_go:                # CONVENTION fixée avant analyse (README 4.2)
+collecte:                  # T16, T17 : appels aux services ouverts
+  pays_cible: DE           # CONVENTION : pays étudié (README, section 1)
+  delai_entre_requetes_s: 2          # CONVENTION : règle 7 du projet, au moins 2 s entre requêtes
+  overpass:                # politique d'usage lue le 12/11/2026 (documentation Overpass et wiki OSM)
+    url: https://overpass-api.de/api/interpreter   # instance publique principale (FOSSGIS)
+    attente_apres_refus_s: 30        # politique d'usage : pause de 30 s après une erreur 429 ou 406
+    essais_max: 3                    # CONVENTION : au-delà, le script s'arrête
+    delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
+  destatis:                # population officielle des communes (Gemeindeverzeichnis)
+    fichier: destatis_05-staedte_2024-12-31.xlsx   # FAIT : classeur tel que téléchargé, dans data/bronze/
+    page_url: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/05-staedte.html
+    date_consultation: "2026-11-12"  # FAIT : jour du téléchargement du classeur
+
+go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0
   indice_prix_min: 95
   indice_prix_max: 110
