@@ -37,6 +37,9 @@ REQUIRED = (
     "fact_parts_de_marche",
     "fact_immobilier",
     "fact_prix_releves",
+    "sensibilite_payback",
+    "eurostat_series",
+    "crocs_produits",
 )
 # Delivered by later tasks (T8 business case and city scoring, T9 AI commentary).
 OPTIONAL = ("business_case", "city_scoring", "ai_commentary")
