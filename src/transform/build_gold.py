@@ -60,6 +60,8 @@ REAL_RELATIONSHIPS = [
     ("osm_villes", "id_zone", "dim_zone_chalandise"),
     ("osm_magasins_chaussures", "id_zone", "osm_villes"),
     ("destatis_population_villes", "id_zone", "dim_zone_chalandise"),
+    ("osrm_distances", "id_hub", "dim_hub_logistique"),
+    ("osrm_distances", "id_zone", "dim_zone_chalandise"),
 ]
 
 # Silver only knows dates (no time of day): they are stored as DATE in the warehouse.

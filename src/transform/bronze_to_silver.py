@@ -474,9 +474,30 @@ REAL_TABLES: dict[str, TableSpec] = {
         primary_key=("id_zone",),
         simulated=False,
     ),
+    # T17: road distance and driving time from each hub to each target city, collected by
+    # src/collect/osrm.py (OSRM public server; Nominatim for the towns of the hubs).
+    "osrm_distances": TableSpec(
+        columns={
+            "id_hub": STR,
+            "id_zone": STR,
+            "commune_hub": STR,
+            "ville": STR,
+            "latitude_hub": FLOAT,
+            "longitude_hub": FLOAT,
+            "latitude_ville": FLOAT,
+            "longitude_ville": FLOAT,
+            "distance_route_km": FLOAT,
+            "duree_h": FLOAT,
+            "ecart_route_hub_m": INT,
+            "ecart_route_ville_m": INT,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("id_hub", "id_zone"),
+        simulated=False,
+    ),
     # TODO T3: Crocs prices scraped on crocs.fr and crocs.de (src/collect/scrape_crocs.py).
     # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
-    # TODO T17: OSRM road distances (src/collect/osrm.py).
     # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }
