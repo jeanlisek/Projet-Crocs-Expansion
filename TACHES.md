@@ -35,7 +35,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | Fait |
-| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | À faire |
+| T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | Fait (128 paires FR/DE, 100 % du catalogue France présent sur crocs.de ; vues KPI à brancher sur ces tables) |
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
 | T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | Fait |
 | T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | Fait |

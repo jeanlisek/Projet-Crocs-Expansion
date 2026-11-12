@@ -34,3 +34,20 @@ Constat du 12/11/2026, vue `kpi_indice_prix`, panier de 15 SKU, données simulé
 - Le jeu simulé applique le même prix public TTC dans toute la zone euro. Une fois les prix ramenés en HT, l'indice ne mesure donc que l'écart de TVA entre le pays et la France : trois pays à 21 % de TVA obtiennent exactement le même indice.
 - L'indice du Royaume-Uni est tiré vers le haut par la TVA à 0 % sur les chaussures enfant.
 - L'Allemagne passe le critère (entre 95 et 110), mais ce GO ne dit rien du positionnement prix réel de la marque. Il ne sera interprétable qu'avec les prix relevés sur crocs.fr et crocs.de (T3).
+
+## 3. Prix réels : même prix TTC en France et en Allemagne, tout le catalogue est sur crocs.de
+
+Constat du 12/11/2026, tables réelles `crocs_produits` et `crocs_catalogue` (T3, relevé des sites crocs.fr et crocs.de du 12/11/2026). Les chiffres sont calculés par `price_pairs`, `price_index` et `catalogue_share` de `src/collect/scrape_crocs.py` ; aucune vue de l'entrepôt ne lit encore ces tables.
+
+| Catégorie | Paires FR/DE | Modèles | Indice prix HT (France = 100) | Références du catalogue France | Présentes sur crocs.de |
+|---|---|---|---|---|---|
+| Sabots | 94 | 7 | 100,85 | 772 | 772 (100 %) |
+| Sandales | 21 | 5 | 100,84 | 152 | 152 (100 %) |
+| Chaussures | 13 | 5 | 100,84 | 131 | 131 (100 %) |
+| **Total** | **128** | **17** | **100,85** | **1 055** | **1 055 (100 %)** |
+
+- **Prix TTC identiques.** Sur les 128 paires réelles (même code modèle, même code coloris, coloris disponible sur les deux sites), le prix affiché TTC est le même en France et en Allemagne, sans exception. Vérifié à la main sur un exemple le 12/11/2026 : le Classic Clog noir, au même prix TTC sur crocs.fr et crocs.de.
+- **L'indice HT de 100,85 est dû uniquement à la TVA.** À prix TTC égal, le prix HT allemand est plus élevé parce que la TVA est de 19 % en Allemagne contre 20 % en France : 1,20 ÷ 1,19 = 100,84, aux arrondis au centime près. L'indice est calculé sur le prix hors promotion (le prix barré quand il existe : 103 paires sur 128 étaient en promotion le jour du relevé) ; sur les prix affichés, il vaut 100,83. Il passe le critère Go (entre 95 et 110).
+- **100 % du catalogue France est disponible sur crocs.de.** Les 1 055 références (modèle + coloris, 433 modèles) listées sur crocs.fr le sont aussi sur crocs.de, dans les trois catégories. Le seuil Go est de 80 %.
+- Limites : un seul jour de relevé ; les prix sont lus sur 17 modèles (les premiers modèles communs de chaque catégorie), le catalogue sur les trois pages « silhouette » des sites, sans les accessoires ; « présent » veut dire listé sur le site, pas en stock.
+- Conséquence : le prix n'est pas un levier de différenciation entre les deux pays, et l'assortiment français peut être repris tel quel. L'hypothèse du jeu simulé (même prix public TTC dans la zone euro, section 2) est confirmée pour le couple France-Allemagne. `kpi_summary` affiche encore les valeurs simulées pour l'Allemagne (indice 100,34, catalogue éligible 97,96 %, `origine_donnees` = SIMULE) : les vues `kpi_indice_prix` et `kpi_catalogue_eligible` restent à brancher sur ces tables réelles.
