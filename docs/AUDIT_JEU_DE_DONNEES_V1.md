@@ -115,4 +115,4 @@ Il est très bon. À reprendre explicitement :
 | 2.6 Valeurs aberrantes | Méthode IQR du journal de nettoyage |
 | 4.3 Productivité, coût d'occupation | Business case magasin |
 | 7 Biais et pièges | Checklist avant publication du dashboard |
-| 8.1 Dimensions de qualité | Tests automatiques `tests/test_qualite.py` |
+| 8.1 Dimensions de qualité | Tests automatiques `tests/test_qualite_gold.py` |
