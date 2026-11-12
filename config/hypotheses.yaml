@@ -7,6 +7,55 @@ seed: 2027
 reseau_france:
   nb_magasins: 48          # CONVENTION : X choisi par l'équipe
 
+# T2 (Alexis) : recalibrage de la rentabilité des magasins France simulés (audit v1, point 1).
+# Cible : payback médian France entre 1 et 4 ans par format ; CA HT/m² d'un spécialiste chaussures.
+# Repère public d'ordre de grandeur (donnée d'enseigne, pas moyenne sectorielle, À VÉRIFIER) :
+# plaquette franchise Sport 2000, CA moyen 8 500 € TTC/m² (≈ 7 100 € HT) pour 40 à 80 m²,
+# https://www.sport2000.fr/sp2k-assets/link/ouvrir-un-magasin/plaquette-s2.pdf (consultée le 12/11/2026).
+# v1 : 9 000 à 19 000 € HT/m², payback 3 à 19 mois -> irréaliste.
+simulation_reseau_france:
+  facteur_volume_magasins: 2.33   # HYPOTHESE : v1 = 3,8 unités de base ; abaissé pour viser ~5 500 € HT/m² en centre commercial
+  facteur_volume_web: 3.8         # CONVENTION : e-commerce inchangé par rapport à v1 (hors périmètre du payback)
+  etp_minimum: 3                  # CONVENTION v1 : amplitude d'ouverture 6 j/7
+  formats:                        # loyer hors charges ; productivité = multiplicateur du volume de base
+    Centre-ville:
+      surface_min_m2: 70          # v1
+      surface_max_m2: 140         # v1
+      loyer_m2_an_eur: 1100       # v1
+      productivite_relative: 1.0  # HYPOTHESE : v1 = 1,15
+      m2_par_etp: 22              # v1
+    Centre commercial:
+      surface_min_m2: 80
+      surface_max_m2: 160
+      loyer_m2_an_eur: 750
+      productivite_relative: 1.0
+      m2_par_etp: 22
+    Outlet:
+      surface_min_m2: 120
+      surface_max_m2: 220
+      loyer_m2_an_eur: 380
+      productivite_relative: 0.95 # HYPOTHESE : v1 = 0,85
+      m2_par_etp: 30              # HYPOTHESE : v1 = 22 ; libre-service, moins de conseil en outlet
+    Gare / Aéroport:
+      surface_min_m2: 40
+      surface_max_m2: 80
+      loyer_m2_an_eur: 1900
+      productivite_relative: 1.05 # HYPOTHESE : v1 = 1,35 ; flux élevé mais petites surfaces
+      m2_par_etp: 22
+  capex_ouverture:                # aménagement × surface + part fixe (stock initial, pré-ouverture)
+    amenagement_m2_min_eur: 1300  # v1
+    amenagement_m2_max_eur: 1800  # v1
+    part_fixe_eur: 45000          # v1
+  fermetures:                     # biais de survie (référentiel, fiche 4.1)
+    nb_magasins: 3                # CONVENTION : quelques fermetures pour l'illustrer
+    vivier_moins_productifs: 10   # CONVENTION : tirées parmi les 10 magasins les moins productifs
+    ouverts_au_plus_tard_en: 2021 # CONVENTION : au moins 2 ans d'historique avant la fermeture
+    annees: [2023, 2024, 2025]    # CONVENTION : fermetures dans la période observée
+
+# Zones insulaires : exclues du benchmark logistique (pas de liaison routière avec les hubs ;
+# la distance « vol d'oiseau × 1,25 » n'y a pas de sens). FAIT géographique.
+zones_insulaires: [Las Palmas, Palma]   # Grande Canarie ; Majorque
+
 business_case_allemagne:
   annee_premiere_ouverture: 2027
   nb_magasins_cible_2029: null       # TODO T8

@@ -13,9 +13,19 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import yaml
 
-SEED = 2027
+CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "hypotheses.yaml"
+with CONFIG_PATH.open(encoding="utf-8") as _f:
+    HYP = yaml.safe_load(_f)
+CAL = HYP["simulation_reseau_france"]  # T2 : paramètres de rentabilité des magasins France
+
+SEED = HYP["seed"]
 rng = np.random.default_rng(SEED)
+# Flux aléatoires séparés (T2) : modifier le calibrage des ventes ou les fermetures
+# ne décale plus les tirages des autres tables.
+rng_ventes = np.random.default_rng([SEED, 6])
+rng_fermetures = np.random.default_rng([SEED, 5])
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "data")
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -194,12 +204,18 @@ VILLES_FR = [  # ville, région, lat, lon, poids population
     ("La Rochelle", "Nouvelle-Aquitaine", 46.1603, -1.1511, 1), ("Metz", "Grand Est", 49.1193, 6.1757, 1),
     ("Rouen", "Normandie", 49.4431, 1.0993, 1), ("Avignon", "Provence-Alpes-Côte d'Azur", 43.9493, 4.8055, 1),
 ]
-TYPES = {  # type: (surface min, max, loyer €/m²/an, productivité relative)
-    "Centre-ville": (70, 140, 1100, 1.15),
-    "Centre commercial": (80, 160, 750, 1.00),
-    "Outlet": (120, 220, 380, 0.85),
-    "Gare / Aéroport": (40, 80, 1900, 1.35),
-}
+# type: (surface min, max, loyer €/m²/an, productivité relative, m² de vente par ETP) -> config/hypotheses.yaml
+TYPES = {t: (f["surface_min_m2"], f["surface_max_m2"], f["loyer_m2_an_eur"], f["productivite_relative"],
+             f["m2_par_etp"]) for t, f in CAL["formats"].items()}
+ETP_MIN = CAL["etp_minimum"]
+CAPEX = CAL["capex_ouverture"]
+
+
+def capex_ouverture(surf):
+    return int(surf * rng.uniform(CAPEX["amenagement_m2_min_eur"], CAPEX["amenagement_m2_max_eur"])
+               + CAPEX["part_fixe_eur"])
+
+
 mag_rows = []
 mid = 1
 for ville, region, lat, lon, w in VILLES_FR:
@@ -209,7 +225,7 @@ for ville, region, lat, lon, w in VILLES_FR:
         t = rng.choice(list(TYPES), p=[.40, .38, .12, .10])
         if ville == "Paris" and mid in (1, 2):
             t = "Centre-ville"
-        smin, smax, loyer, prod = TYPES[t]
+        smin, smax, loyer, prod, m2_etp = TYPES[t]
         surf = int(rng.integers(smin, smax))
         mult_ville = 1.8 if ville == "Paris" else (1.25 if w >= 2 else 1.0)
         hub = min(hubs[hubs.code_pays == "FR"].itertuples(),
@@ -221,8 +237,8 @@ for ville, region, lat, lon, w in VILLES_FR:
             latitude=round(lat + rng.normal(0, .02), 4), longitude=round(lon + rng.normal(0, .02), 4),
             type_emplacement=t, surface_vente_m2=surf, annee_ouverture=ouverture,
             loyer_annuel_eur=int(surf * loyer * mult_ville * rng.uniform(.85, 1.15)),
-            nb_etp=round(max(3, surf / 22 + rng.normal(0, .8)), 1),
-            capex_ouverture_eur=int(surf * rng.uniform(1300, 1800) + 45000),
+            nb_etp=round(max(ETP_MIN, surf / m2_etp + rng.normal(0, .8)), 1),
+            capex_ouverture_eur=capex_ouverture(surf),
             id_hub_rattachement=hub.id_hub,
             distance_hub_km=round(haversine(lat, lon, hub.latitude, hub.longitude) * 1.25, 0),
             productivite_relative=prod * (1.25 if ville == "Paris" else 1.0) * rng.uniform(.85, 1.15),
@@ -232,14 +248,15 @@ for ville, region, lat, lon, w in VILLES_FR:
 while mid <= 48:  # compléter jusqu'à 48 avec villes moyennes
     ville, region, lat, lon, w = VILLES_FR[int(rng.integers(0, 10))]
     t = "Centre commercial"
-    surf = int(rng.integers(80, 160))
+    smin, smax, loyer, _, m2_etp = TYPES[t]
+    surf = int(rng.integers(smin, smax))
     hub = min(hubs[hubs.code_pays == "FR"].itertuples(), key=lambda h: haversine(lat, lon, h.latitude, h.longitude))
     mag_rows.append(dict(
         id_magasin=f"M{mid:03d}", nom_magasin=f"Crocs {ville} Centre {mid}", ville=ville, region=region, code_pays="FR",
         latitude=round(lat + rng.normal(0, .05), 4), longitude=round(lon + rng.normal(0, .05), 4),
         type_emplacement=t, surface_vente_m2=surf, annee_ouverture=int(rng.choice(range(2016, 2025))),
-        loyer_annuel_eur=int(surf * 750 * rng.uniform(.85, 1.15)), nb_etp=round(max(3, surf / 22), 1),
-        capex_ouverture_eur=int(surf * rng.uniform(1300, 1800) + 45000), id_hub_rattachement=hub.id_hub,
+        loyer_annuel_eur=int(surf * loyer * rng.uniform(.85, 1.15)), nb_etp=round(max(ETP_MIN, surf / m2_etp), 1),
+        capex_ouverture_eur=capex_ouverture(surf), id_hub_rattachement=hub.id_hub,
         distance_hub_km=round(haversine(lat, lon, hub.latitude, hub.longitude) * 1.25, 0),
         productivite_relative=rng.uniform(.85, 1.1), statut="Ouvert"))
     mid += 1
@@ -247,10 +264,24 @@ while mid <= 48:  # compléter jusqu'à 48 avec villes moyennes
 mag_rows[-1]["annee_ouverture"] = 2025
 mag_rows[-2]["annee_ouverture"] = 2026
 dim_magasin = pd.DataFrame(mag_rows)
+
+# Fermetures (T2) : quelques magasins peu productifs ont fermé, pour illustrer le biais de survie
+# (un réseau observé aujourd'hui ne montre que les survivants). Tirage sur un flux séparé.
+FERM = CAL["fermetures"]
+candidats = dim_magasin[dim_magasin.annee_ouverture <= FERM["ouverts_au_plus_tard_en"]]
+candidats = candidats.nsmallest(FERM["vivier_moins_productifs"], "productivite_relative")
+fermes = rng_fermetures.choice(candidats.index.to_numpy(), size=FERM["nb_magasins"], replace=False)
+dim_magasin["date_fermeture"] = None
+for i in sorted(fermes):
+    annee = int(rng_fermetures.choice(FERM["annees"]))
+    mois = int(rng_fermetures.integers(1, 13))
+    fin_mois = pd.Timestamp(annee, mois, 1) + pd.offsets.MonthEnd(0)
+    dim_magasin.loc[i, "date_fermeture"] = fin_mois.strftime("%Y-%m-%d")
+    dim_magasin.loc[i, "statut"] = "Fermé"
 web = dict(id_magasin="WEB", nom_magasin="crocs.fr (e-commerce)", ville="Moissy-Cramayel", region="Île-de-France",
            code_pays="FR", latitude=48.6236, longitude=2.5939, type_emplacement="E-commerce", surface_vente_m2=0,
            annee_ouverture=2012, loyer_annuel_eur=0, nb_etp=14.0, capex_ouverture_eur=0, id_hub_rattachement="H01",
-           distance_hub_km=0, productivite_relative=14.0, statut="Ouvert")
+           distance_hub_km=0, productivite_relative=14.0, statut="Ouvert", date_fermeture=None)
 dim_magasin = pd.concat([dim_magasin, pd.DataFrame([web])], ignore_index=True)
 prod_rel = dim_magasin.set_index("id_magasin")["productivite_relative"]
 dim_magasin_out = dim_magasin.drop(columns="productivite_relative")
@@ -285,16 +316,21 @@ for m in dim_magasin.itertuples():
     else:
         part_assort = min(1.0, 0.55 + m.surface_vente_m2 / 400)
     sud = m.latitude < 45.0
+    # T2 : volume des magasins physiques recalibré ; le e-commerce garde le volume v1
+    facteur = CAL["facteur_volume_web"] if m.id_magasin == "WEB" else CAL["facteur_volume_magasins"]
+    fin = pd.Timestamp(m.date_fermeture) if isinstance(m.date_fermeture, str) else None
     for p in dim_produit.itertuples():
-        if m.id_magasin != "WEB" and rng.random() > part_assort and p.coloris not in ("Noir", "Blanc"):
+        if m.id_magasin != "WEB" and rng_ventes.random() > part_assort and p.coloris not in ("Noir", "Blanc"):
             continue
-        base = 3.8 * BASE_UNITS[p.modele] / (len(dim_produit[dim_produit.modele == p.modele]) ** 0.55) \
+        base = facteur * BASE_UNITS[p.modele] / (len(dim_produit[dim_produit.modele == p.modele]) ** 0.55) \
                * POIDS_COUL.get(p.coloris, 0.75) * pr
         prof = PROFILS_SAISON[p.profil_saisonnier]
         for d in periode:
             if d.year < m.annee_ouverture or (d.year == m.annee_ouverture and d.month < 4):
                 continue
             if d.year < p.annee_lancement:
+                continue
+            if fin is not None and d > fin:
                 continue
             g = (CROISSANCE_HD if p.marque == "HEYDUDE" else CROISSANCE)[d.year]
             climat = 1.0
@@ -303,7 +339,7 @@ for m in dim_magasin.itertuples():
             if sud and p.profil_saisonnier == "hiver":
                 climat = 0.75
             mu = base * prof[d.month - 1] * g * climat
-            q = int(rng.poisson(max(mu, 0.01)))
+            q = int(rng_ventes.poisson(max(mu, 0.01)))
             if q == 0:
                 continue
             # remise moyenne : soldes, Black Friday, outlet
@@ -318,7 +354,7 @@ for m in dim_magasin.itertuples():
                 remise += 0.20
             if p.statut == "Fin de série":
                 remise += 0.15
-            remise = min(0.6, remise * rng.uniform(0.8, 1.2))
+            remise = min(0.6, remise * rng_ventes.uniform(0.8, 1.2))
             prix_ttc = p.prix_vente_ttc_fr * (1.0 + 0.03 * (d.year - 2023))  # hausse tarifaire annuelle ~3 %
             ca_brut_ttc = q * prix_ttc
             ca_ttc = ca_brut_ttc * (1 - remise)
@@ -471,6 +507,8 @@ for c, lst in VILLES.items():
                              emissions_co2_kg_palette=round(dist * 0.062, 1)))
         zid += 1
 zones = pd.DataFrame(zones)
+# T2 : zones insulaires, à exclure du benchmark logistique (pas d'accès routier depuis les hubs)
+zones["zone_insulaire"] = zones.ville.isin(HYP["zones_insulaires"])
 impl = pd.DataFrame(impl)
 dens = impl[impl.id_concurrent != "C00"].groupby("id_zone").nb_points_de_vente.sum()
 zones["nb_points_vente_concurrents"] = zones.id_zone.map(dens).fillna(0).astype(int)
