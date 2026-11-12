@@ -1,0 +1,252 @@
+# Crocs France → Allemagne : étude d'implantation 2027-2029
+
+> Projet Data Analytics — Eugenia School · Restitution Comex le 13/11/2026
+>
+> **Question du Comex : l'ouverture d'un réseau de magasins Crocs en propre en Allemagne est-elle réalisable et rentable ?**
+
+| Livrable | Emplacement |
+|---|---|
+| Dépôt & documentation | ce README, `docs/` |
+| Dashboard + synthèse IA | `dashboard/` (lien en tête de dossier) |
+| Slides Comex | `slides/` |
+
+---
+
+## Équipe
+
+| Membre | Rôle |
+|---|---|
+| Jean-Li Sek | Tech lead : dépôt, CI, pipeline bronze → silver → gold |
+| Mehdi Zitouni | Collecte : scraping, API, journal de nettoyage |
+| Alexis Sapone | Modélisation & KPIs : couche gold, business case, scoring |
+| Briac Truquety | Brique IA : commentaires et synthèse Comex |
+| Aurélie Périchon | Restitution : dashboard, slides, cohérence du discours |
+
+Le détail des tâches est dans [`TACHES.md`](TACHES.md).
+
+---
+
+## 1. Présentation de l'entreprise
+
+### Le scénario
+
+**Crocs France** est la filiale française du groupe coté Crocs, Inc. (Nasdaq : CROX). Elle exploite un réseau intégré de magasins aux marques Crocs et HEYDUDE.
+
+En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deichmann…). Dans nos données, elle y pèse 13,9 % du segment casual moulé & sandales en 2025. Le Comex se demande s'il faut **ouvrir un réseau de magasins en propre** sur la période 2027-2029.
+
+> **Scénario fictif, limite assumée.** En réalité, Crocs, Inc. possède déjà quelques boutiques en Allemagne. Nous traitons cette présence réelle comme un indice que le marché existe, pas comme une donnée de l'étude.
+
+### Périmètre France (données simulées)
+
+| Élément | Valeur |
+|---|---|
+| Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports |
+| E-commerce | crocs.fr, environ 24 % du CA HT |
+| CA net TTC | 59 M€ (2023) → 75 M€ (2024) → 81 M€ (2025) |
+| Logistique | Hubs de Moissy-Cramayel (IDF) et Saint-Quentin-Fallavier (Lyon), centre de distribution EMEA à Dordrecht (Pays-Bas) |
+
+### Catalogue
+
+147 SKU (30 modèles × coloris) : sabots, sandales, bottes, Jibbitz (charms), chaussures toile HEYDUDE.
+
+### Pays ciblé : Allemagne
+
+C'est le plus gros marché de l'Union européenne sur notre segment. Cinq autres pays (Espagne, Italie, Belgique, Pays-Bas, Royaume-Uni) servent de **benchmark** pour justifier ce choix.
+
+---
+
+## 2. Cadrage & dictionnaire de données
+
+### 2.1 Les 5W
+
+| | |
+|---|---|
+| **Why** | Trouver un relais de croissance pour 2027-2029 |
+| **Who** | Comex Crocs France (décideurs) ; équipe Data Analytics (nous) |
+| **What** | Une recommandation Go / No-Go argumentée, un dashboard et une synthèse IA |
+| **Where** | Données internes simulées, open data (Eurostat, OpenStreetMap), sites Crocs |
+| **When** | Restitution le 13/11/2026 ; ouvertures envisagées 2027-2029 |
+
+### 2.2 Statut des chiffres
+
+Chaque chiffre de l'étude porte l'un des quatre statuts du référentiel analytique :
+
+| Statut | Signification |
+|---|---|
+| **FAIT** | Vérifiable dans une source externe identifiée |
+| **CALCUL** | Résultat d'une formule appliquée à des entrées explicites |
+| **HYPOTHÈSE** | Plausible mais non vérifié ; jamais présenté comme une conclusion |
+| **CONVENTION** | Choix de définition ; ni vrai ni faux, mais il doit être explicite |
+
+### 2.3 KPIs (métriques)
+
+| Axe | KPI | Formule | Tables | Statut |
+|---|---|---|---|---|
+| Marché | Croissance du secteur | TCAM 2022-2025 de la taille du marché, segment casual moulé & sandales | `fact_marche` | CALCUL |
+| Marché | Part de marché Crocs en France | Part en valeur de la marque, tous canaux | `fact_parts_de_marche` | CALCUL |
+| Marché | Part de marché d'un concurrent en Allemagne | Idem, filtré sur le concurrent (Birkenstock, Deichmann…) | `fact_parts_de_marche` | CALCUL |
+| Prix | Indice prix relatif | Moyenne, sur un panier identique de SKU hors promotion, de (prix HT DE ÷ prix HT FR) × 100 | `fact_prix_releves`, `fact_fiscalite` | CALCUL |
+| Prix | Marge brute post-taxe | (prix TTC local ÷ (1 + TVA) − coût débarqué − transport unitaire) ÷ prix HT | `dim_produit`, `fact_logistique`, `fact_fiscalite` | CALCUL |
+| Réseau | Densité concurrentielle | Points de vente concurrents ÷ 100 000 habitants de la zone de chalandise | `dim_zone_chalandise` | CALCUL |
+| Réseau | Coût moyen au m² | Loyer + charges, en €/m²/an, par ville et par format | `fact_immobilier` | CALCUL |
+| Logistique | Distance moyenne aux hubs | Moyenne, sur les villes cibles, de la distance au hub **le plus proche** | `fact_logistique` | CALCUL |
+| Logistique | Droits & taxes locales | TVA, impôt sur les sociétés, droits d'import, éco-contribution | `fact_fiscalite` | FAIT (à vérifier) |
+| Assortiment | Pénétration des catégories | Part des consommateurs ayant acheté la catégorie | `fact_penetration_categories` | CALCUL |
+| Assortiment | % du catalogue éligible | SKU éligibles ÷ 147 | `fact_eligibilite_assortiment` | CALCUL |
+| Rentabilité | Coût d'occupation | (loyer + charges) ÷ CA du magasin | `fact_immobilier`, business case | CALCUL |
+| Rentabilité | Point mort par magasin | Coûts fixes annuels ÷ taux de marge sur coûts variables | business case | CALCUL |
+| Rentabilité | Payback | Investissement d'ouverture ÷ résultat annuel du magasin, par scénario | business case | CALCUL + HYPOTHÈSE |
+
+### 2.4 Dimensions
+
+| Dimension | Grain | Usage principal |
+|---|---|---|
+| `dim_pays` | Pays | Filtre principal, macro-économie |
+| `dim_temps` | Mois (2019-2029) | Séries, saisonnalité, soldes |
+| `dim_produit` | SKU | Mix, marge, éligibilité |
+| `dim_magasin` | Magasin France | Benchmark de la productivité par format |
+| `dim_zone_chalandise` | Ville cible (53 villes) | Choix des emplacements |
+| `dim_concurrent` | Marque | Parts de marché, prix |
+| `dim_hub_logistique` | Entrepôt | Distances, coûts de transport |
+
+Le dictionnaire champ par champ (type, description, formule, exemple, source) est dans [`docs/DICTIONNAIRE_CHAMPS.md`](docs/DICTIONNAIRE_CHAMPS.md).
+
+### 2.5 Règles de gestion
+
+1. **CA** : CA net TTC = CA brut − remises ; CA HT = TTC ÷ 1,20 en France.
+2. **Coût débarqué** = coût FOB + fret + droits de douane UE à l'entrée.
+3. **Douane** : dans l'UE, les marchandises circulent librement, les droits sont payés une seule fois à l'entrée. Le Royaume-Uni est un pays tiers.
+4. **Prix comparés en HT**, sur des SKU identiques, hors promotion. La TVA diffère (20 % en France, 19 % en Allemagne).
+5. **Part de marché ≠ CA du réseau.** La part de marché couvre la marque, tous canaux confondus ; le CA couvre notre réseau intégré.
+6. **Taux agrégés** recalculés depuis numérateurs et dénominateurs, jamais moyennés.
+7. **CA/m²** comparé uniquement à format identique.
+8. **2026 est partiel** (janvier à octobre). Les comparaisons annuelles portent sur des périodes identiques.
+9. **Projections 2026-2029** : extrapolations à TCAM constant, signalées comme telles.
+10. **Valeurs aberrantes** : méthode des quartiles (Q3 + 1,5 × IQR), chaque suppression est consignée dans le journal de nettoyage.
+11. **Données simulées** : signalées comme telles partout, hypothèses dans `config/hypotheses.yaml`.
+
+### 2.6 Glossaire
+
+| Terme | Définition |
+|---|---|
+| SKU | Référence unique (modèle × coloris) |
+| TCAM | Taux de croissance annuel moyen |
+| Coût débarqué | Coût d'un produit rendu en entrepôt, droits compris |
+| Zone de chalandise | Zone d'où viennent les clients d'un magasin |
+| Wholesale | Vente via des revendeurs |
+| Coût d'occupation | Loyer et charges rapportés au CA |
+| Payback | Durée pour rembourser l'investissement d'ouverture |
+| Bronze / silver / gold | Données brutes / nettoyées / modélisées pour l'analyse |
+
+---
+
+## 3. Architecture & choix des sources
+
+### 3.1 Chaîne de données
+
+```mermaid
+flowchart LR
+    A[Sources réelles<br/>Eurostat · OSM · sites Crocs] --> B[(Bronze<br/>brut horodaté)]
+    S[Générateur Python<br/>données internes simulées] --> B
+    B -->|nettoyage, typage,<br/>journal| C[(Silver)]
+    C -->|modèle en constellation| D[(Gold · DuckDB)]
+    D --> K[Vues KPI]
+    K --> E[Dashboard]
+    K --> I[Brique IA<br/>commentaires]
+    I --> E
+```
+
+### 3.2 Modèle en constellation
+
+Plusieurs tables de faits partagent les mêmes dimensions. `dim_zone_chalandise` se rattache à `dim_pays`, ce qui donne une branche en flocon.
+
+```mermaid
+erDiagram
+    dim_pays ||--o{ fact_marche : code_pays
+    dim_pays ||--o{ fact_parts_de_marche : code_pays
+    dim_pays ||--o{ fact_fiscalite : code_pays
+    dim_pays ||--o{ fact_couts_exploitation : code_pays
+    dim_pays ||--o{ fact_prix_releves : code_pays
+    dim_pays ||--o{ fact_eligibilite_assortiment : code_pays
+    dim_pays ||--o{ dim_zone_chalandise : code_pays
+    dim_temps ||--o{ fact_ventes_france : id_date
+    dim_temps ||--o{ fact_prix_releves : id_date
+    dim_produit ||--o{ fact_ventes_france : id_produit
+    dim_produit ||--o{ fact_eligibilite_assortiment : id_produit
+    dim_magasin ||--o{ fact_ventes_france : id_magasin
+    dim_zone_chalandise ||--o{ fact_immobilier : id_zone
+    dim_zone_chalandise ||--o{ fact_logistique : id_zone
+    dim_zone_chalandise ||--o{ fact_presence_concurrents : id_zone
+    dim_hub_logistique ||--o{ fact_logistique : id_hub
+    dim_concurrent ||--o{ fact_parts_de_marche : id_concurrent
+    dim_concurrent ||--o{ fact_presence_concurrents : id_concurrent
+```
+
+### 3.3 Sources retenues
+
+| Donnée | Source | Type | Statut | Pourquoi |
+|---|---|---|---|---|
+| Population, PIB/hab, chômage, niveaux de prix | Eurostat | API | **Réel** | Statistique officielle, comparable entre pays |
+| Prix Crocs France et Allemagne | crocs.fr, crocs.de | Scraping | **Réel** | Seule source de prix SKU par SKU |
+| Densité concurrentielle par ville | OpenStreetMap (Overpass, `shop=shoes`) | API | **Réel** | Ouvert, toutes enseignes |
+| TVA, impôt sur les sociétés, droits | Commission européenne (Taxes in Europe, TARIC) | Saisie sourcée | Réel | Référence légale |
+| Loyers prime par ville | Calibrés sur Cushman & Wakefield | Simulé calibré | Simulé | Pas de source ouverte au détail |
+| Tailles et parts de marché | Calibrées sur Euromonitor / Statista | Simulé calibré | Simulé | Sources payantes |
+| Ventes, magasins, coûts internes | Générateur Python (seed 2027) | Simulé | Simulé | Données internes inaccessibles |
+
+Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signalé comme simulé dans le dashboard et les slides.
+
+---
+
+## 4. Organisation & roadmap
+
+### 4.1 Méthode
+
+- **Démarche** en 5 étapes : compréhension métier → compréhension des données → préparation → modélisation & analyse → dataviz & déploiement.
+- **Git** : `main` (validé) ← `develop` (intégration) ← une branche `feature/...` par tâche. Aucun push direct sur `main`.
+- **CI** : formatage (black), lint (flake8) et tests (pytest) à chaque push sur `develop` et `main`.
+- **Qualité** : tests d'unicité, de complétude, de validité, d'intégrité référentielle et de cohérence (référentiel, partie 8).
+
+### 4.2 Grille de décision Go / No-Go
+
+Seuils fixés **avant** l'analyse, pour ne pas les ajuster au résultat :
+
+| Critère | Seuil Go |
+|---|---|
+| Croissance du segment en Allemagne | TCAM ≥ 2 % |
+| Indice prix relatif (HT) | Entre 95 et 110 |
+| Marge brute post-taxe Allemagne | ≥ marge France − 5 points |
+| Coût d'occupation | ≤ 15 % du CA magasin |
+| Payback, scénario pessimiste | ≤ 36 mois |
+| % catalogue éligible | ≥ 80 % |
+
+### 4.3 Hors périmètre (roadmap)
+
+Le référentiel décrit des tables e-commerce et stock (`fact_session_web`, `fact_stock`, `dim_client`) que l'étude n'exige pas. Elles sont prévues pour une phase 2 : cannibalisation entre magasins et e-commerce, ruptures, cohortes clients.
+
+### 4.4 Next steps
+
+_À compléter après l'analyse, selon la décision._
+
+---
+
+## 5. Stack technique
+
+| Couche | Outil |
+|---|---|
+| Langage | Python 3.11 |
+| Collecte | `requests`, `BeautifulSoup`, API Eurostat, API Overpass |
+| Transformation | `pandas` |
+| Entrepôt | DuckDB (bronze / silver / gold) |
+| Brique IA | API d’un modèle de langage (LLM) : commentaires pré-générés par valeur de filtre, chiffres vérifiés par code |
+| Dashboard | Power BI ou Looker Studio |
+| Qualité | `pytest`, `black`, `flake8`, GitHub Actions |
+| Orchestration | `Makefile` |
+
+## Lancer le projet
+
+```bash
+pip install -r requirements.txt
+make all        # collecte → simulation → bronze → silver → gold → KPIs → commentaires IA → exports
+make test       # tests de qualité
+```

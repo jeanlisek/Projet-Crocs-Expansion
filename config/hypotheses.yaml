@@ -1,0 +1,34 @@
+# Toutes les hypothèses chiffrées du projet.
+# Chaque valeur porte un commentaire : d'où elle vient, statut (HYPOTHESE / CONVENTION).
+# À compléter par les tâches T2 (recalibrage) et T8 (business case).
+
+seed: 2027
+
+reseau_france:
+  nb_magasins: 48          # CONVENTION : X choisi par l'équipe
+
+business_case_allemagne:
+  annee_premiere_ouverture: 2027
+  nb_magasins_cible_2029: null       # TODO T8
+  formats_retenus: [Centre commercial, Centre-ville]   # TODO T8 : à confirmer par le scoring
+  scenarios:
+    pessimiste:
+      ca_m2_vs_france_meme_format: null   # TODO T8 (ex. ratio appliqué au CA/m² France)
+    central:
+      ca_m2_vs_france_meme_format: null
+    optimiste:
+      ca_m2_vs_france_meme_format: null
+  couts_additionnels_pct_ca:
+    demarque: null          # TODO T8, HYPOTHESE
+    frais_bancaires: null   # TODO T8, HYPOTHESE
+    frais_siege: null       # TODO T8, HYPOTHESE
+  duree_amortissement_capex_ans: null   # TODO T8, CONVENTION
+
+go_no_go:                  # CONVENTION fixée avant analyse (README 4.2)
+  tcam_segment_min_pct: 2.0
+  indice_prix_min: 95
+  indice_prix_max: 110
+  ecart_marge_vs_france_max_pts: 5
+  cout_occupation_max_pct_ca: 15
+  payback_pessimiste_max_mois: 36
+  catalogue_eligible_min_pct: 80
