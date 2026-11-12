@@ -250,6 +250,16 @@ Seuils fixés **avant** l'analyse, pour ne pas les ajuster au résultat :
 | Payback, scénario pessimiste | ≤ 36 mois |
 | % catalogue éligible | ≥ 80 % |
 
+**Règle de combinaison** (CONVENTION, formalisée lors de la synthèse le 12/11/2026 ; les seuils ci-dessus ne changent pas) :
+
+| Situation | Verdict |
+|---|---|
+| Tous les critères sont GO | **GO** |
+| Un critère NO-GO est levé par une condition chiffrée réaliste, lue dans la vue `sensibilite_payback` | **GO conditionnel** |
+| Sinon | **NO-GO** |
+
+Le verdict retenu et ses conditions sont consignés dans `config/hypotheses.yaml` (section `decision`).
+
 ### 4.3 Hors périmètre (roadmap)
 
 Le référentiel décrit des tables e-commerce et stock (`fact_session_web`, `fact_stock`, `dim_client`) que l'étude n'exige pas. Elles sont prévues pour une phase 2 : cannibalisation entre magasins et e-commerce, ruptures, cohortes clients.
