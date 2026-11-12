@@ -1,0 +1,7 @@
+code_pays,scenario,format,surface_m2,ca_m2_croisiere_eur,ca_ht_croisiere_eur,taux_marge_brute_pct,loyer_charges_eur,personnel_eur,energie_eur,couts_variables_eur,ebitda_croisiere_eur,resultat_croisiere_eur,investissement_eur,cout_occupation_pct,point_mort_ca_ht_eur,payback_mois,horizon_annees,origine_donnees
+DE,central,Centre commercial,117.0,5036.0,587793.0,68.72,87789.0,206519.0,6420.0,47611.0,55611.0,13811.0,292600.0,14.94,565010.0,93.9,10,SIMULE
+DE,central,Centre-ville,103.0,5678.0,584820.0,68.69,98588.0,175341.0,5665.0,47370.0,74750.0,36186.0,269950.0,16.86,525098.0,66.1,10,SIMULE
+DE,optimiste,Centre commercial,117.0,5875.0,685758.0,68.72,87789.0,206519.0,6420.0,55546.0,115001.0,73201.0,292600.0,12.8,565010.0,37.0,10,SIMULE
+DE,optimiste,Centre-ville,103.0,6624.0,682290.0,68.69,98588.0,175341.0,5665.0,55265.0,133807.0,95243.0,269950.0,14.45,525098.0,29.8,10,SIMULE
+DE,pessimiste,Centre commercial,117.0,4196.0,489827.0,68.72,87789.0,206519.0,6420.0,39676.0,-3779.0,-45579.0,292600.0,17.92,565010.0,,10,SIMULE
+DE,pessimiste,Centre-ville,103.0,4732.0,487350.0,68.69,98588.0,175341.0,5665.0,39475.0,15693.0,-22871.0,269950.0,20.23,525098.0,,10,SIMULE
