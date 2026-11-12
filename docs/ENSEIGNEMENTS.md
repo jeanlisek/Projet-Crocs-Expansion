@@ -63,5 +63,5 @@ Constat du 12/11/2026, vue `business_case` (T8), reprise dans `kpi_summary` (axe
 
 - **Payback** : en scénario pessimiste, l'investissement n'est remboursé dans aucun des deux formats sur l'horizon du modèle (10 ans). C'est le scénario sur lequel le critère est jugé (README, section 4.2).
 - **Coût d'occupation** (loyer + charges ÷ CA HT de croisière), scénario central : 14,9 % en centre commercial, juste sous le seuil de 15 %, contre 16,9 % en centre-ville.
-- **Effort nécessaire** : il faudrait +23 à 32 % de CA/m² pour tenir un payback de 36 mois. Estimation communiquée le 12/11/2026 ; elle n'est pas encore produite par une vue de l'entrepôt.
+- **Effort nécessaire** : pour tenir un payback de 36 mois en scénario pessimiste, il faudrait +22 % (centre-ville) à +31 % (centre commercial) de CA/m² par rapport à la France du même format, estimation provisoire en attendant la vue `sensibilite_payback` (T8-sensibilité). Elle a été obtenue le 12/11/2026 en faisant varier le CA/m² du scénario pessimiste dans la vue `business_case`.
 - **Points en cours de correction par Alexis**, qui peuvent déplacer ces chiffres : les effectifs des magasins sont repris de la France ; le potentiel des villes utilise la population simulée ; la France doit être comparée sur le même périmètre de coûts.
