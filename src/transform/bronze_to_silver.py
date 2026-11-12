@@ -543,7 +543,30 @@ REAL_TABLES: dict[str, TableSpec] = {
         outlier_checks={"prix_affiche": ("categorie",)},
         simulated=False,
     ),
-    # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
+    # T4: Eurostat dissemination API, collected by src/collect/eurostat.py (`make collect`).
+    # One row per country and indicator (latest year published); the dataset code and the
+    # filter of each row say exactly which Eurostat series it comes from.
+    "eurostat_pays": TableSpec(
+        columns={
+            "code_pays": STR,
+            "indicateur": STR,
+            "libelle_eurostat": STR,
+            "jeu_donnees": STR,
+            "filtre": STR,
+            "annee": INT,
+            "valeur": FLOAT,
+            "unite": STR,
+            "statut_eurostat": STR,
+            "note": STR,
+            "date_collecte": DATE,
+            "source": STR,
+        },
+        primary_key=("code_pays", "indicateur"),
+        # No value when Eurostat publishes none for a country (TODO in `note`); no flag when
+        # the value is final; no note when there is a value.
+        expected_nulls=("annee", "valeur", "statut_eurostat", "note"),
+        simulated=False,
+    ),
     # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }

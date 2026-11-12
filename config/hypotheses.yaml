@@ -134,6 +134,11 @@ collecte:                  # T16, T17 : appels aux services ouverts
       FR: 20               # Code général des impôts, art. 278
       DE: 19               # Umsatzsteuergesetz, § 12 Abs. 1
     delai_reponse_s: 30              # CONVENTION : durée maximale d'une requête
+  eurostat:                # T4 : API de diffusion Eurostat ; robots.txt de ec.europa.eu lu le 12/11/2026
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/   # /eurostat/api/ autorisé
+    pays: [FR, DE, ES, IT, BE, NL, GB]   # CONVENTION : les pays de dim_pays
+    annee_depuis: 2018               # CONVENTION : on garde la dernière année publiée depuis cette date
+    delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
 
 kpi:                   # T7 (Alexis) : périmètre temporel des vues sql/kpi/
   annee_reference: 2025  # CONVENTION : dernière année complète (2026 est partiel, README 2.5 règle 8)
