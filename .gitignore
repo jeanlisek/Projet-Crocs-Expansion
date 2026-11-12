@@ -7,6 +7,8 @@ data/bronze/*
 !data/bronze/osrm_*
 # Exception : relevés datés des sites crocs.fr et crocs.de (T3), originaux non reproductibles
 !data/bronze/crocs_*
+# Exception : réponses datées de l'API Eurostat (T4) et la table qui en est extraite
+!data/bronze/eurostat_*
 data/silver/
 data/gold/*.duckdb
 data/gold/*.duckdb.wal

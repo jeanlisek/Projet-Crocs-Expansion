@@ -133,6 +133,11 @@ TABLE_INFO = {
         "Indicateurs pays Eurostat : une ligne par pays et indicateur (dernière année publiée).",
         "API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne",
     ),
+    "eurostat_series": (
+        "Séries annuelles Eurostat : une ligne par pays, indicateur et année publiée depuis "
+        "annee_depuis, pour les taux de croissance.",
+        "API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne",
+    ),
     "parametres_kpi": (
         "Paramètres numériques des vues KPI (seuils, périodes, scénarios), lus dans "
         "config/hypotheses.yaml.",
@@ -440,6 +445,16 @@ FIELDS = {
         "unite": "Unité de la valeur",
         "statut_eurostat": "Statut Eurostat (p provisoire, e estimé, d définition différente)",
         "note": "TODO quand Eurostat ne publie pas la série pour le pays",
+    },
+    "eurostat_series": {
+        "indicateur": "Nom de l'indicateur",
+        "annee": "Année de la valeur",
+        "valeur": "Valeur publiée par Eurostat pour l'année",
+        "unite": "Unité de la valeur",
+        "statut_eurostat": "Statut Eurostat de la valeur (p provisoire, b rupture de série, "
+        "d définition différente) ; vide si la valeur est définitive",
+        "jeu_donnees": "Code du jeu de données Eurostat",
+        "filtre": "Codes des dimensions retenues (dimension=code)",
     },
     "parametres_kpi": {
         "parametre": "Clé du paramètre dans config/hypotheses.yaml (sections jointes par un point)",
