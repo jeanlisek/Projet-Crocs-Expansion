@@ -207,7 +207,10 @@ erDiagram
 
 **État au 12/11/2026 : seules les sources de T16 sont collectées** (magasins OpenStreetMap et population Destatis des 12 villes allemandes). Les autres lignes « Réel » décrivent ce que les tâches T3, T4, T17 et T18 doivent rapporter ; d'ici là, les tables correspondantes sont celles du générateur et restent étiquetées simulées. L'emplacement des hubs reste une hypothèse du scénario : seules leurs coordonnées et les distances sont réelles.
 
-**Mention obligatoire** pour les données OpenStreetMap (T16, T17) : « Données © les contributeurs d’OpenStreetMap, licence ODbL ». Elle s'affiche sur le dashboard et sur la slide des sources.
+**Mentions obligatoires**, à afficher sur le dashboard et sur la slide des sources :
+
+- pour les données OpenStreetMap (T16, T17) : « Données © les contributeurs d’OpenStreetMap, licence ODbL » ;
+- pour la population des villes allemandes (T16) : « Population : © Statistisches Bundesamt (Destatis), 2026, reproduction autorisée avec mention de la source ».
 
 Tout chiffre simulé est calibré sur des ordres de grandeur publics, puis signalé comme simulé dans le dashboard et les slides.
 
