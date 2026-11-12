@@ -8,16 +8,18 @@
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
 | T1 | Dépôt, CI, Makefile, requirements | ✅ Fait | — | Tout |
-| T5 | Bronze → silver + journal de nettoyage | ✅ Fait (squelette, tables réelles à brancher) | T3, T4 pour les tables réelles | T6 |
+| T5 | Bronze → silver + journal de nettoyage | ✅ Fait (squelette, tables réelles à brancher) | T3, T4, T16, T17, T18 pour les tables réelles | T6 |
 | T6 | Silver → gold (DuckDB) + tests de qualité | ✅ Fait | T2, T5 | T7 |
 | T10 | Exports pour le dashboard | À faire | T7, T9 | T11 |
+| T16 | OpenStreetMap : magasins de chaussures par ville allemande | À faire | — | Densité concurrentielle réelle |
+| T17 | Coordonnées réelles et distances routières (OSRM) | À faire | — | Distance aux hubs réelle |
 | T14 | README final | Vendredi matin | T13 | Livrable 1 |
 
 **Ton rôle transverse** : merger les branches dans `develop` dès qu'elles sont prêtes (CI verte), débloquer les autres.
 
 ## Tes fichiers
 
-`Makefile`, `requirements.txt`, `.github/`, `src/transform/`, `tests/`, `data/gold/`, `README.md`.
+`Makefile`, `requirements.txt`, `.github/`, `src/transform/`, `src/collect/osm.py`, `src/collect/osrm.py`, `tests/`, `data/gold/`, `README.md`.
 
 ## Messages à coller
 
@@ -26,6 +28,12 @@
 
 **Merger une branche d'un coéquipier**
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Récupère `origin/feature/<branche>`. Lance `make lint` et `make test` dessus. Si tout passe, merge dans `develop` en `--no-ff`, push, et vérifie la CI avec `/opt/homebrew/bin/gh run list --limit 2`. Sinon, montre-moi ce qui casse sans corriger le code du coéquipier.
+
+**T16 : OpenStreetMap**
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T16 sur `feature/T16-osm`, créée depuis ce `develop` à jour. Lis d'abord la politique d'usage de l'API Overpass et montre-moi ce qu'elle autorise. Ne lance aucune requête avant mon accord. Crée ensuite `src/collect/osm.py` : pour chaque ville allemande de `dim_zone_chalandise`, relève les magasins `shop=shoes` dans la limite administrative de la ville, avec le tag `brand` quand il existe. User-agent explicite, ≥ 2 s entre requêtes, réponses brutes datées dans `data/bronze/`. Commence par 2 villes et montre-moi le résultat avant d'élargir. Calcule la densité pour 100 000 habitants et dis-moi quelle population tu utilises et si elle est réelle ou simulée. Déclare la table dans `REAL_TABLES`, puis vérifie que `make silver` et `make gold` passent. Blocage ou limite atteinte : arrête-toi et dis-le-moi, sans contourner.
+
+**T17 : distances routières**
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T17 sur `feature/T17-distances`, créée depuis ce `develop` à jour. Lis d'abord la politique d'usage du serveur public OSRM, et celle du service de géocodage que tu proposes, et montre-moi ce qu'elles autorisent. Ne lance aucune requête avant mon accord. Crée ensuite `src/collect/osrm.py` : coordonnées réelles des communes des 3 hubs et des villes cibles de `dim_zone_chalandise` (Allemagne d'abord), puis distance routière et durée de chaque hub vers chaque ville. User-agent explicite, ≥ 2 s entre requêtes, chaque réponse mise en cache dans `data/bronze/` pour ne jamais redemander un trajet déjà obtenu. Commence par 3 trajets et montre-moi. Déclare la table dans `REAL_TABLES`, avec dans `source` le rappel que l'emplacement des hubs est une hypothèse du scénario. Compare ensuite avec `fact_logistique` simulé et montre-moi les écarts.
 
 **T10**
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T10 sur `feature/T10-exports`, créée depuis ce `develop` à jour. Exporte en CSV dans `data/gold/exports/` : `kpi_summary`, `business_case`, `city_scoring`, `ai_commentary` et les tables utiles au dashboard. Mêmes noms de colonnes que les vues. Cible `make exports`. Ces CSV sont versionnés.
