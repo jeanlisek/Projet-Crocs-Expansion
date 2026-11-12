@@ -96,6 +96,16 @@ collecte:                  # T16, T17 : appels aux services ouverts
     attente_apres_refus_s: 30        # CONVENTION : même pause que pour Overpass après une erreur du serveur
     essais_max: 3                    # CONVENTION : au-delà, le script s'arrête
     delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
+  crocs:                   # T3 : prix des sites Crocs, robots.txt lu le 12/11/2026 (identique FR et DE)
+    sites:                 # CONVENTION : une liste de départ par site, la catégorie sabots sans filtre
+      FR:
+        url: https://www.crocs.fr
+        categorie_depart: /c/silhouette/sabots
+      DE:
+        url: https://www.crocs.de
+        categorie_depart: /c/silhouette/clogs
+    nb_modeles_par_site: 10          # CONVENTION : échantillon de l'étape 2 de T3, à élargir ensuite
+    delai_reponse_s: 30              # CONVENTION : durée maximale d'une requête
 
 go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0
