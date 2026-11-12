@@ -85,6 +85,15 @@ business_case_allemagne:   # T8 (Alexis) : compte de résultat d'un magasin type
   duree_amortissement_capex_ans: 7   # CONVENTION : durée d'usage de l'agencement, alignée sur un bail commercial
   horizon_annees: 10        # CONVENTION : au-delà, l'investissement est réputé non remboursé
 
+sensibilite_payback:        # T8-sensibilite : grille de lecture du payback, ne modifie aucun seuil
+  scenario: pessimiste      # CONVENTION : le scénario jugé par la grille Go / No-Go (README 4.2)
+  format: Centre commercial # CONVENTION : le format le mieux placé du business case
+  etp_min: 3.0              # CONVENTION : minimum du réseau France (simulation_reseau_france.etp_minimum)
+  etp_pas: 0.05             # CONVENTION : pas de la grille ; le maximum est l'ETP du magasin type (moyenne France)
+  ca_m2_ratio_min: 0.75     # CONVENTION : CA/m² du scénario pessimiste, en part de la France
+  ca_m2_ratio_max: 1.05     # CONVENTION : CA/m² du scénario optimiste
+  ca_m2_ratio_pas: 0.01     # CONVENTION : pas de la grille
+
 city_scoring:               # T8 : score des villes allemandes sur 100 ; chaque critère est ramené de 0 à 100 entre les 12 villes
   poids:                    # CONVENTION fixée avant le calcul, somme = 100
     potentiel: 40           # population de la zone de chalandise x indice de revenu (simulé)

@@ -110,7 +110,8 @@ lignes AS (
     SELECT 'Payback : ' || k.type_emplacement, 'Rentabilité', k.code_pays, k.payback_mois, 'mois', NULL,
         'INFO', 'CALCUL', k.origine_donnees
     FROM kpi_payback AS k
-    -- Rentabilité : business case Allemagne (T8), par scénario et par format.
+    -- Rentabilité : business case Allemagne (T8), par scénario et par format. Statuts du README 2.3 :
+    -- coût d'occupation et point mort en CALCUL, payback en HYPOTHÈSE (dépend des scénarios).
     -- Payback jugé sur le scénario pessimiste (README 4.2) ; vide = non atteint dans l'horizon -> NO-GO.
     -- Coût d'occupation jugé sur le scénario central (le README ne fixe pas de scénario).
     UNION ALL
@@ -133,14 +134,27 @@ lignes AS (
             WHEN b.cout_occupation_pct <= s.occupation_max THEN 'GO'
             ELSE 'NO-GO'
         END,
-        'HYPOTHÈSE', b.origine_donnees
+        'CALCUL', b.origine_donnees
     FROM business_case AS b, s
     UNION ALL
     -- le point mort ne dépend pas du scénario (coûts fixes et taux identiques) : une ligne par format
     SELECT 'Point mort par magasin : ' || b.format, 'Rentabilité', b.code_pays, b.point_mort_ca_ht_eur,
-        '€ de CA HT/an', NULL, 'INFO', 'HYPOTHÈSE', b.origine_donnees
+        '€ de CA HT/an', NULL, 'INFO', 'CALCUL', b.origine_donnees
     FROM business_case AS b
     WHERE b.scenario = 'central'
+    -- Référence France sur le même périmètre de coûts que l'Allemagne (INFO, pas un critère)
+    UNION ALL
+    SELECT 'Payback (même périmètre de coûts que l''Allemagne) : ' || f.format, 'Rentabilité', f.code_pays,
+        f.payback_mois, 'mois', NULL, 'INFO', 'HYPOTHÈSE', f.origine_donnees
+    FROM business_case_france AS f
+    UNION ALL
+    SELECT 'Coût d''occupation (loyer + charges ÷ CA, même périmètre que l''Allemagne) : ' || f.format,
+        'Rentabilité', f.code_pays, f.cout_occupation_pct, '%', NULL, 'INFO', 'CALCUL', f.origine_donnees
+    FROM business_case_france AS f
+    UNION ALL
+    SELECT 'Point mort par magasin (même périmètre que l''Allemagne) : ' || f.format, 'Rentabilité',
+        f.code_pays, f.point_mort_ca_ht_eur, '€ de CA HT/an', NULL, 'INFO', 'CALCUL', f.origine_donnees
+    FROM business_case_france AS f
 )
 SELECT
     kpi,
