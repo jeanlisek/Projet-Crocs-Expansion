@@ -22,13 +22,13 @@
 ## Messages à coller
 
 **T6**
-> Lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T6 sur `feature/T6-gold` depuis `develop`. Construis `src/transform/build_gold.py` : charge les Parquet de `data/silver/` dans `data/gold/warehouse.duckdb` selon le modèle en constellation du README (section 3.2). Si des tables réelles existent dans `REAL_TABLES`, charge-les à côté des tables simulées, sans les fusionner. Ajoute `tests/test_qualite_gold.py` : unicité au grain, aucune clé orpheline, prix > 0, codes pays dans `dim_pays`. Cible `make gold`, ajoutée à `all`. Montre-moi le résultat avant le commit.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T6 sur `feature/T6-gold`, créée depuis ce `develop` à jour. Construis `src/transform/build_gold.py` : charge les Parquet de `data/silver/` dans `data/gold/warehouse.duckdb` selon le modèle en constellation du README (section 3.2). Si des tables réelles existent dans `REAL_TABLES`, charge-les à côté des tables simulées, sans les fusionner. Ajoute `tests/test_qualite_gold.py` : unicité au grain, aucune clé orpheline, prix > 0, codes pays dans `dim_pays`. Cible `make gold`, ajoutée à `all`. Montre-moi le résultat avant le commit.
 
 **Merger une branche d'un coéquipier**
-> Récupère `origin/feature/<branche>`. Lance `make lint` et `make test` dessus. Si tout passe, merge dans `develop` en `--no-ff`, push, et vérifie la CI avec `/opt/homebrew/bin/gh run list --limit 2`. Sinon, montre-moi ce qui casse sans corriger le code du coéquipier.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Récupère `origin/feature/<branche>`. Lance `make lint` et `make test` dessus. Si tout passe, merge dans `develop` en `--no-ff`, push, et vérifie la CI avec `/opt/homebrew/bin/gh run list --limit 2`. Sinon, montre-moi ce qui casse sans corriger le code du coéquipier.
 
 **T10**
-> Tâche T10 sur `feature/T10-exports`. Exporte en CSV dans `data/gold/exports/` : `kpi_summary`, `business_case`, `city_scoring`, `ai_commentary` et les tables utiles au dashboard. Mêmes noms de colonnes que les vues. Cible `make exports`. Ces CSV sont versionnés.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. Tâche T10 sur `feature/T10-exports`, créée depuis ce `develop` à jour. Exporte en CSV dans `data/gold/exports/` : `kpi_summary`, `business_case`, `city_scoring`, `ai_commentary` et les tables utiles au dashboard. Mêmes noms de colonnes que les vues. Cible `make exports`. Ces CSV sont versionnés.
 
 **Fusion finale vers `main`** (jeudi soir, puis vendredi matin)
-> CI verte sur `develop` ? Si oui, merge `develop` dans `main` en `--no-ff`, push, vérifie la CI de `main`.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/jean-li.md`. CI verte sur `develop` ? Si oui, merge `develop` dans `main` en `--no-ff`, push, vérifie la CI de `main`.
