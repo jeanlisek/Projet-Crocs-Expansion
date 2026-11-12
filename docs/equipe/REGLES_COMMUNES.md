@@ -40,7 +40,7 @@ Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `m
 - **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`). Quatre y sont à ce jour : `osm_villes`, `osm_magasins_chaussures` et `destatis_population_villes` (T16), `osrm_distances` (T17). Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion. Tant que son fichier n'existe pas, elle est ignorée avec un message, sans arrêter le pipeline.
 - **Deux dossiers d'entrée** : un fichier collecté par un script va dans `data/bronze/` (non versionné) ; un fichier saisi à la main depuis une source officielle va dans `data/manual/` (versionné) et se déclare avec `directory=MANUAL`. Dans les deux cas, le fichier s'appelle `<nom de la table>.csv`.
 - **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville ou un trajet absent de `data/bronze/`.
-- **Jeu simulé recalibré (T2)** : le recalibrage a changé les valeurs de 11 des 19 tables simulées, pas seulement celles des magasins et des ventes : le tirage aléatoire des tables suivantes a été décalé. Aucune table n'a disparu. Relancez `make all` après votre `git pull`. Tout chiffre du jeu v1 recopié dans un document (README, journal de nettoyage, slides) est à recalculer.
+- **Jeu simulé recalibré (T2)** : le recalibrage a changé les valeurs de 11 des 19 tables simulées, pas seulement celles des magasins et des ventes : le tirage aléatoire des tables suivantes a été décalé. Aucune table n'a disparu. Relancez `make all` après votre `git pull`. Les chiffres du README, du dictionnaire et du journal de nettoyage ont été recalculés sur ce jeu le 12/11/2026 ; un chiffre du jeu v1 recopié ailleurs (slides, dashboard) est à refaire. Le générateur est gelé : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
 - **Tâches faites** : T1, T2, T5 (squelette, tables réelles à brancher), T6, T16, T17. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
@@ -71,6 +71,7 @@ Puis prévenir Jean-Li, qui merge dans `develop`. **Personne ne pousse sur `main
 6. **Calculs** : taux recalculés depuis numérateurs et dénominateurs, jamais moyennés ; prix comparés en HT sur un panier identique de SKU ; CA/m² comparé à format identique ; 2026 partiel (janvier-octobre).
 7. **Scraping** : lire `robots.txt` d'abord, user-agent explicite, ≥ 2 s entre requêtes, données produit publiques seulement. Blocage ou CAPTCHA : on s'arrête, jamais de contournement.
 8. **Secrets** (clé API) dans `.env`, jamais commité. Le dépôt est **public**.
+9. **Le générateur est gelé** : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
 
 ## Périmètre de chacun
 
