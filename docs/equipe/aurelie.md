@@ -55,6 +55,9 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 | `distance_hub.csv` | Distance routière au hub le plus proche, 12 villes allemandes (réel) | 12 |
 | `dim_pays.csv` | Les 7 pays | 7 |
 | `dim_zone_chalandise.csv` | Les 53 villes, dont 12 allemandes | 53 |
+| `dim_concurrent.csv` | Les 12 marques et enseignes, Crocs comprise, avec leur nom | 12 |
+| `dim_produit.csv` | Le catalogue Crocs : modèle, coloris, catégorie, prix France | 147 |
+| `dim_temps.csv` | Un mois par ligne, de janvier 2019 à décembre 2029 | 132 |
 | `fact_marche.csv` | Taille et croissance du marché par pays, année et segment | 154 |
 | `fact_parts_de_marche.csv` | Parts de marché par pays, année et concurrent | 420 |
 | `fact_immobilier.csv` | Loyers et charges par ville, année et type d'emplacement | 1 060 |
@@ -99,10 +102,16 @@ Les libellés des menus peuvent varier un peu selon la version de Power BI Deskt
 | `dim_zone_chalandise` | `fact_immobilier` | `id_zone` |
 | `dim_zone_chalandise` | `densite_concurrentielle` | `id_zone` (une ligne par ville allemande : Power BI propose une relation 1 à 1) |
 | `dim_zone_chalandise` | `distance_hub` | `id_zone` (idem) |
+| `dim_concurrent` | `fact_parts_de_marche` | `id_concurrent` |
+| `dim_concurrent` | `fact_prix_releves` | `id_concurrent` |
+| `dim_produit` | `fact_prix_releves` | `id_produit` |
+| `dim_temps` | `fact_prix_releves` | `id_date` |
 
 - Les filtres pays et ville se posent sur `dim_pays[nom_pays]` et `dim_zone_chalandise[ville]`, jamais sur la colonne d'une table de faits : c'est ce qui fait réagir tous les visuels d'une page au même filtre.
 - `ai_commentary` n'aura pas de relation : la zone de texte se filtre sur `page` et `valeur_filtre`.
-- `fact_parts_de_marche` et `fact_prix_releves` portent un `id_concurrent` dont la table de noms (`dim_concurrent`) n'est pas exportée à ce jour. `fact_prix_releves` a déjà le nom dans `enseigne` ; pour les parts de marché, demander l'export de `dim_concurrent` à Jean-Li.
+- Le nom d'un concurrent se lit dans `dim_concurrent[nom_concurrent]`, celui d'un mois ou d'une saison dans `dim_temps`.
+- `id_produit` est vide sur 1 157 des 4 153 relevés de prix : ce sont les produits des concurrents, absents du catalogue Crocs. Power BI les range sous une ligne « (Vide) » de `dim_produit` ; leur libellé reste dans `fact_prix_releves[libelle_produit]`.
+- **Tables annuelles** (`fact_marche`, `fact_parts_de_marche`, `fact_immobilier`) : elles ont une colonne `annee`, alors que `dim_temps` a une ligne par mois. `annee` n'y est donc pas unique et Power BI refuse une relation 1 à plusieurs sur cette colonne. Deux façons de faire : utiliser directement la colonne `annee` de la table de faits comme axe du visuel, ou, pour un filtre année commun à plusieurs tables, créer une table d'années dans Power BI (Modélisation > Nouvelle table : `dim_annee = DISTINCT(dim_temps[annee])`) et la relier en 1 à plusieurs à la colonne `annee` de chacune de ces tables.
 - La mention « données simulées » se pilote avec `est_simule` (tables) et `origine_donnees` (`kpi_summary`, `densite_concurrentielle`, `distance_hub`).
 
 ## Les slides (7 à 9)
