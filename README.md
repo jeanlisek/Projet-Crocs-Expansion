@@ -4,6 +4,8 @@
 >
 > **Question du Comex : l'ouverture d'un réseau de magasins Crocs en propre en Allemagne est-elle réalisable et rentable ?**
 
+> **Résultat en une phrase : NO-GO en l'état, GO conditionnel** : un magasin type calqué sur la France ne rembourse pas son investissement en 10 ans dans le scénario pessimiste, mais un format allégé en centre commercial, à environ 3 ETP, passe le critère dès que son CA/m² dépasse de 2 % celui de la France au même format (section 4.4).
+
 | Livrable | Emplacement |
 |---|---|
 | Dépôt & documentation | ce README, `docs/` |
@@ -44,7 +46,7 @@ En Allemagne, la marque est **déjà vendue par des revendeurs** (Zalando, Deich
 |---|---|
 | Réseau (X) | **48 magasins physiques** : 25 en centres commerciaux, 14 en centre-ville, 5 outlets, 4 en gares et aéroports. Trois ont fermé entre 2023 et 2025 : 45 sont ouverts |
 | E-commerce | crocs.fr, environ 37 % du CA HT |
-| CA net TTC | 40 M€ (2023) → 50 M€ (2024) → 53 M€ (2025) |
+| CA net TTC | 40 M€ (2023) → 50 M€ (2024) → 52,5 M€ (2025) |
 | Logistique | Hubs de Moissy-Cramayel (IDF) et Saint-Quentin-Fallavier (Lyon), centre de distribution EMEA à Dordrecht (Pays-Bas) |
 
 ### Catalogue
@@ -92,7 +94,7 @@ Chaque chiffre de l'étude porte l'un des quatre statuts du référentiel analyt
 | Réseau | Densité concurrentielle | Magasins de chaussures toutes enseignes (OpenStreetMap, `shop=shoes`) pour 100 000 habitants, population officielle Destatis au 31/12/2024 | `osm_villes`, `destatis_population_villes` | CALCUL |
 | Réseau | Coût moyen au m² | Loyer + charges, en €/m²/an, par ville et par format | `fact_immobilier` | CALCUL |
 | Logistique | Distance moyenne aux hubs | Moyenne, sur les 12 villes allemandes, de la distance routière réelle (OSRM) au hub **le plus proche** | `osrm_distances` | CALCUL |
-| Logistique | Droits & taxes locales | TVA, impôt sur les sociétés, droits d'import, éco-contribution | `fact_fiscalite` | FAIT (à vérifier) |
+| Logistique | Droits & taxes locales | TVA, impôt sur les sociétés, droits d'import, éco-contribution | `taxes_reference` (réel, saisi depuis les sources officielles, T18) ; `fact_fiscalite` (simulé, en comparaison et pour les taxes que le réel ne couvre pas) | FAIT (réel) ; HYPOTHÈSE (simulé) |
 | Assortiment | Pénétration des catégories | Part des consommateurs ayant acheté la catégorie | `fact_penetration_categories` | CALCUL |
 | Assortiment | % du catalogue éligible | Allemagne : références du catalogue crocs.fr listées sur crocs.de ÷ références du catalogue crocs.fr. Autres pays et ligne de comparaison : SKU éligibles ÷ 147 | `crocs_catalogue` (réel, T3) ; `fact_eligibilite_assortiment` (simulé) | CALCUL |
 | Rentabilité | Coût d'occupation | (loyer + charges) ÷ CA du magasin | `fact_immobilier`, business case | CALCUL |
@@ -266,7 +268,45 @@ Le référentiel décrit des tables e-commerce et stock (`fact_session_web`, `fa
 
 ### 4.4 Next steps
 
-_À compléter après l'analyse, selon la décision._
+#### Recommandation : NO-GO en l'état, GO conditionnel
+
+Verdict obtenu avec la règle de combinaison de la section 4.2 et consigné dans `config/hypotheses.yaml` (section `decision`). Chiffres du 12/11/2026, lus dans `kpi_summary` et les vues citées ; les coûts et les ventes du business case sont simulés.
+
+| Critère (Allemagne) | Valeur | Seuil | Verdict |
+|---|---|---|---|
+| Croissance du segment (TCAM 2022-2025, jeu simulé) | 3,89 % | ≥ 2 % | GO |
+| Indice prix relatif HT (prix réels crocs.fr / crocs.de) | 100,85 | 95 à 110 | GO |
+| Marge brute post-taxe | 70,47 % | ≥ 66,91 % | GO |
+| % du catalogue éligible (catalogues réels) | 100 % | ≥ 80 % | GO |
+| Coût d'occupation, scénario central : centre commercial | 14,94 % | ≤ 15 % | GO |
+| Coût d'occupation, scénario central : centre-ville | 16,86 % | ≤ 15 % | NO-GO |
+| Payback, scénario pessimiste : centre commercial et centre-ville | non atteint en 10 ans | ≤ 36 mois | NO-GO |
+
+**En l'état, c'est un NO-GO** : le magasin type, calqué sur la moyenne France (5,35 ETP en centre commercial), ne rembourse pas son investissement dans le scénario pessimiste. **Le NO-GO est levé sous conditions** (GO conditionnel), lues dans `sensibilite_payback`.
+
+#### Conditions de succès
+
+| Condition | Valeur | Source |
+|---|---|---|
+| Format | Centre commercial, seul format sous le seuil de coût d'occupation | `business_case` |
+| Effectif | Environ **3 ETP** par magasin, contre 5,35 pour le magasin type ; le GO tient jusqu'à 3,25 ETP, mais il faut alors 1,05 fois le CA/m² de la France | `sensibilite_payback` |
+| CA/m² | **Au moins 1,02 fois celui de la France au même format** (+2 %), soit 5 707 €/m² contre 5 595 €/m² : payback de 35,5 mois à 3 ETP. Au niveau de la France (1,00), le payback est de 36,8 mois : NO-GO de peu | `sensibilite_payback` |
+| Villes | Les 6 villes prioritaires du scoring : Berlin, Dortmund, Hamburg, Köln, Hannover, Nürnberg | `city_scoring` |
+| Approvisionnement | Via le hub de Dordrecht, le plus proche des 6 villes prioritaires | `distance_hub` (OSRM) |
+| Levier secondaire | Produits fabriqués au Vietnam importés à 0 % de droit (accord UE-Vietnam) : +1,6 point de marge, insuffisant seul | `impact_origine` |
+
+#### Plan d'action
+
+1. **Pilote de 2 magasins en centre commercial à Berlin et Dortmund**, les deux premières villes du scoring (scores 63,8 et 58,8 sur 100), avec un effectif de 3 ETP.
+2. **Point d'étape à 12 mois** : CA/m² au moins égal à 60 % du niveau cible (France +2 %), conformément à la montée en charge du scénario pessimiste. **Décision d'ouvrir les 4 autres villes à 24 mois** si le CA/m² atteint au moins 80 % du niveau cible, à 3 ETP.
+3. **Approvisionnement via Dordrecht** : 246 km par la route jusqu'à Dortmund, 704 km jusqu'à Berlin (OSRM).
+4. **Vérification de la préférence Vietnam** avant le premier import : preuve de l'origine vietnamienne des produits, classement douanier du Classic Clog (6402 99 39, retenu par lecture de la nomenclature, sans décision EBTI trouvée).
+
+#### Compléments d'étude
+
+- **Tables e-commerce et clients du référentiel** (`fact_session_web`, `fact_stock`, `dim_client`, section 4.3) : mesurer la cannibalisation entre les magasins et crocs.de, les ruptures et les cohortes de clients.
+- **Données de marché payantes** sur le segment casual moulé & sandales : le critère de croissance repose aujourd'hui sur le jeu simulé. Eurostat ne publie que les dépenses en chaussures, tous types confondus (+5,5 % par an en Allemagne entre 2022 et 2025, en valeur, données provisoires).
+- **Validation des effectifs minimaux avec les opérations** : un magasin de centre commercial peut-il tenir ses horaires d'ouverture avec 3 ETP ? C'est la condition dont dépend le GO.
 
 ---
 
@@ -324,8 +364,8 @@ Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'
 | `make all` | Reconstruit tout depuis zéro. Aujourd'hui : simulation, silver, gold, vues KPI puis exports ; chaque tâche y ajoute son étape (collecte, commentaires IA) |
 | `make collect` | Reconstruit les tables réelles de T3, T4, T16 et T17 (prix et catalogue Crocs FR / DE, indicateurs Eurostat, magasins OpenStreetMap, population Destatis, distances OSRM). Les réponses brutes sont versionnées dans `data/bronze/` : la cible n'appelle le réseau que pour une ville ou un trajet qui n'y est pas encore. Elle ne fait pas partie de `make all` |
 | `make silver` | Type et contrôle les tables de `data/bronze/` et de `data/manual/` (saisies manuelles sourcées, versionnées), les écrit en Parquet dans `data/silver/` avec `rapport_controles.csv` (voir [`docs/JOURNAL_NETTOYAGE.md`](docs/JOURNAL_NETTOYAGE.md)) |
-| `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires et les 23 relations du modèle en constellation (section 3.2) |
+| `make gold` | Reconstruit l'entrepôt `data/gold/warehouse.duckdb` à partir de `data/silver/` : une table par fichier Parquet, avec les clés primaires, les 23 relations du modèle en constellation (section 3.2) et les 7 relations des tables réelles |
 | `make kpi` | Crée les vues KPI : exécute chaque fichier `sql/kpi/*.sql` sur l'entrepôt (une vue par fichier) |
-| `make exports` | Écrit en CSV UTF-8, dans `data/gold/exports/` (versionné), les tables et vues lues par le dashboard. `business_case`, `city_scoring` et `ai_commentary` sont exportés dès qu'ils existent dans l'entrepôt, et sautés sans erreur d'ici là |
+| `make exports` | Écrit en CSV UTF-8, dans `data/gold/exports/` (versionné), les tables et vues lues par le dashboard (17 fichiers). `data/gold/ai_commentary.csv` (T9) y est copié tel quel dès qu'il existe ; d'ici là, la cible le saute sans erreur |
 | `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
 | `make format` | Reformate `src/` et `tests/` avec `black` |
