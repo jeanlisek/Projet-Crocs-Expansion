@@ -5,6 +5,8 @@ data/bronze/*
 !data/bronze/destatis_*
 # Exception : instantané daté des géocodages Nominatim et des trajets OSRM
 !data/bronze/osrm_*
+# Exception : relevés datés des sites crocs.fr et crocs.de (T3), originaux non reproductibles
+!data/bronze/crocs_*
 data/silver/
 data/gold/*.duckdb
 data/gold/*.duckdb.wal

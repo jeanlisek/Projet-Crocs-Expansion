@@ -29,6 +29,7 @@ collect:
 	$(PYTHON) -m src.collect.osm --bronze $(BRONZE_DIR)
 	$(PYTHON) -m src.collect.destatis --bronze $(BRONZE_DIR)
 	$(PYTHON) -m src.collect.osrm --bronze $(BRONZE_DIR)
+	$(PYTHON) -m src.collect.scrape_crocs --bronze $(BRONZE_DIR)
 
 # Types and checks the bronze and manual tables, writes them as Parquet with the check report.
 silver:
