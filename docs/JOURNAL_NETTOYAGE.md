@@ -1,7 +1,7 @@
 # Journal de nettoyage (bronze → silver)
 
 > **État au 12/11/2026.** Les 9 constats du rapport de contrôles sur le jeu v1 sont consignés ci-dessous. Chaque décision est une **proposition à valider par l'équipe**. Aucune correction n'est appliquée : le jeu v1 est écrit en silver tel quel.
-> Les sections des données réelles (T3, T4) restent à ouvrir.
+> Les données réelles de T16 (OpenStreetMap, Destatis) sont consignées en section 2. Les sections de T3 et T4 restent à ouvrir.
 
 ## Principe
 
@@ -74,3 +74,21 @@ _TODO T4 : aucun fichier collecté à ce jour._
 | ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
 |---|---|---|---|---|---|---|---|---|
 | _N-…_ | | | | | | | | |
+
+#### 2.3 Magasins de chaussures OpenStreetMap (API Overpass, T16)
+
+Fichiers : `data/bronze/osm_overpass_<id_zone>_2026-11-12.json` (une réponse brute par ville), `osm_villes.csv` et `osm_magasins_chaussures.csv`. Source : <https://overpass-api.de/api/interpreter>, données © les contributeurs d'OpenStreetMap, licence ODbL.
+
+| ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
+|---|---|---|---|---|---|---|---|---|
+| N-010 | 12/11/2026 | `osm_villes`, `osm_magasins_chaussures` | — | Erreurs HTTP 502 (Bad Gateway) du serveur Overpass pendant la collecte | 12 requêtes sur 24 ; aucune ligne de données | **Reprise** : attente de 30 s entre deux essais, arrêt après 3 échecs de suite, relance quelques minutes plus tard à partir du cache | Indisponibilité passagère d'un serveur public que sa politique d'usage annonce comme surchargé, et non un refus : aucune limite n'a été approchée (24 requêtes pour un plafond de 10 000 par jour). Les données ne sont pas touchées : une réponse en erreur n'est jamais enregistrée, chaque ville a une réponse complète avec exactement une limite administrative, et une ville déjà obtenue n'est pas redemandée | `RETRY_STATUSES` et `fetch` dans `src/collect/osm.py` |
+| N-011 | 12/11/2026 | `osm_magasins_chaussures` | `enseigne` | Valeurs nulles | 574 sur 992 | **Conservé** (proposition à valider par l'équipe) | Le tag `brand` est facultatif dans OpenStreetMap : un magasin sans enseigne renseignée reste un magasin de chaussures et compte dans la densité. Limite signalée dans le README (section 3.4) pour toute analyse par enseigne. Non imputé | Aucune |
+| N-012 | 12/11/2026 | `osm_magasins_chaussures` | `nom` | Valeurs nulles | 4 sur 992 | **Conservé** (proposition à valider par l'équipe) | Le tag `name` est facultatif ; l'identifiant OSM et les coordonnées suffisent à compter le magasin. Non imputé | Aucune |
+| N-013 | 12/11/2026 | `osm_villes` | `population_osm`, `annee_population_osm`, `source_population_osm` | Valeurs nulles : le tag `population` manque sur la limite administrative de 7 villes, son année pour 9, sa source pour 10 | 7, 9 et 10 sur 12 | **Conservé** ; la densité se calcule avec la population officielle Destatis (décision du 12/11/2026) | Ces tags sont facultatifs dans OpenStreetMap et ne suffisent pas à calculer la densité des 12 villes avec une année et une source connues. La population Destatis est officielle et porte la même date de référence (31/12/2024) pour toutes les villes. Les valeurs OSM existantes sont gardées pour comparaison, sans imputation | Aucune |
+
+#### 2.4 Population des villes allemandes (Destatis, T16)
+
+Fichiers : `data/bronze/destatis_05-staedte_2024-12-31.xlsx` (classeur officiel tel que téléchargé le 12/11/2026) et `destatis_population_villes.csv` (les 12 villes, extraites par leur code communal). Source : <https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/05-staedte.html>.
+
+Aucune anomalie : les 12 villes sont trouvées, chacune une seule fois, sans valeur nulle.
+

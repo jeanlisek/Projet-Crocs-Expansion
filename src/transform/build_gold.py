@@ -55,6 +55,13 @@ RELATIONSHIPS = [
     ("fact_prix_releves", "id_concurrent", "dim_concurrent"),
 ]
 
+# Relationships of the real tables, applied only when the table has been collected.
+REAL_RELATIONSHIPS = [
+    ("osm_villes", "id_zone", "dim_zone_chalandise"),
+    ("osm_magasins_chaussures", "id_zone", "osm_villes"),
+    ("destatis_population_villes", "id_zone", "dim_zone_chalandise"),
+]
+
 # Silver only knows dates (no time of day): they are stored as DATE in the warehouse.
 SILVER_DATE_TYPE = "TIMESTAMP"
 GOLD_DATE_TYPE = "DATE"
@@ -127,35 +134,44 @@ def build(
     shared_names = sorted(set(simulated) & set(real))
     if shared_names:
         raise ValueError(f"real tables must not reuse a simulated table name: {shared_names}")
-    specs = {**simulated, **real}
+    for name in simulated:
+        if not (silver_dir / f"{name}.parquet").exists():
+            raise FileNotFoundError(f"{name}.parquet is missing in {silver_dir}: run `make silver`")
+    # A real table is optional: it is loaded only when it reached the silver layer.
+    collected = {
+        name: spec for name, spec in real.items() if (silver_dir / f"{name}.parquet").exists()
+    }
+    for name in sorted(set(real) - set(collected)):
+        print(f"{name:32s} absente : table réelle pas encore collectée")
+    specs = {**simulated, **collected}
 
-    for child, _, parent in RELATIONSHIPS:
+    relationships = RELATIONSHIPS + [
+        relationship for relationship in REAL_RELATIONSHIPS if relationship[0] in collected
+    ]
+    for child, _, parent in relationships:
         unknown = [name for name in (child, parent) if name not in specs]
         if unknown:
             raise ValueError(f"relationship on a table that is not loaded: {unknown}")
-    for name in specs:
-        if not (silver_dir / f"{name}.parquet").exists():
-            raise FileNotFoundError(f"{name}.parquet is missing in {silver_dir}: run `make silver`")
 
     warehouse_path.parent.mkdir(parents=True, exist_ok=True)
     warehouse_path.unlink(missing_ok=True)
     rows = {}
     con = duckdb.connect(str(warehouse_path))
     try:
-        for name in load_order(list(specs), RELATIONSHIPS):
+        for name in load_order(list(specs), relationships):
             path = silver_dir / f"{name}.parquet"
             foreign_keys = [
                 (column, dimension, dimension_key(specs, dimension))
-                for table, column, dimension in RELATIONSHIPS
+                for table, column, dimension in relationships
                 if table == name
             ]
             rows[name] = create_table(con, name, specs[name], path, foreign_keys)
-            origin = "réelle" if name in real else "simulée"
+            origin = "réelle" if name in collected else "simulée"
             print(f"{name:32s} {rows[name]:>8,d} lignes   table {origin}")
     finally:
         con.close()
     print(
-        f"\n{len(rows)} tables et {len(RELATIONSHIPS)} relations dans : {warehouse_path.resolve()}"
+        f"\n{len(rows)} tables et {len(relationships)} relations dans : {warehouse_path.resolve()}"
     )
     return rows
 

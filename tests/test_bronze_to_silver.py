@@ -139,5 +139,13 @@ def test_manual_table_is_not_looked_for_in_the_bronze_directory(tmp_path):
     manual_dir.mkdir()
     # The file sits in bronze, but the table is declared as a manual one.
     (bronze_dir / f"{MANUAL_EXAMPLE}.csv").write_text(MANUAL_EXAMPLE_CSV, encoding="utf-8")
-    with pytest.raises(FileNotFoundError, match="manual"):
-        b2s.run(bronze_dir, silver_dir, manual_dir, {MANUAL_EXAMPLE: MANUAL_EXAMPLE_SPEC})
+    report = b2s.run(bronze_dir, silver_dir, manual_dir, {MANUAL_EXAMPLE: MANUAL_EXAMPLE_SPEC})
+    # A real table whose file is missing is skipped, not read from the other directory.
+    assert not (silver_dir / f"{MANUAL_EXAMPLE}.parquet").exists()
+    assert report.empty
+
+
+def test_missing_simulated_table_stops_the_run(tmp_path):
+    spec = b2s.SIMULATED_TABLES["dim_pays"]
+    with pytest.raises(FileNotFoundError, match="make simulate"):
+        b2s.run(tmp_path / "bronze", tmp_path / "silver", tmp_path / "manual", {"dim_pays": spec})

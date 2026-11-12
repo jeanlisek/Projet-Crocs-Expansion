@@ -22,21 +22,25 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 
 > État au 12/11/2026. **À tenir à jour à chaque merge dans `develop`**, par la personne qui merge.
 
-`make all` enchaîne quatre étapes :
+`make all` enchaîne quatre étapes. La collecte (`make collect`) n'en fait pas partie : ses résultats sont déjà dans le dépôt.
 
 | Étape | Commande | Ce qu'elle produit | Où |
 |---|---|---|---|
 | 1. Simulation | `make simulate` | Les 19 tables simulées (seed 2027), en CSV | `data/bronze/*.csv` |
 | 2. Silver | `make silver` | Les tables de `data/bronze/` et de `data/manual/`, typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
-| 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 19 tables, 19 clés primaires, 23 relations | `data/gold/warehouse.duckdb` |
-| 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Le dossier est vide à ce jour : l'étape ne crée encore aucune vue | Vues dans `data/gold/warehouse.duckdb` |
+| 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 22 tables (19 simulées, 3 réelles), 22 clés primaires, 26 relations | `data/gold/warehouse.duckdb` |
+| 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. Une vue à ce jour : `densite_concurrentielle` (T16) | Vues dans `data/gold/warehouse.duckdb` |
 
-Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`. Seule exception en entrée : `data/manual/`, qui contient les saisies manuelles sourcées et qui est versionné.
+Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`. Deux exceptions en entrée, toutes deux versionnées :
 
-- **Les 23 relations de l'entrepôt** sont celles du diagramme du README (section 3.2). Elles sont déclarées en clés étrangères dans `RELATIONSHIPS` (`src/transform/build_gold.py`) : l'entrepôt refuse un doublon ou une clé orpheline.
-- **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`), vide à ce jour. Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion.
+- `data/manual/`, qui contient les saisies manuelles sourcées ;
+- les fichiers `osm_*` et `destatis_*` de `data/bronze/`. Ce sont des instantanés datés du 12/11/2026 : le serveur Overpass est instable (une requête sur deux en erreur ce jour-là) et le classeur Destatis est la pièce officielle d'où viennent les populations. Les versionner évite à chacun de refaire la collecte et garantit que tout le monde calcule sur les mêmes données.
+
+- **Les relations de l'entrepôt** : 23 pour les tables simulées, celles du diagramme du README (section 3.2), et 3 pour les tables réelles (`REAL_RELATIONSHIPS`). Elles sont déclarées en clés étrangères dans `RELATIONSHIPS` (`src/transform/build_gold.py`) : l'entrepôt refuse un doublon ou une clé orpheline.
+- **Tables réelles** : elles se déclarent dans le registre `REAL_TABLES` (`src/transform/bronze_to_silver.py`). Trois y sont à ce jour : `osm_villes`, `osm_magasins_chaussures` et `destatis_population_villes` (T16). Une table déclarée passe en silver puis en gold sous son propre nom, à côté des tables simulées, sans fusion. Tant que son fichier n'existe pas, elle est ignorée avec un message, sans arrêter le pipeline.
 - **Deux dossiers d'entrée** : un fichier collecté par un script va dans `data/bronze/` (non versionné) ; un fichier saisi à la main depuis une source officielle va dans `data/manual/` (versionné) et se déclare avec `directory=MANUAL`. Dans les deux cas, le fichier s'appelle `<nom de la table>.csv`.
-- **Tâches faites** : T1, T5 (squelette, tables réelles à brancher), T6. Le suivi complet est dans `TACHES.md`.
+- **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville absente de `data/bronze/`.
+- **Tâches faites** : T1, T5 (squelette, tables réelles à brancher), T6, T16. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
 

@@ -37,6 +37,7 @@ Consignes techniques :
 - L'ordre des fichiers est libre : une vue qui en lit une autre est retentée après les autres.
 - Une erreur SQL arrête `make kpi` en nommant le fichier fautif.
 - Pour tester : `make gold && make kpi`.
+- Une vue existe déjà et sert de modèle : `sql/kpi/densite_concurrentielle.sql` (T16, données réelles), avec son test `tests/test_kpi_densite_concurrentielle.py`. Reprends-la telle quelle pour alimenter `kpi_summary`.
 
 Réel ou simulé : pour l'indice prix, le % du catalogue éligible, la densité concurrentielle et la distance au hub, la table réelle est prioritaire quand elle existe dans l'entrepôt ; sinon, utilise la simulée. Dans `kpi_summary`, `origine_donnees` indique d'où viennent les entrées (REEL, SIMULE ou MIXTE) et `statut_epistemique` reste conforme au README (section 2.3). Quand les deux tables existent, ajoute une ligne de comparaison réel / simulé.
 

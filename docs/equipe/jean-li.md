@@ -11,7 +11,7 @@
 | T5 | Bronze → silver + journal de nettoyage | ✅ Fait (squelette, tables réelles à brancher) | T3, T4, T16, T17, T18 pour les tables réelles | T6 |
 | T6 | Silver → gold (DuckDB) + tests de qualité | ✅ Fait | T2, T5 | T7 |
 | T10 | Exports pour le dashboard | À faire | T7, T9 | T11 |
-| T16 | OpenStreetMap : magasins de chaussures par ville allemande | À faire | — | Densité concurrentielle réelle |
+| T16 | OpenStreetMap : magasins de chaussures par ville allemande | ✅ Fait | — | Densité concurrentielle réelle |
 | T17 | Coordonnées réelles et distances routières (OSRM) | À faire | — | Distance aux hubs réelle |
 | T14 | README final | Vendredi matin | T13 | Livrable 1 |
 
@@ -19,7 +19,7 @@
 
 ## Tes fichiers
 
-`Makefile`, `requirements.txt`, `.github/`, `src/transform/`, `src/collect/osm.py`, `src/collect/osrm.py`, `tests/`, `data/gold/`, `README.md`.
+`Makefile`, `requirements.txt`, `.github/`, `src/transform/`, `src/collect/osm.py`, `src/collect/destatis.py`, `src/collect/osrm.py`, `tests/`, `data/gold/`, `README.md`.
 
 ## Messages à coller
 
