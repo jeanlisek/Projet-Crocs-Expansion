@@ -244,7 +244,7 @@ Seuils fixés **avant** l'analyse, pour ne pas les ajuster au résultat :
 | Croissance du segment en Allemagne | TCAM ≥ 2 % |
 | Indice prix relatif (HT) | Entre 95 et 110 |
 | Marge brute post-taxe Allemagne | ≥ marge France − 5 points |
-| Coût d'occupation | ≤ 15 % du CA magasin |
+| Coût d'occupation | ≤ 15 % du CA magasin, jugé sur le scénario central (CONVENTION) |
 | Payback, scénario pessimiste | ≤ 36 mois |
 | % catalogue éligible | ≥ 80 % |
 

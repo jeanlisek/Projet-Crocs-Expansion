@@ -102,15 +102,15 @@ def test_business_case_inputs_come_from_the_french_network_and_german_costs(tmp_
 HYPOTHESES = """
     CREATE TABLE business_case_hypotheses AS SELECT * FROM (VALUES
         ('DE', 'central', 'CC', 100.0, 4.0, 5000.0, 0.70, 0.10, 300.0, 50.0, 40000.0, 50.0, 1500.0,
-         50000.0, 50000.0, 5.0, 5, 0.5, 0.8, 1.0, 'SIMULE'),
+         50000.0, 50000.0, 5.0, 5, 0.5, 0.8, 1.0, 'SIMULE', 5000.0, 1.0),
         ('DE', 'pessimiste', 'CC', 100.0, 4.0, 2000.0, 0.70, 0.10, 300.0, 50.0, 40000.0, 50.0,
-         1500.0, 50000.0, 50000.0, 5.0, 5, 0.5, 0.8, 1.0, 'SIMULE')
+         1500.0, 50000.0, 50000.0, 5.0, 5, 0.5, 0.8, 1.0, 'SIMULE', 5000.0, 0.4)
     ) AS t(code_pays, scenario, format, surface_m2, nb_etp, ca_m2_eur, taux_marge,
            taux_couts_variables,
            loyer_m2_an_eur, charges_m2_an_eur, cout_complet_annuel_etp_eur, cout_energie_m2_an_eur,
            cout_amenagement_m2_eur, budget_marketing_lancement_eur, part_fixe_eur,
            duree_amortissement_ans, horizon_annees, montee_an1, montee_an2, montee_an3,
-           origine_donnees);
+           origine_donnees, ca_m2_france_eur, ratio_ca_m2_vs_france);
 """
 
 
@@ -165,14 +165,16 @@ def test_city_scoring_weights_criteria_scaled_from_0_to_100(tmp_path):
             ('{BC}.nb_magasins_cible_2029', 1.0)
         ) AS t(parametre, valeur);
         CREATE TABLE dim_zone_chalandise AS SELECT * FROM (VALUES
-            ('Z1', 'DE', 'A', 4.0, 100, 1.0), ('Z2', 'DE', 'B', 2.0, 100, 1.0),
+            ('Z1', 'DE', 'A', 9.0, 100, 1.0), ('Z2', 'DE', 'B', 9.0, 100, 1.0),
             ('Z3', 'DE', 'C', 1.0, 100, 8.0), ('Z9', 'ES', 'X', 9.0, 100, 1.0)
-        ) AS t(id_zone, code_pays, ville, population_zone_chalandise_millions, indice_revenu_ue100,
+        ) AS t(id_zone, code_pays, ville, population_ville_millions, indice_revenu_ue100,
                densite_concurrentielle_pour_100k_hab);
         CREATE TABLE kpi_cout_m2 AS SELECT * FROM (VALUES
             ('Z1', 'Centre commercial', 1000), ('Z2', 'Centre commercial', 600),
             ('Z3', 'Centre commercial', 200), ('Z3', 'Outlet', 50), ('Z9', 'Centre commercial', 100)
         ) AS t(id_zone, type_emplacement, cout_m2_an_eur);
+        CREATE TABLE destatis_population_villes AS SELECT * FROM (VALUES
+            ('Z1', 4000000), ('Z2', 2000000)) AS t(id_zone, population);
         CREATE TABLE densite_concurrentielle AS SELECT * FROM (VALUES ('Z1', 10.0), ('Z2', 6.0))
             AS t(id_zone, densite_pour_100k_hab);
         CREATE TABLE distance_hub AS SELECT * FROM (VALUES
@@ -188,7 +190,8 @@ def test_city_scoring_weights_criteria_scaled_from_0_to_100(tmp_path):
         "SELECT ville, note_potentiel, note_loyer, note_densite, note_distance, score, rang, "
         "est_prioritaire FROM city_scoring ORDER BY rang",
     )
-    # potential on a log scale: ln 4, ln 2, ln 1 -> 100, 50, 0 ; rent 1 000, 600, 200 -> 0, 50, 100
+    # potential: Destatis 4 and 2 million (the simulated 9 is ignored), simulated 1 for C;
+    # on a log scale: ln 4, ln 2, ln 1 -> 100, 50, 0 ; rent 1 000, 600, 200 -> 0, 50, 100
     # density: real 10 and 6, simulated 8 for C -> 0, 100, 50 ; distance 100, 300, 500 -> 100, 50, 0
     # A: (100x40 + 100x20) / 100 = 60 ; B: (50x40 + 50x25 + 100x15 + 50x20) / 100 = 57.5
     # C: (100x25 + 50x15) / 100 = 32.5 ; the outlet rent and the Spanish city are left out
@@ -197,3 +200,81 @@ def test_city_scoring_weights_criteria_scaled_from_0_to_100(tmp_path):
         ("B", 50.0, 50.0, 100.0, 50.0, 57.5, 2, False),
         ("C", 0.0, 100.0, 50.0, 0.0, 32.5, 3, False),
     ]
+
+
+def test_payback_sensitivity_reads_as_a_go_frontier(tmp_path):
+    warehouse = build(
+        tmp_path,
+        HYPOTHESES + """
+        CREATE TABLE parametres_kpi AS
+        SELECT parametre, CAST(valeur AS DOUBLE) AS valeur FROM (VALUES
+            ('sensibilite_payback.etp_min', 3.0), ('sensibilite_payback.etp_pas', 0.5),
+            ('sensibilite_payback.ca_m2_ratio_min', 1.0),
+            ('sensibilite_payback.ca_m2_ratio_max', 1.2),
+            ('sensibilite_payback.ca_m2_ratio_pas', 0.2),
+            ('go_no_go.payback_pessimiste_max_mois', 36.0)
+        ) AS t(parametre, valeur);
+        CREATE TABLE parametres_kpi_texte AS SELECT * FROM (VALUES
+            ('sensibilite_payback.scenario', 'central'), ('sensibilite_payback.format', 'CC')
+        ) AS t(parametre, valeur);
+        """,
+    )
+    rows = run_views(
+        tmp_path,
+        warehouse,
+        ["sensibilite_payback"],
+        "SELECT nb_etp, ratio_ca_m2_vs_france, payback_mois, statut_go, ca_m2_ratio_min_go, "
+        "etp_max_go, est_cas_business_case FROM sensibilite_payback ORDER BY 1, 2",
+    )
+    # fixed costs 40 000 + ETP x 40 000 ; margin net of variable costs 60 % ; investment 250 000
+    # 3 ETP, 100 %: EBITDA -10, 80, 140, 140 k -> 36 + 40/140 x 12 = 39.4 months
+    # 3 ETP, 120 %: 20, 128, 200 k -> 24 + 102/200 x 12 = 30.1
+    # 3.5 ETP, 120 %: 0, 108, 180 k -> 24 + 142/180 x 12 = 33.5
+    # 3.5 ETP, 100 %: -30, 60, 120, 120 k -> 46.0
+    # 4 ETP, 120 %: -20, 88, 160, 160 k -> 36 + 22/160 x 12 = 37.65, rounded to 37.7
+    # 4 ETP, 100 % is the business case itself (55.2 months)
+    assert rows == [
+        (3.0, 1.0, 39.4, "NO-GO", 1.2, None, False),
+        (3.0, 1.2, 30.1, "GO", 1.2, 3.5, False),
+        (3.5, 1.0, 46.0, "NO-GO", 1.2, None, False),
+        (3.5, 1.2, 33.5, "GO", 1.2, 3.5, False),
+        (4.0, 1.0, 55.2, "NO-GO", None, None, True),
+        (4.0, 1.2, 37.7, "NO-GO", None, 3.5, False),
+    ]
+
+
+def test_france_comparison_uses_the_german_cost_perimeter(tmp_path):
+    warehouse = build(
+        tmp_path,
+        TEXT_PARAMETERS + f"""
+        CREATE TABLE parametres_kpi AS
+        SELECT parametre, CAST(valeur AS DOUBLE) AS valeur FROM (VALUES
+            ('{BC}.couts_additionnels_pct_ca.demarque', 1.0),
+            ('{BC}.couts_additionnels_pct_ca.frais_siege', 4.0),
+            ('{BC}.duree_amortissement_capex_ans', 5.0)
+        ) AS t(parametre, valeur);
+        CREATE TABLE kpi_cout_m2 AS SELECT * FROM (VALUES
+            ('Centre commercial', 300, 30), ('Centre commercial', 100, 10), ('Outlet', 100, 90)
+        ) AS t(type_emplacement, loyer_m2_an_eur, charges_m2_an_eur);
+        CREATE TABLE magasins_france_reference AS SELECT * FROM (VALUES
+            ('Centre commercial', 500000.0, 350000.0, 70000, 150000.0, 5000.0, 200000, TRUE),
+            ('Centre commercial', 500000.0, 350000.0, 70000, 150000.0, 5000.0, 200000, TRUE),
+            ('Centre-ville', 900000.0, 600000.0, 90000, 150000.0, 5000.0, 200000, TRUE)
+        ) AS t(type_emplacement, ca_ht_eur, marge_brute_eur, loyer_annuel_eur, personnel_eur,
+               energie_eur, capex_ouverture_eur, est_simule);
+        """,
+    )
+    rows = run_views(
+        tmp_path,
+        warehouse,
+        ["business_case_france"],
+        "SELECT format, nb_magasins, loyer_charges_eur, ebitda_eur, resultat_eur, "
+        "cout_occupation_pct, "
+        "point_mort_ca_ht_eur, payback_mois FROM business_case_france",
+    )
+    # charges / rent = 40 / 400 = 10 % ; rent + charges 140 000 x 1.1 = 154 000 (77 000 a store)
+    # EBITDA 700 000 - 5 % x 1 000 000 - 154 000 - 300 000 - 10 000 = 186 000 (93 000 a store)
+    # depreciation 400 000 / 5 ; break-even (154 + 300 + 10 + 80) k / 2 / 0.65
+    # payback 400 x 12 / 186
+    # the city-centre store is not a format kept in the parameters
+    assert rows == [("Centre commercial", 2, 77000.0, 93000.0, 53000.0, 15.4, 418462.0, 25.8)]

@@ -24,7 +24,7 @@ from src.transform.build_gold import DEFAULT_WAREHOUSE
 
 TABLE = "parametres_kpi"
 TEXT_TABLE = "parametres_kpi_texte"
-SECTIONS = ("go_no_go", "kpi", "business_case_allemagne", "city_scoring")
+SECTIONS = ("go_no_go", "kpi", "business_case_allemagne", "city_scoring", "sensibilite_payback")
 
 
 def flatten(value, prefix: str):
