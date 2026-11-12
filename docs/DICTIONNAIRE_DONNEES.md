@@ -10,7 +10,7 @@
 | Réseau France (X) | **48 magasins physiques** + 1 canal e-commerce (crocs.fr) |
 | Types d'emplacement | Centre-ville, centre commercial, outlet, gare/aéroport |
 | Catalogue | 147 SKU (30 modèles × coloris) : sabots, sandales, bottes, Jibbitz, chaussures toile HEYDUDE |
-| CA net TTC France | 59 M€ (2023) → 75 M€ (2024) → 81 M€ (2025) |
+| CA net TTC France | 40 M€ (2023) → 50 M€ (2024) → 53 M€ (2025) |
 | Hubs | Moissy-Cramayel (IDF), Saint-Quentin-Fallavier (Lyon) + DC Crocs EMEA Dordrecht (NL) |
 | Pays candidats | Allemagne, Espagne, Italie, Belgique, Pays-Bas, Royaume-Uni (la France sert de référence) |
 | Historique | ventes de janv. 2023 à oct. 2026, marché 2019-2025, projections 2026-2029 |
@@ -48,7 +48,7 @@ Clés : `id_date` (AAAAMM), `id_produit`, `id_magasin`, `code_pays` (ISO-2), `id
 
 | Table | Grain | Mesures |
 |---|---|---|
-| `fact_ventes_france` | mois × magasin × produit (261 832 lignes) | quantités, CA brut/net TTC, CA net HT, remise, coût des marchandises, marge brute, retours |
+| `fact_ventes_france` | mois × magasin × produit (246 476 lignes) | quantités, CA brut/net TTC, CA net HT, remise, coût des marchandises, marge brute, retours |
 | `fact_marche` | pays × année × segment | taille de marché (M€), taux de croissance, `est_projection` |
 | `fact_parts_de_marche` | pays × année × marque (segment casual moulé & sandales) | part de marché en valeur (%), CA estimé |
 | `fact_presence_concurrents` | zone × concurrent | nb de points de vente, dont magasins en propre |

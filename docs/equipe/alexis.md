@@ -15,6 +15,10 @@
 
 Dans le jeu v1, un magasin rembourse son investissement en 3 à 6 mois, pour un CA de 9 à 19 k€/m² ; seuls les outlets font exception (19 mois, 5 000 €/m²). Le Go serait acquis d'avance, et le jury le verrait (voir `docs/AUDIT_JEU_DE_DONNEES_V1.md`, point 1).
 
+Après recalibrage (T2, mergée le 12/11/2026), le payback médian va de 16 à 23 mois selon le format, pour un CA de 3 500 à 9 700 €/m².
+
+> **Le générateur est gelé** : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
+
 ## Tes fichiers
 
 `src/simulate/generate_data.py`, `config/hypotheses.yaml` (section business case), `sql/kpi/`.

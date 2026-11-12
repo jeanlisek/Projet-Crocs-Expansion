@@ -45,7 +45,7 @@ def test_density_is_shops_per_100000_inhabitants_of_the_official_population(ware
     try:
         rows = con.execute(
             f"SELECT id_zone, densite_pour_100k_hab, densite_population_osm, "
-            f"densite_population_simulee, densite_simulee_v1, origine_donnees "
+            f"densite_population_simulee, densite_simulee, origine_donnees "
             f"FROM {VIEW} ORDER BY id_zone"
         ).fetchall()
     finally:
