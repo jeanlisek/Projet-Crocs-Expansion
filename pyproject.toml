@@ -10,3 +10,5 @@ extend-exclude = '''
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Lets the tests import the project code, e.g. `from src.transform import bronze_to_silver`.
+pythonpath = ["."]

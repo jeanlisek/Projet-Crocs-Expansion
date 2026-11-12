@@ -24,7 +24,10 @@ business_case_allemagne:
     frais_siege: null       # TODO T8, HYPOTHESE
   duree_amortissement_capex_ans: null   # TODO T8, CONVENTION
 
-go_no_go:                  # CONVENTION fixée avant analyse (README 4.2)
+nettoyage:                 # T5 : bronze -> silver
+  iqr_multiplicateur: 1.5  # CONVENTION : méthode des quartiles (README 2.5, règle 10)
+
+go_no_go:                # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0
   indice_prix_min: 95
   indice_prix_max: 110

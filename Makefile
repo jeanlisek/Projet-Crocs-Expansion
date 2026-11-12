@@ -5,11 +5,12 @@
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 
 BRONZE_DIR := data/bronze
+SILVER_DIR := data/silver
 CODE_DIRS := src tests
 
-.PHONY: all install simulate format lint test
+.PHONY: all install simulate silver format lint test
 
-all: simulate
+all: simulate silver
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -17,6 +18,10 @@ install:
 # Deterministic (fixed seed): rewrites the simulated CSV files in the bronze layer.
 simulate:
 	$(PYTHON) src/simulate/generate_data.py $(BRONZE_DIR)
+
+# Types and checks the bronze tables, writes them as Parquet with the check report.
+silver:
+	$(PYTHON) src/transform/bronze_to_silver.py --bronze $(BRONZE_DIR) --silver $(SILVER_DIR)
 
 format:
 	$(PYTHON) -m black $(CODE_DIRS)
