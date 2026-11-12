@@ -245,8 +245,42 @@ _À compléter après l'analyse, selon la décision._
 
 ## Lancer le projet
 
-```bash
-pip install -r requirements.txt
-make all        # collecte → simulation → bronze → silver → gold → KPIs → commentaires IA → exports
-make test       # tests de qualité
-```
+Le projet tourne en **Python 3.11**, la version de la CI. Les commandes ci-dessous valent pour macOS et Linux.
+
+1. Installer [`uv`](https://docs.astral.sh/uv/getting-started/installation/), qui télécharge Python 3.11 si la machine ne l'a pas :
+
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+2. Créer l'environnement virtuel `.venv` à la racine du dépôt (`--seed` y installe `pip`, dont `make install` a besoin) :
+
+   ```bash
+   uv venv --python 3.11 --seed
+   ```
+
+3. Installer les dépendances, aux versions figées dans `requirements.txt` :
+
+   ```bash
+   make install
+   ```
+
+4. Générer les données simulées dans `data/bronze/` (seed fixe : les 19 CSV sont identiques à chaque exécution) :
+
+   ```bash
+   make simulate
+   ```
+
+5. Lancer les tests de qualité :
+
+   ```bash
+   make test
+   ```
+
+Le `Makefile` utilise `.venv` dès qu'il existe : il n'est pas nécessaire de l'activer.
+
+| Commande | Rôle |
+|---|---|
+| `make all` | Reconstruit tout depuis zéro. Aujourd'hui : la simulation ; chaque tâche y ajoute son étape (collecte, silver, gold, KPIs, commentaires IA, exports) |
+| `make lint` | Mêmes contrôles que la CI : `black --check` et `flake8` |
+| `make format` | Reformate `src/` et `tests/` avec `black` |
