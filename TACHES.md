@@ -4,6 +4,8 @@
 
 **Chaque membre commence par sa fiche** : [`docs/equipe/`](docs/equipe/).
 
+Les numéros sont des identifiants ; l'ordre est donné par les phases.
+
 > **Échéance : oral le vendredi 13/11.** Bilan intermédiaire jeudi à 18h30.
 > Répartition proposée, à ajuster selon les profils de chacun.
 
@@ -22,40 +24,71 @@
 | D1 | Outil de dashboard | Power BI si au moins un membre a Windows, sinon Looker Studio |
 | D2 | Seuils Go / No-Go | Ceux du README (section 4.2) |
 | D3 | Recalibrage de la rentabilité magasin | Oui (voir l'audit, point 1) |
-| D4 | Sources réelles | Eurostat + prix crocs.fr / crocs.de ; OpenStreetMap si le temps le permet |
+| D4 | Sources réelles | Eurostat (T4), prix et catalogue crocs.fr / crocs.de (T3), OpenStreetMap (T16, T17), taxes officielles (T18) |
 
 ## Tâches
 
+Les phases suivent l'ordre de la démarche du cours.
+
+### 1. Collecte
+
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T1 | Dépôt : arborescence, `develop`, CI, `Makefile`, `requirements.txt` | Jean-Li | — | La CI passe au vert sur `develop` | Fait |
 | T2 | Recalibrer `generate_data.py` : CA/m² réaliste, charges, `date_fermeture` | Alexis | T1 | Payback médian France entre 1 et 4 ans ; contrôles de cohérence à 0 écart | À faire |
 | T3 | Scraping des prix Crocs FR / DE (`robots.txt` vérifié d'abord) ; part du catalogue France présente sur crocs.de, par catégorie | Mehdi | T1 | Snapshots datés dans `data/bronze/` ; au moins 30 SKU appariés ; KPI « % catalogue éligible » réel par catégorie | À faire |
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
+| T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | À faire |
+| T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | À faire |
+| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | À faire |
+
+### 2. Préparation
+
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
 | T5 | Bronze → silver : nettoyage + journal | Jean-Li | T3, T4, T16, T17, T18 | `docs/JOURNAL_NETTOYAGE.md` : anomalie → décision → justification | Fait (squelette, tables réelles à brancher) |
+
+### 3. Modélisation
+
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
 | T6 | Silver → gold dans DuckDB + tests de qualité | Jean-Li | T2, T5 | `tests/test_qualite_gold.py` passe : unicité, intégrité, validité, cohérence | Fait |
+
+### 4. Analyse
+
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | À faire |
 | T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | À faire |
 | T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
+
+### 5. Restitution
+
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
 | T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | À faire |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | À faire |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
 | T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies | À faire |
 | T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | À faire |
-| T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | À faire |
-| T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | À faire |
-| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | À faire |
+
+### Transverse
+
+| ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
+|---|---|---|---|---|---|
+| T1 | Dépôt : arborescence, `develop`, CI, `Makefile`, `requirements.txt` | Jean-Li | — | La CI passe au vert sur `develop` | Fait |
 
 ## Planning
 
 | Créneau | Jean-Li | Mehdi | Alexis | Briac | Aurélie |
 |---|---|---|---|---|---|
-| Jeudi, avant 18h30 | T1, puis T5 | T3, T4 | T2 | Prompts et garde-fous de T9 sur des KPIs factices | Maquette du dashboard (T11) sur le jeu v1 |
+| Jeudi, avant 18h30 | T1, T5 et T6 (faits) ; T16, T17 | T3, T4 | T2 | T18 ; prompts et garde-fous de T9 sur des KPIs factices | Maquette du dashboard (T11) sur le jeu v1 |
 | **18h30 : bilan intermédiaire** | Présente l'état d'avancement | | | | |
-| Jeudi soir | T6, T10 | T12 | T7, T8 | T9 branchée sur les vraies vues | T11 branché, début de T13 |
+| Jeudi soir | Tables réelles branchées en silver (T5), T10 | T12 | T7, T8 | T9 branchée sur les vraies vues | T11 branché, début de T13 |
 | Vendredi matin | T14, merge `main` | Relecture du README | Contrôle des chiffres slides vs dashboard | T13 | T13 |
 | Vendredi | **T15 : répétition**, puis oral | | | | |
+
+T16, T17 et T18 se font jeudi après-midi, avant 18h30, en parallèle de T3 et T4.
 
 ## Le dashboard (T11)
 
