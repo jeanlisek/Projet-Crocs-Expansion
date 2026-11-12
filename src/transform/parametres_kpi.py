@@ -26,7 +26,14 @@ from src.transform.build_gold import DEFAULT_WAREHOUSE
 TABLE = "parametres_kpi"
 TEXT_TABLE = "parametres_kpi_texte"
 # Dotted path of each section read; a nested one keeps its full path as key prefix.
-SECTIONS = ("go_no_go", "kpi", "business_case_allemagne", "city_scoring", "collecte.crocs.tva_pct")
+SECTIONS = (
+    "go_no_go",
+    "kpi",
+    "business_case_allemagne",
+    "city_scoring",
+    "sensibilite_payback",
+    "collecte.crocs.tva_pct",
+)
 
 
 def flatten(value, prefix: str):

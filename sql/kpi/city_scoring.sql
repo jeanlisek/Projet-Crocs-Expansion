@@ -1,6 +1,7 @@
 -- Scoring des villes allemandes (T8), sur 100. Chaque critère est ramené de 0 à 100 entre les
 -- villes (0 = la moins favorable, 100 = la plus favorable), puis pondéré (city_scoring.poids).
--- Potentiel : population de la zone de chalandise x indice de revenu (jeu simulé), noté sur
+-- Potentiel : population officielle de la ville (Destatis, réel ; à défaut, population simulée de la
+-- ville) x indice de revenu (jeu simulé), noté sur
 -- son logarithme (CONVENTION : sinon Berlin, 4 à 10 fois plus peuplée, écrase les autres villes).
 -- Loyer : loyer + charges moyens des types d'emplacement des formats retenus (jeu simulé).
 -- Densité concurrentielle : réelle (OSM) si disponible, sinon simulée ; plus dense = moins favorable
@@ -33,13 +34,18 @@ villes AS (
     SELECT
         z.id_zone,
         z.ville,
-        z.population_zone_chalandise_millions * z.indice_revenu_ue100 / 100 AS potentiel,
+        coalesce(pop.population / 1000000.0, z.population_ville_millions) AS population_millions,
+        CASE WHEN pop.population IS NULL THEN 'SIMULE' ELSE 'REEL' END AS origine_population,
+        coalesce(pop.population / 1000000.0, z.population_ville_millions) * z.indice_revenu_ue100 / 100
+            AS potentiel,
         loyers.cout_m2_an_eur,
         coalesce(d.densite_pour_100k_hab, z.densite_concurrentielle_pour_100k_hab) AS densite_pour_100k_hab,
         coalesce(h.distance_reelle_km, l.distance_min_km) AS distance_hub_km,
-        CASE WHEN d.id_zone IS NULL AND h.id_zone IS NULL THEN 'SIMULE' ELSE 'MIXTE' END AS origine_donnees
+        CASE WHEN pop.id_zone IS NULL AND d.id_zone IS NULL AND h.id_zone IS NULL THEN 'SIMULE' ELSE 'MIXTE' END
+            AS origine_donnees
     FROM dim_zone_chalandise AS z
     JOIN loyers ON loyers.id_zone = z.id_zone
+    LEFT JOIN destatis_population_villes AS pop ON pop.id_zone = z.id_zone
     LEFT JOIN densite_concurrentielle AS d ON d.id_zone = z.id_zone
     LEFT JOIN distance_hub AS h ON h.id_zone = z.id_zone
     LEFT JOIN (
@@ -72,6 +78,8 @@ scores AS (
 SELECT
     id_zone,
     ville,
+    round(population_millions, 3) AS population_millions,
+    origine_population,
     round(potentiel, 3) AS potentiel_millions_ponderes,
     round(cout_m2_an_eur, 0) AS cout_m2_an_eur,
     densite_pour_100k_hab,

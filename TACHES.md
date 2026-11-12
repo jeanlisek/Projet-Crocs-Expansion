@@ -39,7 +39,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | À faire |
 | T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | Fait |
 | T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | Fait |
-| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | À faire |
+| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | Fait (7 pays, saisi le 12/11/2026 sur `feature/T18-taxes-v2` ; `kpi_taxes` ne lit pas encore ce fichier) |
 
 ### 2. Préparation
 
@@ -58,7 +58,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | Fait |
-| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (chiffres provisoires : corrections d'Alexis en cours, voir `docs/ENSEIGNEMENTS.md`, section 4) |
+| T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (sensibilité du payback, population Destatis et référence France mergées le 12/11/2026 ; voir `docs/ENSEIGNEMENTS.md`, section 4) |
 | T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | À faire |
 
 ### 5. Restitution
@@ -67,7 +67,7 @@ Les phases suivent l'ordre de la démarche du cours.
 |---|---|---|---|---|---|
 | T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` ; `business_case`, `city_scoring` et `ai_commentary` s'exportent dès qu'ils existent) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
-| T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | À faire |
+| T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | Fait (généré par `python -m src.collect.dictionnaire` ; les vues sont listées avec leur définition, sans détail champ par champ) |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
 | T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies | À faire |
 | T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | À faire |

@@ -8,7 +8,7 @@
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
 | T9 | Commentaires par filtre + synthèse Comex | Démarrer maintenant sur des données factices | T7 pour les vraies données | Dashboard, slides |
-| T18 | Référentiel des taxes, saisi à la main depuis les sources officielles | À faire | — | KPI « Droits & taxes locales » réel |
+| T18 | Référentiel des taxes, saisi à la main depuis les sources officielles | Fait (repris par Jean-Li) | — | KPI « Droits & taxes locales » réel |
 | T13 | Slides Comex (avec Aurélie) | Jeudi soir | T8, T11 | Oral |
 
 > **Contrat `kpi_summary` mis à jour le 12/11/2026** : il a gagné la colonne `origine_donnees` (REEL, SIMULE ou MIXTE), décrite dans `REGLES_COMMUNES.md` (« Contrat entre les tâches »). Si ton `kpi_summary` factice existe déjà, ajoute-la.

@@ -52,16 +52,63 @@ Constat du 12/11/2026, tables réelles `crocs_produits` et `crocs_catalogue` (T3
 - Limites : un seul jour de relevé ; les prix sont lus sur 17 modèles (les premiers modèles communs de chaque catégorie), le catalogue sur les trois pages « silhouette » des sites, sans les accessoires ; « présent » veut dire listé sur le site, pas en stock.
 - Conséquence : le prix n'est pas un levier de différenciation entre les deux pays, et l'assortiment français peut être repris tel quel. L'hypothèse du jeu simulé (même prix public TTC dans la zone euro, section 2) est confirmée pour le couple France-Allemagne. Dans `kpi_summary`, l'Allemagne est jugée sur ces valeurs réelles (indice 100,85 et catalogue 100 %, `origine_donnees` = REEL, GO tous les deux) ; les valeurs du jeu simulé (indice 100,34, catalogue éligible 97,96 %) restent affichées sur une ligne « (comparaison, jeu simulé) », sans verdict.
 
-## 4. Business case Allemagne (provisoire) : le scénario pessimiste ne passe pas
+## 4. Business case Allemagne : le scénario pessimiste ne passe pas en l'état, un format allégé à 3 ETP passe
 
-Constat du 12/11/2026, vue `business_case` (T8), reprise dans `kpi_summary` (axe Rentabilité, Allemagne), données simulées, statut HYPOTHÈSE. **Chiffres provisoires** : Alexis corrige le modèle (voir la fin de la section).
+Constat du 12/11/2026, données simulées. Vues `business_case`, `sensibilite_payback` et `business_case_france` (T8 et T8-sensibilité), reprises dans `kpi_summary` (axe Rentabilité). Statuts du README (section 2.3) : payback en HYPOTHÈSE, coût d'occupation et point mort en CALCUL.
 
-| Format | Payback, scénario pessimiste (seuil : 36 mois) | Coût d'occupation, scénario central (seuil : 15 %) |
-|---|---|---|
-| Centre commercial | Non atteint en 10 ans : **NO-GO** | 14,9 % : **GO** de justesse |
-| Centre-ville | Non atteint en 10 ans : **NO-GO** | 16,9 % : **NO-GO** |
+### Lecture « en l'état » : le magasin type du business case
 
-- **Payback** : en scénario pessimiste, l'investissement n'est remboursé dans aucun des deux formats sur l'horizon du modèle (10 ans). C'est le scénario sur lequel le critère est jugé (README, section 4.2).
+Le magasin type reprend les effectifs moyens des magasins France du même format : 5,35 ETP en centre commercial, 4,55 ETP en centre-ville.
+
+| Format | Payback, scénario pessimiste (seuil : 36 mois) | Coût d'occupation, scénario central (seuil : 15 %) | CA/m² nécessaire pour un payback de 36 mois en scénario pessimiste |
+|---|---|---|---|
+| Centre commercial | Non atteint en 10 ans : **NO-GO** | 14,9 % : **GO** de justesse | +31 % par rapport à la France du même format |
+| Centre-ville | Non atteint en 10 ans : **NO-GO** | 16,9 % : **NO-GO** | +22 % par rapport à la France du même format |
+
+- **Payback** : en scénario pessimiste (CA/m² à 75 % de la France du même format), l'investissement n'est remboursé dans aucun des deux formats sur l'horizon du modèle (10 ans). C'est le scénario sur lequel le critère est jugé (README, section 4.2).
 - **Coût d'occupation** (loyer + charges ÷ CA HT de croisière), scénario central : 14,9 % en centre commercial, juste sous le seuil de 15 %, contre 16,9 % en centre-ville.
-- **Effort nécessaire** : il faudrait +23 à 32 % de CA/m² pour tenir un payback de 36 mois. Estimation communiquée le 12/11/2026 ; elle n'est pas encore produite par une vue de l'entrepôt.
-- **Points en cours de correction par Alexis**, qui peuvent déplacer ces chiffres : les effectifs des magasins sont repris de la France ; le potentiel des villes utilise la population simulée ; la France doit être comparée sur le même périmètre de coûts.
+- **Effort nécessaire** : la vue `sensibilite_payback` donne le premier GO, au pas de 1 % de la grille, à 1,32 × le CA/m² France en centre commercial et à 1,23 × en centre-ville. Le calcul continu donne +31 % et +22 %. La grille configurée (`sensibilite_payback` dans `config/hypotheses.yaml`) s'arrête à 1,05 × la France et ne porte que sur le centre commercial : à 5,35 ETP, elle ne montre donc aucun GO. Ces deux seuils ont été obtenus avec la même vue sur une grille élargie à 1,60 et pour chacun des deux formats.
+
+### Lecture « format allégé à 3 ETP » : le minimum du réseau France
+
+Centre commercial, scénario pessimiste, vue `sensibilite_payback` telle que configurée.
+
+- À 3 ETP, le payback passe sous les 36 mois dès **1,02 × le CA/m² France** du même format (+2 %). Au CA/m² de la France (1,00), il est de 36,8 mois : NO-GO de peu.
+- Au CA/m² maximal de la grille (1,05 × la France, celui du scénario optimiste), le GO tient jusqu'à **3,25 ETP**. Au-delà de 3,25 ETP, aucun CA/m² de la grille ne donne un GO.
+- En centre-ville, à 3 ETP, il faudrait 1,03 × le CA/m² France (+3 %). Ce chiffre a été obtenu avec la même vue en passant son format à « Centre-ville ».
+- Lecture : le critère de payback ne se joue pas sur le CA, que le scénario pessimiste fixe à 75 % de la France, mais sur l'effectif. Un magasin allemand ne passe qu'avec une équipe ramenée au minimum du réseau France ET un CA/m² au moins égal à celui de la France, soit bien au-dessus du scénario pessimiste.
+
+### Référence France sur le même périmètre de coûts
+
+Vue `business_case_france` : magasins France ouverts toute l'année 2025, mêmes postes de coûts que l'Allemagne (loyer et charges, personnel, énergie, coûts variables, amortissement). Les charges locatives, absentes du jeu France, sont estimées avec le ratio charges / loyer de `fact_immobilier` (HYPOTHÈSE de proxy). Le payback France est calculé sur un magasin à maturité, sans montée en charge ni marketing de lancement.
+
+| Format | Magasins | CA HT moyen | Coût d'occupation | Point mort | Payback |
+|---|---|---|---|---|---|
+| Centre commercial | 22 | 653 103 € | 17,4 % | 540 354 € | 26,2 mois |
+| Centre-ville | 13 | 649 800 € | 26,9 % | 590 268 € | 37,2 mois |
+
+- Sur ce périmètre, les magasins France dépassent eux-mêmes le seuil de coût d'occupation de 15 % dans les deux formats. Le magasin France de centre-ville ne tiendrait pas non plus le critère de payback de 36 mois.
+- L'Allemagne en scénario central a un coût d'occupation plus bas que la France (14,9 % contre 17,4 % en centre commercial, 16,9 % contre 26,9 % en centre-ville) : les loyers et charges simulés y sont plus bas, pour un CA/m² à 90 % de la France.
+- Le point mort allemand est proche du point mort français (565 010 € contre 540 354 € en centre commercial). Avec 5,35 ETP, le magasin type allemand a un coût de personnel plus élevé que la moyenne France (206 519 € contre 185 332 €) pour un CA plus faible.
+
+### Classement des villes avec la population Destatis
+
+Vue `city_scoring` : le critère potentiel (40 % du score) utilise désormais la population officielle de chaque ville (Destatis, 31/12/2024) au lieu de la population simulée de sa zone de chalandise, toujours multipliée par l'indice de revenu simulé. Les autres critères sont inchangés.
+
+| Rang | Ville | Rang avant | Prioritaire |
+|---|---|---|---|
+| 1 | Berlin | 1 | Oui |
+| 2 | Dortmund | 2 | Oui |
+| 3 | Hamburg | 3 | Oui |
+| 4 | Köln | 4 | Oui |
+| 5 | Hannover | 5 | Oui |
+| 6 | **Nürnberg** | 7 | **Oui (entre)** |
+| 7 | **Leipzig** | 6 | **Non (sort)** |
+| 8 | Frankfurt | 8 | Non |
+| 9 | Düsseldorf | 9 | Non |
+| 10 | **München** | 12 | Non |
+| 11 | **Dresden** | 10 | Non |
+| 12 | **Stuttgart** | 11 | Non |
+
+- Les cinq premières villes ne bougent pas. Nürnberg remplace Leipzig parmi les six villes prioritaires. München gagne deux places, Dresden et Stuttgart en perdent une.
+- Le changement vient surtout de la définition du potentiel (ville au lieu de zone de chalandise), pas de l'écart entre population réelle et simulée, qui est de 0,1 à 6 % selon les villes. La zone de chalandise simulée valait de 1,6 à 2,5 fois la population de la ville : München, où ce rapport était le plus faible, gagne deux places ; Leipzig, où il était le plus élevé, sort des villes prioritaires.

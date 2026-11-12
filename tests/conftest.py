@@ -44,5 +44,11 @@ def tables(bronze_dir):
 def silver(bronze_dir, tmp_path_factory):
     """Run bronze -> silver once on the generated dataset: (silver directory, check report)."""
     silver_dir = tmp_path_factory.mktemp("silver")
-    report = bronze_to_silver.run(bronze_dir, silver_dir)
+    # Empty manual directory, like the temporary bronze one: this fixture covers the
+    # generated dataset alone. Without it, `run` reads the repository's own data/manual/,
+    # whose files are versioned, and every test comparing the silver layer with the
+    # generated tables breaks as soon as a manual table exists (T18). The manual table has
+    # its own tests in test_taxes_reference.py.
+    manual_dir = tmp_path_factory.mktemp("manual")
+    report = bronze_to_silver.run(bronze_dir, silver_dir, manual_dir)
     return silver_dir, report
