@@ -13,7 +13,7 @@ EXPORTS_DIR := data/gold/exports
 AI_COMMENTARY := data/gold/ai_commentary.csv
 CODE_DIRS := src tests
 
-.PHONY: all install simulate collect silver gold kpi exports format lint test
+.PHONY: all install simulate collect silver gold kpi exports ai format lint test
 
 all: simulate silver gold kpi exports
 
@@ -50,6 +50,12 @@ kpi:
 # views of later tasks (business case, city scoring, AI commentary) are skipped until they exist.
 # data/gold/ai_commentary.csv (T9) is copied as it is when it exists.
 exports:
+	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR) --ai-commentary $(AI_COMMENTARY)
+
+# T9: generates the AI commentary with the language model, then rewrites the exports. Needs
+# the key in .env and the network: like `collect`, it is not part of `all`. Run it after `all`.
+ai:
+	$(PYTHON) -m src.ai.commentary --warehouse $(WAREHOUSE) --out $(AI_COMMENTARY)
 	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR) --ai-commentary $(AI_COMMENTARY)
 
 format:
