@@ -34,7 +34,7 @@ Sur chaque page, une zone de texte affiche le commentaire de `ai_commentary` cor
 Maquette dès maintenant sur les CSV de `data/bronze/` (lance `make simulate`) : structure des pages, filtres, couleurs. Quand T10 sera prête, il suffira de pointer vers `data/gold/exports/`.
 
 Si tu utilises un assistant :
-> Lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/aurelie.md`. Je construis le dashboard dans <Power BI / Looker Studio>. Propose-moi pour chacune des 4 pages : les visuels (type de graphique justifié par l'objectif : comparaison, composition, distribution ou relation), les champs utilisés, les filtres, et l'emplacement du commentaire IA. Respecte les règles de dataviz de ma fiche.
+> Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/aurelie.md`. Je construis le dashboard dans <Power BI / Looker Studio>. Propose-moi pour chacune des 4 pages : les visuels (type de graphique justifié par l'objectif : comparaison, composition, distribution ou relation), les champs utilisés, les filtres, et l'emplacement du commentaire IA. Respecte les règles de dataviz de ma fiche.
 
 ## Les slides (7 à 9)
 

@@ -1,5 +1,7 @@
 # Répartition des tâches
 
+> **Avant chaque session : `git checkout develop && git pull`.** Les fiches sont mises à jour au fil de l'eau ; copiez toujours les messages depuis GitHub, pas depuis une ancienne copie.
+
 **Chaque membre commence par sa fiche** : [`docs/equipe/`](docs/equipe/).
 
 > **Échéance : oral le vendredi 13/11.** Bilan intermédiaire jeudi à 18h30.
