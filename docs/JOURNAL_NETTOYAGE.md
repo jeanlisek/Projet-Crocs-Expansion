@@ -1,7 +1,7 @@
 # Journal de nettoyage (bronze → silver)
 
 > **État au 12/11/2026.** Les 9 constats du rapport de contrôles sur le jeu v1 sont consignés ci-dessous. Chaque décision est une **proposition à valider par l'équipe**. Aucune correction n'est appliquée : le jeu v1 est écrit en silver tel quel.
-> Les données réelles de T16 (OpenStreetMap, Destatis) sont consignées en section 2. Les sections de T3 et T4 restent à ouvrir.
+> Les données réelles de T16 (OpenStreetMap, Destatis) et de T17 (OSRM) sont consignées en section 2. Les sections de T3 et T4 restent à ouvrir.
 
 ## Principe
 
@@ -91,4 +91,14 @@ Fichiers : `data/bronze/osm_overpass_<id_zone>_2026-11-12.json` (une réponse br
 Fichiers : `data/bronze/destatis_05-staedte_2024-12-31.xlsx` (classeur officiel tel que téléchargé le 12/11/2026) et `destatis_population_villes.csv` (les 12 villes, extraites par leur code communal). Source : <https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/05-staedte.html>.
 
 Aucune anomalie : les 12 villes sont trouvées, chacune une seule fois, sans valeur nulle.
+
+#### 2.5 Distances routières (OSRM et Nominatim, T17)
+
+Fichiers : `data/bronze/osrm_geocodage_<id_hub>_2026-11-12.json` (3 communes), `osrm_trajet_<id_hub>_<id_zone>_2026-11-12.json` (36 trajets) et `osrm_distances.csv`. Sources : <https://nominatim.openstreetmap.org/search> et <https://router.project-osrm.org/route/v1/driving>, données © les contributeurs d'OpenStreetMap, licence ODbL.
+
+Collecte sans erreur : 39 requêtes, 3 communes géocodées avec un seul résultat chacune, 36 trajets obtenus. Aucun doublon, aucune valeur nulle.
+
+| ID | Date | Table | Colonne | Anomalie constatée | Lignes concernées | Décision | Justification métier | Correction dans le code |
+|---|---|---|---|---|---|---|---|---|
+| N-014 | 12/11/2026 | `osrm_distances` | `latitude_ville`, `longitude_ville` | Les données OpenStreetMap de T16 ne contiennent pas les coordonnées du centre des villes (seulement les tags de leur limite administrative) | 12 villes, soit les 36 trajets | **Point médian des magasins de chaussures** de chaque ville (décision du 12/11/2026) | Ce point se calcule sur les 992 magasins déjà relevés, sans nouvelle requête à un serveur instable. Il tombe dans le centre commerçant, là où un magasin s'installerait, à 1,3 km au plus du centre simulé de la ville (moins de 1 km pour 11 villes sur 12, 1,27 km pour Berlin). La médiane ignore les magasins isolés en périphérie. OSRM accroche ensuite le point à la route la plus proche, à 109 m au plus. Sur des trajets de 208 à 1 235 km, l'écart avec un centre administratif est négligeable | `city_points` dans `src/collect/osrm.py` |
 

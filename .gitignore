@@ -3,6 +3,8 @@ data/bronze/*
 !data/bronze/osm_*
 # Exception : classeur officiel Destatis tel que téléchargé, et la table qui en est extraite
 !data/bronze/destatis_*
+# Exception : instantané daté des géocodages Nominatim et des trajets OSRM
+!data/bronze/osrm_*
 data/silver/
 data/gold/*.duckdb
 data/gold/*.duckdb.wal

@@ -40,6 +40,13 @@ collecte:                  # T16, T17 : appels aux services ouverts
     page_url: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/05-staedte.html
     date_consultation: "2026-11-12"  # FAIT : jour du téléchargement du classeur
     delai_entre_requetes_s: 30       # robots.txt de destatis.de (Crawl-delay: 30), lu le 12/11/2026
+  nominatim:               # géocodage des communes des hubs ; politique d'usage lue le 12/11/2026
+    url: https://nominatim.openstreetmap.org/search   # 1 requête par seconde au maximum, résultats mis en cache
+  osrm:                    # distances routières ; politique d'usage lue le 12/11/2026 (FOSSGIS)
+    url: https://router.project-osrm.org/route/v1/driving   # serveur public : 1 requête par seconde au maximum
+    attente_apres_refus_s: 30        # CONVENTION : même pause que pour Overpass après une erreur du serveur
+    essais_max: 3                    # CONVENTION : au-delà, le script s'arrête
+    delai_reponse_s: 60              # CONVENTION : durée maximale d'une requête
 
 go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0

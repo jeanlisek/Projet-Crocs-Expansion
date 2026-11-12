@@ -12,7 +12,7 @@
 | T6 | Silver → gold (DuckDB) + tests de qualité | ✅ Fait | T2, T5 | T7 |
 | T10 | Exports pour le dashboard | À faire | T7, T9 | T11 |
 | T16 | OpenStreetMap : magasins de chaussures par ville allemande | ✅ Fait | — | Densité concurrentielle réelle |
-| T17 | Coordonnées réelles et distances routières (OSRM) | À faire | — | Distance aux hubs réelle |
+| T17 | Coordonnées réelles et distances routières (OSRM) | ✅ Fait | — | Distance aux hubs réelle |
 | T14 | README final | Vendredi matin | T13 | Livrable 1 |
 
 **Ton rôle transverse** : merger les branches dans `develop` dès qu'elles sont prêtes (CI verte), débloquer les autres.
