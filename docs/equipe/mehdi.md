@@ -8,7 +8,7 @@
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
 | T3 | Prix réels Crocs FR / DE (scraping ou relevé manuel) ; part du catalogue France présente sur crocs.de, par catégorie | Fait | — | Indice prix réel, « % catalogue éligible » réel |
-| T4 | API Eurostat → données pays réelles ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) | **Prioritaire** | — | `dim_pays` réel, taille de marché réelle |
+| T4 | API Eurostat → données pays réelles ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) | Fait | — | `dim_pays` réel, taille de marché réelle |
 | T12 | Dictionnaire champ par champ | Fait | T6 | README |
 
 ## Tes fichiers
