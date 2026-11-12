@@ -39,7 +39,7 @@ Les phases suivent l'ordre de la démarche du cours.
 | T4 | API Eurostat → `dim_pays` réel ; dépenses des ménages en chaussures et commerce de détail de chaussures (NACE 47.72) pour les mêmes pays | Mehdi | T1 | `dim_pays` alimenté par l'API, source et date dans les métadonnées ; codes des jeux de données Eurostat vérifiés et notés | Fait (tables réelles `eurostat_pays` et `eurostat_series`, chargées à côté de `dim_pays` ; les vues KPI lisent encore le jeu simulé) |
 | T16 | OpenStreetMap (API Overpass) : magasins `shop=shoes` par ville allemande de `dim_zone_chalandise`, avec `brand` quand elle existe | Jean-Li | T1 | Fichier daté dans `data/bronze/` ; densité pour 100 000 habitants par ville | Fait |
 | T17 | Coordonnées réelles des hubs et des villes cibles ; distances routières via OSRM | Jean-Li | T1 | Serveur public, requêtes espacées ; résultats en cache dans `data/bronze/` | Fait |
-| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | Fait (7 pays, saisi le 12/11/2026 sur `feature/T18-taxes-v2` ; `kpi_taxes` ne lit pas encore ce fichier) |
+| T18 | Référentiel des taxes saisi à la main : TVA standard, TVA réduite chaussures enfant si elle existe, impôt sur les sociétés, droit de douane UE pour les chaussures (chapitre 64) | Briac | — | `data/manual/taxes_reference.csv` : une ligne par pays, avec `source_url` et `date_consultation` ; rien d'inventé | Fait (7 pays, saisi le 12/11/2026 sur `feature/T18-taxes-v2` ; `kpi_taxes` lit ces taxes réelles en priorité, statut FAIT dans `kpi_summary`, le jeu simulé restant en comparaison) |
 
 ### 2. Préparation
 
@@ -65,7 +65,7 @@ Les phases suivent l'ordre de la démarche du cours.
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` ; `business_case`, `city_scoring` et `ai_commentary` s'exportent dès qu'ils existent) |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 18 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/`) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | Fait (généré par `python -m src.collect.dictionnaire` ; les vues sont listées avec leur définition, sans détail champ par champ) |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
