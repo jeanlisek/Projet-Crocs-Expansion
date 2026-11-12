@@ -1,0 +1,13 @@
+id_zone,ville,nb_magasins_chaussures,population_destatis,date_reference_population,densite_pour_100k_hab,population_osm,annee_population_osm,densite_population_osm,population_simulee,densite_population_simulee,densite_simulee,origine_donnees
+Z001,Berlin,251,3685265,2024-12-31,6.81,3769962,2020,6.66,3750000,6.69,7.63,REEL
+Z002,Hamburg,124,1862565,2024-12-31,6.66,,,,1910000,6.49,6.13,REEL
+Z003,München,135,1505005,2024-12-31,8.97,1478280,,9.13,1510000,8.94,6.16,REEL
+Z004,Köln,91,1024621,2024-12-31,8.88,1097519,2023,8.29,1090000,8.35,6.97,REEL
+Z005,Frankfurt,56,756021,2024-12-31,7.41,756021,2024,7.41,770000,7.27,8.57,REEL
+Z006,Stuttgart,57,612663,2024-12-31,9.3,,,,630000,9.05,6.83,REEL
+Z007,Düsseldorf,60,618685,2024-12-31,9.7,,,,630000,9.52,7.14,REEL
+Z008,Leipzig,54,611850,2024-12-31,8.83,,,,620000,8.71,5.81,REEL
+Z009,Dortmund,35,603462,2024-12-31,5.8,,,,590000,5.93,4.24,REEL
+Z010,Nürnberg,31,529508,2024-12-31,5.85,,,,530000,5.85,7.55,REEL
+Z011,Hannover,37,522131,2024-12-31,7.09,,,,540000,6.85,5.56,REEL
+Z012,Dresden,61,564904,2024-12-31,10.8,556780,,10.96,560000,10.89,7.86,REEL

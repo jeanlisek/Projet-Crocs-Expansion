@@ -22,7 +22,7 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 
 > État au 12/11/2026. **À tenir à jour à chaque merge dans `develop`**, par la personne qui merge.
 
-`make all` enchaîne quatre étapes. La collecte (`make collect`) n'en fait pas partie : ses résultats sont déjà dans le dépôt.
+`make all` enchaîne cinq étapes. La collecte (`make collect`) n'en fait pas partie : ses résultats sont déjà dans le dépôt.
 
 | Étape | Commande | Ce qu'elle produit | Où |
 |---|---|---|---|
@@ -30,8 +30,9 @@ Voir la section « Lancer le projet » du README (Python 3.11 via `uv`, `make in
 | 2. Silver | `make silver` | Les tables de `data/bronze/` et de `data/manual/`, typées et contrôlées (doublons, valeurs nulles, valeurs aberrantes), avec les colonnes `est_simule` et `source`, plus le rapport de contrôles | `data/silver/*.parquet`, `data/silver/rapport_controles.csv` |
 | 3. Gold | `make gold` | L'entrepôt DuckDB, reconstruit depuis zéro : 23 tables (19 simulées, 4 réelles), 23 clés primaires, 28 relations | `data/gold/warehouse.duckdb` |
 | 4. KPI | `make kpi` | Les vues KPI, créées dans l'entrepôt à partir de `sql/kpi/*.sql`. La cible écrit d'abord la table `parametres_kpi` (seuils et périodes de `config/hypotheses.yaml`), puis crée 18 vues : les 16 de T7 (une par KPI du README, deux vues de base et `kpi_summary`, la synthèse au contrat : 232 lignes, 7 pays), `densite_concurrentielle` (T16) et `distance_hub` (T17) | Vues dans `data/gold/warehouse.duckdb` |
+| 5. Exports | `make exports` | Les tables et vues lues par le dashboard, en CSV UTF-8 (T10) : `kpi_summary`, `densite_concurrentielle`, `distance_hub`, `dim_pays`, `dim_zone_chalandise`, `fact_marche`, `fact_parts_de_marche`, `fact_immobilier`, `fact_prix_releves`. `business_case`, `city_scoring` et `ai_commentary` s'y ajoutent dès qu'ils existent dans l'entrepôt ; d'ici là, la cible les saute sans échouer | `data/gold/exports/*.csv` |
 
-Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `make all`. Deux exceptions en entrée, toutes deux versionnées :
+Les fichiers des étapes 1 à 4 ne sont pas versionnés : chacun les reconstruit chez soi avec `make all`. Les exports de l'étape 5 le sont, pour que le dashboard se branche dessus après un simple `git pull` ; si `make all` les modifie chez vous alors que vous n'avez touché ni aux données ni aux vues, prévenez Jean-Li au lieu de les commiter. Deux exceptions en entrée, toutes deux versionnées :
 
 - `data/manual/`, qui contient les saisies manuelles sourcées ;
 - les fichiers `osm_*`, `destatis_*` et `osrm_*` de `data/bronze/`. Ce sont des instantanés datés du 12/11/2026 : le serveur Overpass est instable (une requête sur deux en erreur ce jour-là), le classeur Destatis est la pièce officielle d'où viennent les populations, et les serveurs publics OSRM et Nominatim n'acceptent qu'un usage léger. Les versionner évite à chacun de refaire la collecte et garantit que tout le monde calcule sur les mêmes données.
@@ -42,7 +43,7 @@ Aucun de ces fichiers n'est versionné : chacun les reconstruit chez soi avec `m
 - **Collecte** : `make collect` reconstruit les tables réelles à partir des fichiers bruts versionnés. Elle n'appelle le réseau que pour une ville ou un trajet absent de `data/bronze/`.
 - **Jeu simulé recalibré (T2)** : le recalibrage a changé les valeurs de 11 des 19 tables simulées, pas seulement celles des magasins et des ventes : le tirage aléatoire des tables suivantes a été décalé. Aucune table n'a disparu. Relancez `make all` après votre `git pull`. Les chiffres du README, du dictionnaire et du journal de nettoyage ont été recalculés sur ce jeu le 12/11/2026 ; un chiffre du jeu v1 recopié ailleurs (slides, dashboard) est à refaire. Le générateur est gelé : toute modification de `generate_data.py` décale l’ensemble des tables simulées et doit être validée par le groupe. Les réglages passent par `config/hypotheses.yaml`.
 - **`kpi_summary`** : les KPIs de rentabilité (coût d'occupation, point mort, payback) n'y figurent que pour la France, comme benchmark. Ceux de l'Allemagne, par scénario, viendront avec T8. Les premiers enseignements sont consignés dans `docs/ENSEIGNEMENTS.md`.
-- **Tâches faites** : T1, T2, T5 (squelette, tables réelles à brancher), T6, T7, T16, T17. Le suivi complet est dans `TACHES.md`.
+- **Tâches faites** : T1, T2, T5 (squelette, tables réelles à brancher), T6, T7, T10, T16, T17. Le suivi complet est dans `TACHES.md`.
 
 ## Git : le circuit
 
