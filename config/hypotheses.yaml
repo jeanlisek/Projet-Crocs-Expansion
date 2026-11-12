@@ -162,3 +162,11 @@ go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   cout_occupation_max_pct_ca: 15
   payback_pessimiste_max_mois: 36
   catalogue_eligible_min_pct: 80
+
+ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/commentary.py
+  modele: claude-haiku-5-5      # HYPOTHÈSE : identifiant relevé dans une source secondaire (iclarified.com, 08/10/2026), à confirmer dans la console Anthropic
+  reflexion: disabled          # HYPOTHÈSE : la réflexion du modèle consomme le plafond max_tokens (doc du SDK, paramètre thinking) et a laissé 14 textes vides le 12/11/2026 ; si l'API refuse disabled, mettre adaptive et max_tokens à 4000
+  max_tokens: 2000              # CONVENTION : plafond d'une réponse, large pour ne jamais couper la synthèse ; un texte coupé est rejeté
+  delai_entre_appels_s: 0.5     # CONVENTION : marge entre deux appels ; le SDK rejoue de lui-même une erreur 429
+  tentatives_max: 3             # nouveaux essais du SDK sur 408, 409, 429 et 5xx (anthropic/_base_client.py)
+  synthese_mots_max: 300        # CONVENTION : la synthèse tient dans une zone de texte du dashboard ; une version sans limite a été coupée à 816 mots au plafond max_tokens le 12/11/2026
