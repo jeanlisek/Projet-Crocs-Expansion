@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | T1 | Dépôt, CI, Makefile, requirements | ✅ Fait | — | Tout |
 | T5 | Bronze → silver + journal de nettoyage | ✅ Fait (squelette, tables réelles à brancher) | T3, T4 pour les tables réelles | T6 |
-| T6 | Silver → gold (DuckDB) + tests de qualité | À faire | T2, T5 | T7 |
+| T6 | Silver → gold (DuckDB) + tests de qualité | ✅ Fait | T2, T5 | T7 |
 | T10 | Exports pour le dashboard | À faire | T7, T9 | T11 |
 | T14 | README final | Vendredi matin | T13 | Livrable 1 |
 

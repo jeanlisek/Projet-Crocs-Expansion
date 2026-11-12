@@ -8,14 +8,6 @@ from src.transform import bronze_to_silver as b2s
 IQR_MULTIPLIER = 1.5
 
 
-@pytest.fixture(scope="session")
-def silver(bronze_dir, tmp_path_factory):
-    """Run the whole step once on the generated dataset: (silver directory, check report)."""
-    silver_dir = tmp_path_factory.mktemp("silver")
-    report = b2s.run(bronze_dir, silver_dir)
-    return silver_dir, report
-
-
 def test_cast_column_rejects_a_value_that_does_not_fit_the_type():
     prices = pd.Series(["49.99", "49,99 €"], dtype="string")
     with pytest.raises(ValueError):

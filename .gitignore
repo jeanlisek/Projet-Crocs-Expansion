@@ -1,6 +1,7 @@
 data/bronze/
 data/silver/
 data/gold/*.duckdb
+data/gold/*.duckdb.wal
 .env
 __pycache__/
 .venv/

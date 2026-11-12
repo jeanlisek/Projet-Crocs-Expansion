@@ -6,11 +6,13 @@ PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 
 BRONZE_DIR := data/bronze
 SILVER_DIR := data/silver
+WAREHOUSE := data/gold/warehouse.duckdb
+SQL_KPI_DIR := sql/kpi
 CODE_DIRS := src tests
 
-.PHONY: all install simulate silver format lint test
+.PHONY: all install simulate silver gold kpi format lint test
 
-all: simulate silver
+all: simulate silver gold kpi
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -22,6 +24,14 @@ simulate:
 # Types and checks the bronze tables, writes them as Parquet with the check report.
 silver:
 	$(PYTHON) src/transform/bronze_to_silver.py --bronze $(BRONZE_DIR) --silver $(SILVER_DIR)
+
+# Rebuilds the DuckDB warehouse from the silver tables, with primary and foreign keys.
+gold:
+	$(PYTHON) -m src.transform.build_gold --silver $(SILVER_DIR) --warehouse $(WAREHOUSE)
+
+# Creates the KPI views: runs every sql/kpi/*.sql file on the warehouse (none is not an error).
+kpi:
+	$(PYTHON) -m src.transform.run_kpi --warehouse $(WAREHOUSE) --sql-dir $(SQL_KPI_DIR)
 
 format:
 	$(PYTHON) -m black $(CODE_DIRS)
