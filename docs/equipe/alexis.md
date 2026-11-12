@@ -44,4 +44,7 @@ Réel ou simulé : pour l'indice prix, le % du catalogue éligible, la densité 
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T7 sur `feature/T7-kpi`, créée depuis ce `develop` à jour. Écris une vue SQL par KPI du README (section 2.3), une vue par fichier dans `sql/kpi/`, exécutée par `make kpi`, avec les règles de gestion de la section 2.5. Construis `kpi_summary` avec les colonnes exactes de `docs/equipe/REGLES_COMMUNES.md` (« Contrat entre les tâches »), pour tous les pays, avec les seuils de `config/hypotheses.yaml`. Un test par KPI sur un petit jeu calculé à la main.
 
 **T8**
+
+La vue `densite_concurrentielle` donne la densité réelle des 12 villes : à intégrer dans `city_scoring`.
+
 > Fais `git checkout develop && git pull`, puis lis `docs/equipe/REGLES_COMMUNES.md` et `docs/equipe/alexis.md`. Tâche T8 sur `feature/T8-business-case`, créée depuis ce `develop` à jour. Compte de résultat d'un magasin type en Allemagne : loyer + charges, personnel, énergie, marketing de lancement, logistique, démarque, frais bancaires, frais de siège, amortissement. Trois scénarios de montée en charge (pessimiste, central, optimiste), hypothèses dans `config/hypotheses.yaml`. Vues `business_case` (payback, point mort, coût d'occupation par scénario et format) et `city_scoring` (score des villes allemandes : potentiel, loyer, densité concurrentielle, distance au hub). Ajoute les KPIs de rentabilité à `kpi_summary`.

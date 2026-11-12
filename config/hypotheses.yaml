@@ -39,6 +39,7 @@ collecte:                  # T16, T17 : appels aux services ouverts
     fichier: destatis_05-staedte_2024-12-31.xlsx   # FAIT : classeur tel que téléchargé, dans data/bronze/
     page_url: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/05-staedte.html
     date_consultation: "2026-11-12"  # FAIT : jour du téléchargement du classeur
+    delai_entre_requetes_s: 30       # robots.txt de destatis.de (Crawl-delay: 30), lu le 12/11/2026
 
 go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   tcam_segment_min_pct: 2.0
