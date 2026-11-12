@@ -7,7 +7,7 @@
 
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
-| T9 | Commentaires par filtre + synthèse Comex | Démarrer maintenant sur des données factices | T7 pour les vraies données | Dashboard, slides |
+| T9 | Commentaires par filtre + synthèse Comex | Fait | T7 pour les vraies données | Dashboard, slides |
 | T18 | Référentiel des taxes, saisi à la main depuis les sources officielles | Fait (repris par Jean-Li) | — | KPI « Droits & taxes locales » réel |
 | T13 | Slides Comex (avec Aurélie) | Jeudi soir | T8, T11 | Oral |
 
