@@ -7,7 +7,7 @@
 
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
-| T2 | Recalibrer la rentabilité des magasins | **Prioritaire** | — | Business case crédible |
+| T2 | Recalibrer la rentabilité des magasins | ✅ Fait | — | Business case crédible |
 | T7 | Vues KPI + `kpi_summary` | Jeudi après-midi | T6 (faite) | IA, dashboard |
 | T8 | Business case Allemagne : 3 scénarios + scoring des villes | Jeudi soir | T7 | Recommandation |
 
