@@ -85,3 +85,59 @@ def test_simulated_dataset_has_no_duplicate_and_no_unexpected_null(silver):
     _, report = silver
     to_review = report[report["statut"] == b2s.STATUS_TO_REVIEW]
     assert set(to_review["controle"]) <= {b2s.CHECK_OUTLIERS}
+
+
+# A stand-in for a table typed in by hand: example values, not real ones.
+MANUAL_EXAMPLE = "saisie_exemple"
+MANUAL_EXAMPLE_SPEC = b2s.TableSpec(
+    columns={
+        "code_pays": b2s.STR,
+        "taux_exemple_pct": b2s.FLOAT,
+        "source_url": b2s.STR,
+        "date_consultation": b2s.DATE,
+    },
+    primary_key=("code_pays",),
+    simulated=False,
+    source="Saisie manuelle : URL de chaque ligne dans source_url",
+    directory=b2s.MANUAL,
+)
+MANUAL_EXAMPLE_CSV = (
+    "code_pays,taux_exemple_pct,source_url,date_consultation\n"
+    "FR,10.0,https://example.org/fr,2026-11-12\n"
+    "DE,,https://example.org/de,2026-11-12\n"
+)
+
+
+def test_manual_table_is_read_from_the_manual_directory(tmp_path):
+    bronze_dir, manual_dir, silver_dir = (
+        tmp_path / name for name in ("bronze", "manual", "silver")
+    )
+    bronze_dir.mkdir()
+    manual_dir.mkdir()
+    (manual_dir / f"{MANUAL_EXAMPLE}.csv").write_text(MANUAL_EXAMPLE_CSV, encoding="utf-8")
+
+    tables = {MANUAL_EXAMPLE: MANUAL_EXAMPLE_SPEC}
+    report = b2s.run(bronze_dir, silver_dir, manual_dir, tables)
+
+    table = pd.read_parquet(silver_dir / f"{MANUAL_EXAMPLE}.parquet")
+    assert table["code_pays"].tolist() == ["FR", "DE"]
+    assert not table[b2s.SIMULATED_COLUMN].any()
+    assert table[b2s.SOURCE_COLUMN].notna().all()
+    assert str(table["date_consultation"].dt.date.iloc[0]) == "2026-11-12"
+    # The empty rate is reported like any other missing value.
+    nulls = report[report["controle"] == b2s.CHECK_NULLS]
+    assert nulls[["colonne", "nb_lignes", "statut"]].values.tolist() == [
+        ["taux_exemple_pct", 1, b2s.STATUS_TO_REVIEW]
+    ]
+
+
+def test_manual_table_is_not_looked_for_in_the_bronze_directory(tmp_path):
+    bronze_dir, manual_dir, silver_dir = (
+        tmp_path / name for name in ("bronze", "manual", "silver")
+    )
+    bronze_dir.mkdir()
+    manual_dir.mkdir()
+    # The file sits in bronze, but the table is declared as a manual one.
+    (bronze_dir / f"{MANUAL_EXAMPLE}.csv").write_text(MANUAL_EXAMPLE_CSV, encoding="utf-8")
+    with pytest.raises(FileNotFoundError, match="manual"):
+        b2s.run(bronze_dir, silver_dir, manual_dir, {MANUAL_EXAMPLE: MANUAL_EXAMPLE_SPEC})

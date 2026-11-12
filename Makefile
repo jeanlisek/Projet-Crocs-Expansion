@@ -5,6 +5,7 @@
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 
 BRONZE_DIR := data/bronze
+MANUAL_DIR := data/manual
 SILVER_DIR := data/silver
 WAREHOUSE := data/gold/warehouse.duckdb
 SQL_KPI_DIR := sql/kpi
@@ -21,9 +22,9 @@ install:
 simulate:
 	$(PYTHON) src/simulate/generate_data.py $(BRONZE_DIR)
 
-# Types and checks the bronze tables, writes them as Parquet with the check report.
+# Types and checks the bronze and manual tables, writes them as Parquet with the check report.
 silver:
-	$(PYTHON) src/transform/bronze_to_silver.py --bronze $(BRONZE_DIR) --silver $(SILVER_DIR)
+	$(PYTHON) src/transform/bronze_to_silver.py --bronze $(BRONZE_DIR) --manual $(MANUAL_DIR) --silver $(SILVER_DIR)
 
 # Rebuilds the DuckDB warehouse from the silver tables, with primary and foreign keys.
 gold:

@@ -1,10 +1,11 @@
 """Bronze -> silver: load, type, check and write every table as Parquet.
 
-Usage: python src/transform/bronze_to_silver.py [--bronze DIR] [--silver DIR]
+Usage: python src/transform/bronze_to_silver.py [--bronze DIR] [--manual DIR] [--silver DIR]
 
 Bronze is never modified: each CSV file is read as raw text, cast to the schema declared
 in its TableSpec, checked (duplicates, nulls, IQR outliers), labelled (est_simule, source)
-and written to the silver layer.
+and written to the silver layer. Tables typed in by hand from official sources live in
+data/manual/ (versioned) and go through exactly the same steps.
 
 The checks only report, in data/silver/rapport_controles.csv. Changing the data is a
 deliberate decision: it is registered in CORRECTIONS and logged in
@@ -22,8 +23,13 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "config" / "hypotheses.yaml"
 DEFAULT_BRONZE_DIR = REPO_ROOT / "data" / "bronze"
+DEFAULT_MANUAL_DIR = REPO_ROOT / "data" / "manual"
 DEFAULT_SILVER_DIR = REPO_ROOT / "data" / "silver"
 REPORT_FILE = "rapport_controles.csv"
+
+# Where the CSV file of a table lives: generated or collected files in data/bronze/
+# (not versioned), values typed in by hand from official sources in data/manual/ (versioned).
+BRONZE, MANUAL = "bronze", "manual"
 
 # Column types of the silver layer.
 STR, INT, FLOAT, BOOL, DATE = "string", "integer", "float", "boolean", "date"
@@ -51,9 +57,9 @@ STAGE_RAW, STAGE_TYPED = "raw", "typed"
 
 @dataclass(frozen=True)
 class TableSpec:
-    """Schema and checks of one bronze table."""
+    """Schema and checks of one input table (a CSV file of data/bronze/ or data/manual/)."""
 
-    # Column name -> silver type. Must match the bronze file exactly.
+    # Column name -> silver type. Must match the CSV file exactly.
     columns: dict[str, str]
     # Grain of the table: no two rows may share these values.
     primary_key: tuple[str, ...]
@@ -63,9 +69,12 @@ class TableSpec:
     # is only compared with comparable ones (same store format, same product...).
     outlier_checks: dict[str, tuple[str, ...]] = field(default_factory=dict)
     simulated: bool = True
-    # Written to the `source` column when the bronze file has none. Simulated tables
-    # default to SIMULATED_SOURCE; a real table must give the URL of its dated bronze file.
+    # Written to the `source` column when the file has none. Simulated tables default to
+    # SIMULATED_SOURCE; a real table must say where its values come from (URL of the dated
+    # bronze file, or how the manual file is sourced).
     source: str | None = None
+    # BRONZE or MANUAL: the directory that holds <table name>.csv.
+    directory: str = BRONZE
 
 
 @dataclass(frozen=True)
@@ -389,16 +398,20 @@ SIMULATED_TABLES: dict[str, TableSpec] = {
 }
 
 # --------------------------------------------------------------------------------------
-# Real tables: collected by src/collect/, stored as dated files in data/bronze/
+# Real tables: collected by src/collect/ into data/bronze/, or typed in by hand in data/manual/
 # --------------------------------------------------------------------------------------
 # Nothing is registered yet. File names and columns are only known once the collectors
 # have run: they are not guessed here. To plug a real table in, add a TableSpec with
 # simulated=False and `source` set to the URL of the dated bronze file (or a `source`
 # column in the file itself), then log its anomalies in docs/JOURNAL_NETTOYAGE.md.
-# A bronze CSV file without a TableSpec is listed as ignored at the end of the run.
+# A table typed in by hand is declared the same way, with directory=MANUAL: its file is
+# then read from data/manual/ instead of data/bronze/.
+# A CSV file without a TableSpec is listed as ignored at the end of the run.
 REAL_TABLES: dict[str, TableSpec] = {
     # TODO T3: Crocs prices scraped on crocs.fr and crocs.de (src/collect/scrape_crocs.py).
     # TODO T4: Eurostat country indicators (src/collect/eurostat.py).
+    # TODO T16 / T17: OpenStreetMap shops and OSRM road distances (src/collect/).
+    # TODO T18: data/manual/taxes_reference.csv, declared with directory=MANUAL.
     # TODO: decide with T3 / T4 how a table made of several dated snapshots is loaded.
 }
 
@@ -541,17 +554,24 @@ def apply_corrections(name: str, df: pd.DataFrame, stage: str) -> pd.DataFrame:
     return df
 
 
-def run(bronze_dir: Path = DEFAULT_BRONZE_DIR, silver_dir: Path = DEFAULT_SILVER_DIR):
+def run(
+    bronze_dir: Path = DEFAULT_BRONZE_DIR,
+    silver_dir: Path = DEFAULT_SILVER_DIR,
+    manual_dir: Path = DEFAULT_MANUAL_DIR,
+    tables: dict[str, TableSpec] = TABLES,
+):
     """Build the silver layer; return the check report as a DataFrame."""
     config = load_config()
     iqr_multiplier = config["nettoyage"]["iqr_multiplicateur"]
     silver_dir.mkdir(parents=True, exist_ok=True)
+    input_dirs = {BRONZE: bronze_dir, MANUAL: manual_dir}
 
     findings = []
-    for name, spec in TABLES.items():
-        path = bronze_dir / f"{name}.csv"
+    for name, spec in tables.items():
+        path = input_dirs[spec.directory] / f"{name}.csv"
         if not path.exists():
-            raise FileNotFoundError(f"{path} is missing: run `make simulate` first")
+            hint = "run `make simulate` first" if spec.simulated else "the file was not collected"
+            raise FileNotFoundError(f"{path} is missing: {hint}")
         raw = apply_corrections(name, load_raw(path), STAGE_RAW)
         typed = cast_table(name, raw, spec)
         table_findings = check_table(name, typed, spec, iqr_multiplier)
@@ -562,9 +582,10 @@ def run(bronze_dir: Path = DEFAULT_BRONZE_DIR, silver_dir: Path = DEFAULT_SILVER
         to_review = sum(row["statut"] == STATUS_TO_REVIEW for row in table_findings)
         print(f"{name:32s} {len(silver):>8,d} lignes   {to_review} constat(s) à examiner")
 
-    for path in sorted(bronze_dir.glob("*.csv")):
-        if path.stem not in TABLES:
-            print(f"ignoré (aucun TableSpec déclaré) : {path.name}")
+    for layer, directory in input_dirs.items():
+        for path in sorted(directory.glob("*.csv")) if directory.exists() else []:
+            if path.stem not in tables or tables[path.stem].directory != layer:
+                print(f"ignoré (aucun TableSpec déclaré) : {path}")
 
     report = pd.DataFrame(findings, columns=REPORT_COLUMNS)
     report.to_csv(silver_dir / REPORT_FILE, index=False)
@@ -575,9 +596,10 @@ def run(bronze_dir: Path = DEFAULT_BRONZE_DIR, silver_dir: Path = DEFAULT_SILVER
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--bronze", type=Path, default=DEFAULT_BRONZE_DIR)
+    parser.add_argument("--manual", type=Path, default=DEFAULT_MANUAL_DIR)
     parser.add_argument("--silver", type=Path, default=DEFAULT_SILVER_DIR)
     args = parser.parse_args()
-    run(args.bronze, args.silver)
+    run(args.bronze, args.silver, args.manual)
 
 
 if __name__ == "__main__":
