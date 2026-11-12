@@ -2,7 +2,7 @@
 
 > Généré par `python -m src.collect.dictionnaire` à partir de l'entrepôt `data/gold/warehouse.duckdb` : ne pas modifier à la main, relancer le script. Types et exemples lus dans les données ; descriptions et sources tirées de `docs/DICTIONNAIRE_DONNEES.md`, du README et des scripts ; chaque formule est vérifiée sur les données. `TODO` = information manquante.
 
-27 tables et 24 vues. Une table simulée porte `est_simule` = vrai sur toutes ses lignes ; « Source » donne alors la source publique sur laquelle la simulation est calibrée.
+28 tables et 24 vues. Une table simulée porte `est_simule` = vrai sur toutes ses lignes ; « Source » donne alors la source publique sur laquelle la simulation est calibrée.
 
 ## Dimensions
 
@@ -485,6 +485,23 @@ Prix relevés sur les pages produit de crocs.fr et crocs.de, par modèle et colo
 | `url` | Texte | Page du produit, avec le coloris en paramètre (?cid=) | — | https://www.crocs.de/p/classic-clog/10001.html?cid=001 | Pages produit de crocs.fr et crocs.de (src/collect/scrape_crocs.py) |
 | `date_collecte` | Date | Jour de la collecte | — | 2026-11-12 | Pages produit de crocs.fr et crocs.de (src/collect/scrape_crocs.py) |
 | `source` | Texte | Origine de la ligne : script et source, ou générateur pour une ligne simulée | — | Site https://www.crocs.de, page produit publique, relevé du… | Pipeline : bronze_to_silver.py |
+| `est_simule` | Booléen | Vrai pour une donnée simulée, faux pour une donnée réelle | — | False | Pipeline : bronze_to_silver.py |
+
+### `taxes_reference`
+
+Référentiel des taxes par pays : TVA, impôt sur les sociétés, droit de douane UE sur les chaussures (chapitre 64). Table réelle, 7 lignes. Grain : `code_pays`.
+
+| Champ | Type | Description | Formule | Exemple | Source |
+|---|---|---|---|---|---|
+| `code_pays` | Texte | Code pays ISO 3166-1 alpha-2 (FR, DE, ES, IT, BE, NL, GB) | — | BE | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `taux_tva_standard_pct` | Décimal | Taux normal de TVA (%) | — | 21 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `taux_tva_reduite_chaussures_enfant_pct` | Décimal | Taux de TVA réduit sur les chaussures enfant (%) ; vide s'il n'en existe pas | — | 0 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `taux_impot_societes_pct` | Décimal | Taux de l'impôt sur les sociétés (%) ; ce qu'il inclut est dans la note | — | 25 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `droit_douane_ue_chaussures_ch64_pct` | Décimal | Droit de douane de pays tiers de l'UE sur les chaussures, code NC 6402 99 (%) ; vide hors union douanière | — | 16.8 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `source_url` | Texte | Pages officielles d'où viennent les valeurs, séparées par un point-virgule | — | https://ec.europa.eu/taxation_customs/tedb/#/vat-search;htt… | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `date_consultation` | Date | Jour où les pages ont été lues | — | 2026-11-12 | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `note` | Texte | Ce que couvre chaque taux et pourquoi une cellule est vide | — | TVA : TEDB (Commission européenne), recherche sur le code N… | Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : Commission européenne (TEDB, TARIC), OCDE, textes nationaux |
+| `source` | Texte | Origine de la ligne : script et source, ou générateur pour une ligne simulée | — | Saisie manuelle depuis les sources officielles, URL par lig… | Pipeline : bronze_to_silver.py |
 | `est_simule` | Booléen | Vrai pour une donnée simulée, faux pour une donnée réelle | — | False | Pipeline : bronze_to_silver.py |
 
 ## Paramètres des KPI

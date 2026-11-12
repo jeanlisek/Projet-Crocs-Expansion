@@ -123,6 +123,12 @@ TABLE_INFO = {
         "Prix relevés sur les pages produit de crocs.fr et crocs.de, par modèle et coloris.",
         "Pages produit de crocs.fr et crocs.de (src/collect/scrape_crocs.py)",
     ),
+    "taxes_reference": (
+        "Référentiel des taxes par pays : TVA, impôt sur les sociétés, droit de douane UE "
+        "sur les chaussures (chapitre 64).",
+        "Saisie manuelle (data/manual/), sources officielles par ligne dans source_url : "
+        "Commission européenne (TEDB, TARIC), OCDE, textes nationaux",
+    ),
     "eurostat_pays": (
         "Indicateurs pays Eurostat : une ligne par pays et indicateur (dernière année publiée).",
         "API de diffusion Eurostat (src/collect/eurostat.py), © Union européenne",
@@ -387,6 +393,18 @@ FIELDS = {
         "duree_h": "Durée du trajet en voiture (heures)",
         "ecart_route_hub_m": "Écart entre le hub et le point de route le plus proche (m)",
         "ecart_route_ville_m": "Écart entre la ville et le point de route le plus proche (m)",
+    },
+    "taxes_reference": {
+        "taux_tva_standard_pct": "Taux normal de TVA (%)",
+        "taux_tva_reduite_chaussures_enfant_pct": "Taux de TVA réduit sur les chaussures "
+        "enfant (%) ; vide s'il n'en existe pas",
+        "taux_impot_societes_pct": "Taux de l'impôt sur les sociétés (%) ; ce qu'il inclut est "
+        "dans la note",
+        "droit_douane_ue_chaussures_ch64_pct": "Droit de douane de pays tiers de l'UE sur les "
+        "chaussures, code NC 6402 99 (%) ; vide hors union douanière",
+        "source_url": "Pages officielles d'où viennent les valeurs, séparées par un point-virgule",
+        "date_consultation": "Jour où les pages ont été lues",
+        "note": "Ce que couvre chaque taux et pourquoi une cellule est vide",
     },
     "crocs_catalogue": {
         "site": "Site relevé (FR = crocs.fr, DE = crocs.de)",
