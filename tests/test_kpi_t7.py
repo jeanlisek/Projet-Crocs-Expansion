@@ -27,8 +27,41 @@ PARAMETERS = """
         ('go_no_go.ecart_marge_vs_france_max_pts', 5.0),
         ('go_no_go.cout_occupation_max_pct_ca', 15.0),
         ('go_no_go.payback_pessimiste_max_mois', 36.0),
-        ('go_no_go.catalogue_eligible_min_pct', 80.0)
+        ('go_no_go.catalogue_eligible_min_pct', 80.0),
+        ('collecte.crocs.tva_pct.FR', 20.0),
+        ('collecte.crocs.tva_pct.DE', 19.0)
     ) AS t(parametre, valeur);
+"""
+
+# Real tables of T3, as loaded in the warehouse (only the columns the views read).
+CROCS_PRICES_SCHEMA = """
+    CREATE TABLE crocs_produits (site VARCHAR, code_modele VARCHAR, code_coloris VARCHAR,
+        prix_affiche DOUBLE, prix_barre DOUBLE, disponible BOOLEAN);
+"""
+CROCS_CATALOGUE_SCHEMA = """
+    CREATE TABLE crocs_catalogue (site VARCHAR, categorie VARCHAR, code_modele VARCHAR,
+        code_coloris VARCHAR);
+"""
+# Two colours can be ordered on both sites; M2 is sold out in DE, M3 is not sold in FR.
+CROCS_PRICES = CROCS_PRICES_SCHEMA + """
+    INSERT INTO crocs_produits VALUES
+        ('FR', 'M1', '001', 36.0, 60.0, TRUE),
+        ('DE', 'M1', '001', 59.5, NULL, TRUE),
+        ('FR', 'M1', '002', 24.0, NULL, TRUE),
+        ('DE', 'M1', '002', 28.56, NULL, TRUE),
+        ('FR', 'M2', '001', 24.0, NULL, TRUE),
+        ('DE', 'M2', '001', 99.0, NULL, FALSE),
+        ('DE', 'M3', '001', 99.0, NULL, TRUE);
+"""
+# Five French references (M1-001 is listed in two categories), four of them on the German site.
+CROCS_CATALOGUE = CROCS_CATALOGUE_SCHEMA + """
+    INSERT INTO crocs_catalogue VALUES
+        ('FR', 'Sabots', 'M1', '001'), ('FR', 'Chaussures', 'M1', '001'),
+        ('FR', 'Sabots', 'M1', '002'), ('FR', 'Sandales', 'M2', '001'),
+        ('FR', 'Sandales', 'M3', '001'), ('FR', 'Sandales', 'M4', '001'),
+        ('DE', 'Sabots', 'M1', '001'), ('DE', 'Sandales', 'M2', '001'),
+        ('DE', 'Sandales', 'M3', '001'), ('DE', 'Sandales', 'M4', '001'),
+        ('DE', 'Sabots', 'M9', '001');
 """
 
 COUNTRIES = """
@@ -105,6 +138,9 @@ def test_parameters_come_from_the_go_no_go_and_kpi_sections():
     assert parameters["go_no_go.indice_prix_min"] == 95
     assert parameters["go_no_go.payback_pessimiste_max_mois"] == 36
     assert parameters["kpi.annee_reference"] == 2025
+    # VAT rates of the real Crocs prices (T3): a nested section keeps its full path
+    assert parameters["collecte.crocs.tva_pct.FR"] == 20
+    assert parameters["collecte.crocs.tva_pct.DE"] == 19
 
 
 def test_sector_growth_is_the_cagr_of_observed_years(tmp_path):
@@ -153,17 +189,33 @@ def test_market_share_is_recomputed_from_the_reference_year_sales(tmp_path):
     assert rows == [("C00", 25.0), ("C01", 75.0)]
 
 
+PRICE_INDEX_QUERY = (
+    "SELECT code_pays, origine_donnees, nb_sku_panier, indice_prix, est_retenue "
+    "FROM kpi_indice_prix ORDER BY code_pays, origine_donnees"
+)
+
+
 def test_price_index_compares_net_prices_on_the_shared_basket(tmp_path):
-    warehouse = build(tmp_path, COUNTRIES + TAX + PRICES)
+    # No real price collected: the simulated index is the one kept.
+    warehouse = build(tmp_path, COUNTRIES + TAX + PRICES + CROCS_PRICES_SCHEMA)
     rows = run_views(
-        tmp_path,
-        warehouse,
-        ["kpi_prix_crocs_ht", "kpi_indice_prix"],
-        "SELECT code_pays, nb_sku_panier, indice_prix FROM kpi_indice_prix",
+        tmp_path, warehouse, ["kpi_prix_crocs_ht", "kpi_indice_prix"], PRICE_INDEX_QUERY
     )
     # P1: 119/1.19 = 100 vs 120/1.20 = 100 -> 1.0 (promotion and Zalando ignored)
     # P2: 65.45/1.19 = 55 vs 60/1.20 = 50 -> 1.1 ; P3 is not sold in FR -> out of the basket
-    assert rows == [("DE", 2, 105.0)]
+    assert rows == [("DE", "SIMULE", 2, 105.0, True)]
+
+
+def test_real_price_index_is_kept_and_the_simulated_one_stays_for_comparison(tmp_path):
+    warehouse = build(tmp_path, COUNTRIES + TAX + PRICES + CROCS_PRICES)
+    rows = run_views(
+        tmp_path, warehouse, ["kpi_prix_crocs_ht", "kpi_indice_prix"], PRICE_INDEX_QUERY
+    )
+    # M1-001: FR crossed-out price 60/1.20 = 50 vs DE 59.5/1.19 = 50 -> 1.0 (the promotion
+    #   price of 36 is not the one compared)
+    # M1-002: FR 24/1.20 = 20 vs DE 28.56/1.19 = 24 -> 1.2
+    # M2 cannot be ordered in DE, M3 is not sold in FR -> out of the basket. Mean = 1.1
+    assert rows == [("DE", "REEL", 2, 110.0, True), ("DE", "SIMULE", 2, 105.0, False)]
 
 
 def test_post_tax_margin_uses_sums_and_the_same_basket_as_the_reference(tmp_path):
@@ -294,25 +346,34 @@ def test_category_penetration_keeps_the_reference_year(tmp_path):
     assert rows == [("DE", "Sabots", 12.5)]
 
 
+ELIGIBILITY = """
+    CREATE TABLE dim_produit AS SELECT * FROM (VALUES ('P1'), ('P2'), ('P3'), ('P4'))
+        AS t(id_produit);
+    CREATE TABLE fact_eligibilite_assortiment AS SELECT * FROM (VALUES
+        ('DE', 'P1', TRUE, TRUE), ('DE', 'P2', TRUE, TRUE), ('DE', 'P3', TRUE, TRUE),
+        ('DE', 'P4', FALSE, TRUE)
+    ) AS t(code_pays, id_produit, eligible, est_simule);
+"""
+CATALOGUE_QUERY = (
+    "SELECT code_pays, origine_donnees, nb_sku_eligibles, nb_sku_catalogue, "
+    "catalogue_eligible_pct, est_retenue FROM kpi_catalogue_eligible "
+    "ORDER BY code_pays, origine_donnees"
+)
+
+
 def test_eligible_catalogue_is_counted_against_the_whole_catalogue(tmp_path):
-    warehouse = build(
-        tmp_path,
-        """
-        CREATE TABLE dim_produit AS SELECT * FROM (VALUES ('P1'), ('P2'), ('P3'), ('P4'))
-            AS t(id_produit);
-        CREATE TABLE fact_eligibilite_assortiment AS SELECT * FROM (VALUES
-            ('DE', 'P1', TRUE, TRUE), ('DE', 'P2', TRUE, TRUE), ('DE', 'P3', TRUE, TRUE),
-            ('DE', 'P4', FALSE, TRUE)
-        ) AS t(code_pays, id_produit, eligible, est_simule);
-        """,
-    )
-    rows = run_views(
-        tmp_path,
-        warehouse,
-        ["kpi_catalogue_eligible"],
-        "SELECT code_pays, nb_sku_eligibles, catalogue_eligible_pct FROM kpi_catalogue_eligible",
-    )
-    assert rows == [("DE", 3, 75.0)]
+    # No real catalogue collected: the simulated share is the one kept.
+    warehouse = build(tmp_path, COUNTRIES + ELIGIBILITY + CROCS_CATALOGUE_SCHEMA)
+    rows = run_views(tmp_path, warehouse, ["kpi_catalogue_eligible"], CATALOGUE_QUERY)
+    assert rows == [("DE", "SIMULE", 3, 4, 75.0, True)]
+
+
+def test_real_catalogue_share_counts_the_french_references_listed_on_the_other_site(tmp_path):
+    warehouse = build(tmp_path, COUNTRIES + ELIGIBILITY + CROCS_CATALOGUE)
+    rows = run_views(tmp_path, warehouse, ["kpi_catalogue_eligible"], CATALOGUE_QUERY)
+    # 5 French references (M1-001 counted once), 4 also on the German site -> 80 % ;
+    # M9, only on the German site, is not in the denominator
+    assert rows == [("DE", "REEL", 4, 5, 80.0, True), ("DE", "SIMULE", 3, 4, 75.0, False)]
 
 
 # Two stores open the whole of 2025 (M001, M004), one closed in 2025, one opened in 2025,
@@ -394,7 +455,9 @@ def test_payback_is_capex_over_annual_result_in_months(tmp_path):
 
 @pytest.fixture(scope="module")
 def summary(silver, tmp_path_factory):
-    """Every view on the generated dataset. Real tables absent: the simulated ones are used."""
+    """Every view on the generated dataset. The real tables of T16 and T17 are empty (the
+    simulated measures are used); those of T3 hold a few rows, to check the real / simulated
+    comparison lines of prices and catalogue."""
     silver_dir, _ = silver
     warehouse = tmp_path_factory.mktemp("gold") / "warehouse.duckdb"
     build_gold.build(silver_dir, warehouse)
@@ -407,6 +470,7 @@ def summary(silver, tmp_path_factory):
         CREATE TABLE osrm_distances (id_hub VARCHAR, id_zone VARCHAR, commune_hub VARCHAR,
             ville VARCHAR, distance_route_km DOUBLE, duree_h DOUBLE);
         """)
+    con.execute(CROCS_PRICES + CROCS_CATALOGUE)
     con.close()
     parametres_kpi.write(warehouse, parametres_kpi.load())
     run_kpi.run(warehouse)
@@ -453,6 +517,32 @@ def test_summary_follows_the_contract(summary):
     # a GO / NO-GO verdict always shows the threshold it was judged against
     judged = frame[frame["statut_go"] != "INFO"]
     assert not judged.empty and judged["seuil"].notna().all()
+
+
+def test_summary_keeps_the_real_measure_and_shows_the_simulated_one_for_comparison(summary):
+    frame, _ = summary
+    german = frame[frame["pays"] == "DE"].set_index("kpi")
+    for kept, comparison, real_value in [
+        (
+            "Indice prix relatif (HT, base pays de référence = 100)",
+            "Indice prix relatif (comparaison, jeu simulé)",
+            110.0,
+        ),
+        ("% du catalogue éligible", "% du catalogue éligible (comparaison, jeu simulé)", 80.0),
+    ]:
+        # the real measure carries the verdict and its threshold
+        assert german.loc[kept, "origine_donnees"] == "REEL"
+        assert german.loc[kept, "valeur"] == real_value
+        assert german.loc[kept, "statut_go"] in ("GO", "NO-GO") and german.loc[kept, "seuil"]
+        # the simulated one is only shown: no threshold, no verdict
+        assert german.loc[comparison, "origine_donnees"] == "SIMULE"
+        assert german.loc[comparison, "statut_go"] == "INFO"
+        assert german.loc[[comparison], "seuil"].isna().all()
+    # a country without real data keeps its simulated measure as the judged one
+    spanish = frame[frame["pays"] == "ES"]
+    assert not spanish["kpi"].str.contains("comparaison").any()
+    index = spanish[spanish["kpi"].str.startswith("Indice prix relatif")]
+    assert list(index["origine_donnees"]) == ["SIMULE"] and (index["statut_go"] != "INFO").all()
 
 
 def test_summary_has_no_duplicate_kpi_per_country(summary):
