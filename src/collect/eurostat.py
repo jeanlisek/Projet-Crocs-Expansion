@@ -104,6 +104,15 @@ SERIES = [
         {"coicop18": "CP032", "unit": "PC_TOT"},
         "% de la consommation des ménages",
     ),
+    # prc_hicp_ainr "Harmonised index of consumer prices (HICP) - ECOICOP ver.2 - indices and
+    # rates of change, annual data": annual average index (INX_A_AVG) of CP032 "Footwear",
+    # the same COICOP 2018 code as the spending above, to deflate it (growth in volume).
+    Series(
+        "indice_prix_chaussures_ipch",
+        "prc_hicp_ainr",
+        {"coicop18": "CP032", "unit": "INX_A_AVG"},
+        "indice IPCH (moyenne annuelle)",
+    ),
     # sbs_ovw_act "Enterprises by detailed NACE Rev. 2 activity and special aggregates":
     # G4772 "Retail sale of footwear and leather goods in specialised stores" (NACE 47.72:
     # footwear AND leather goods, not footwear alone).
