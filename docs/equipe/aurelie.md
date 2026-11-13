@@ -7,7 +7,7 @@
 
 | ID | Tâche | Statut | Dépend de | Débloque |
 |---|---|---|---|---|
-| T11 | Dashboard, 4 pages | Maquette maintenant | T10 (faite : CSV dans `data/gold/exports/`) | Démo |
+| T11 | Dashboard, 4 pages | Fait (capture de la page 1 à refaire) | T10 (faite : CSV dans `data/gold/exports/`) | Démo |
 | T13 | Slides Comex (avec Briac) | Jeudi soir | T8, T11 | Oral |
 
 **Outil** : Power BI (décision D1, prise le 12/11/2026).
