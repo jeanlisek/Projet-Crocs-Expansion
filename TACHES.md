@@ -65,7 +65,7 @@ Les phases suivent l'ordre de la démarche du cours.
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 18 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/`) |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 19 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/` et `kpi_guide.csv`, le guide des 79 KPI) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | À faire |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | Fait (généré par `python -m src.collect.dictionnaire` ; les vues sont listées avec leur définition, sans détail champ par champ) |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
