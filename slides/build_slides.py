@@ -44,6 +44,7 @@ EXPORTS = REPO_ROOT / "data" / "gold" / "exports"
 CONFIG = REPO_ROOT / "config" / "hypotheses.yaml"
 README = REPO_ROOT / "README.md"
 CI = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+PIPELINE = REPO_ROOT / "docs" / "equipe" / "REGLES_COMMUNES.md"
 RESOURCES = (
     REPO_ROOT / "dashboard" / "dashboard_crocs.Report" / "StaticResources" / "RegisteredResources"
 )
@@ -59,6 +60,22 @@ MISSING = "À COMPLÉTER"
 NBSP = "\u00a0"
 MINUS = "\u2212"
 
+# Destatis licence, word for word (README 3.3, mentions obligatoires).
+DESTATIS = (
+    "Population : © Statistisches Bundesamt (Destatis), 2025, reproduction autorisée avec "
+    "mention de la source"
+)
+# Labels of the six criteria of the grid (README 4.2), in the words of the team (13/11/2026),
+# keyed by the start of the KPI name in kpi_guide / kpi_summary.
+CRITERIA = (
+    ("Croissance du secteur", "Croissance du marché", "Le marché croît-il ?"),
+    ("Indice prix relatif", "Indice de prix HT", "Le prix est-il aligné ?"),
+    ("Marge brute post-taxe", "Marge après taxes", "La marge tient-elle ?"),
+    ("% du catalogue éligible", "Catalogue vendable", "Le catalogue est-il vendable ?"),
+    ("Coût d'occupation", "Loyer ÷ CA, scénario central", "Le loyer est-il soutenable ?"),
+    ("Payback", "Remboursement, scénario pessimiste", "L'investissement revient-il vite ?"),
+)
+
 # The five sections of the oral (TACHES.md, « L'oral »): label of the progress bar, speaker.
 SECTIONS = ("Entreprise", "Données", "KPIs", "Analyse", "Décision")
 # Words no slide may show before the decision slide (teacher, 13/11/2026).
@@ -70,7 +87,7 @@ MAX_RUNNING_WORDS = 30
 WIDTH, HEIGHT = 13.333, 7.5
 MARGIN = 0.45
 CONTENT_TOP, CONTENT_BOTTOM = 1.62, 6.02
-CARD_W = 3.95
+CARD_W = 4.2
 CHART_X = MARGIN + CARD_W + 0.35
 CHART_W = WIDTH - MARGIN - CHART_X
 
@@ -185,14 +202,31 @@ class Data:
         year, month, day = str(products["date_collecte"].max()).split("-")
         return f"{day}/{month}/{year}"
 
-    def guide_date(self, name: str) -> str:
-        """Year of the survey of a real KPI, read in the perimeter of kpi_guide."""
+    def guide_period(self, name: str) -> str:
+        """The « période » of a KPI in kpi_guide, without its leading « réel : »."""
+        guide = self.frame("kpi_guide")
+        rows = guide[guide["nom"] == name] if guide is not None else []
+        if not len(rows):
+            return MISSING
+        period = str(rows["perimetre"].iloc[0]).split("période : ", 1)[-1]
+        return period.removeprefix("réel : ")
+
+    def company(self, column: str) -> float | None:
+        """A figure of Crocs France (entreprise_france.csv), reference year."""
+        company = self.frame("entreprise_france")
+        if company is None or column not in company:
+            return None
+        rows = company[company["annee"].astype(str) == self.year()]
+        return None if rows.empty or pd.isna(rows[column].iloc[0]) else float(rows[column].iloc[0])
+
+    def guide_date(self, name: str, full: bool = False) -> str:
+        """Year (or full date) of the survey of a real KPI, in the perimeter of kpi_guide."""
         guide = self.frame("kpi_guide")
         rows = guide[guide["nom"] == name] if guide is not None else []
         found = (
             re.search(r"\d\d/\d\d/(\d{4})", str(rows["perimetre"].iloc[0])) if len(rows) else None
         )
-        return found.group(1) if found else MISSING
+        return (found.group(0) if full else found.group(1)) if found else MISSING
 
     def population_date(self) -> str:
         density = self.frame("densite_concurrentielle")
@@ -394,9 +428,9 @@ class Deck:
         )
         self.text(
             MARGIN,
-            7.02,
+            6.94,
             WIDTH - 2 * MARGIN - 0.8,
-            0.36,
+            0.5,
             f"Sources : {sources}{mention}",
             size=SMALL_PT,
             color=self.theme.grey,
@@ -407,7 +441,7 @@ class Deck:
             7.02,
             0.7,
             0.3,
-            f"{self.data.slide} / 10",
+            f"{self.data.slide} / {len(SLIDES)}",
             size=SMALL_PT,
             color=self.theme.grey,
             align=PP_ALIGN.RIGHT,
@@ -500,17 +534,91 @@ def add_fade(slide) -> None:
     anchor.addnext(transition)
 
 
+def criterion_of(name: str):
+    """The (prefix, label, question) of CRITERIA a KPI name belongs to, or None."""
+    return next((c for c in CRITERIA if name.startswith(c[0])), None)
+
+
+def thresholds(d: Data) -> list[tuple[str, str, str, str]]:
+    """(axis, label, threshold, question) of each criterion, threshold read in kpi_guide."""
+    guide = d.frame("kpi_guide")
+    if guide is None:
+        return []
+    rows = []
+    for prefix, label, question in CRITERIA:
+        match = guide[guide["nom"].str.startswith(prefix) & guide["seuil"].notna()]
+        if match.empty:
+            rows.append(("", label, d.lack(f"seuil {label}"), question))
+            continue
+        rule = str(match["seuil"].iloc[0]).split(" (README", 1)[0]
+        rule = re.sub(r"(\d)\.(\d)", r"\1,\2", rule)
+        d.track(f"Seuil {label}", rule, "kpi_guide.csv : colonne seuil")
+        rows.append((match["axe"].iloc[0], label, rule, question))
+    return rows
+
+
+def results(d: Data) -> list[tuple[str, str, str, str]]:
+    """(label, threshold, value in Germany, verdict) of each criterion: the slide 9 table."""
+    kpis = d.frame("kpi_summary")
+    cases = d.frame("business_case")
+    horizon = int(cases["horizon_annees"].iloc[0]) if cases is not None else None
+    rules = {label: rule for _, label, rule, _ in thresholds(d)}
+    origin = {"REEL": "réel", "SIMULE": "simulé", "MIXTE": "mixte"}
+    rows = []
+    for prefix, label, _ in CRITERIA:
+        match = kpis[
+            (kpis["pays"] == TARGET) & kpis["kpi"].str.startswith(prefix) & kpis["seuil"].notna()
+        ]
+        values, verdicts = [], []
+        for row in match.itertuples():
+            unit = row.unite or ""
+            if pd.isna(row.valeur):
+                shown = f"non atteint en {horizon} ans" if horizon else MISSING
+            else:
+                decimals = 1 if unit == "mois" else 2
+                shown = f"{fr(row.valeur, decimals)} {'' if unit == 'indice' else unit}".strip()
+            part = row.kpi.split(" : ", 1)[1].lower() if " : " in row.kpi else ""
+            values.append((f"{shown} {part}".strip(), origin.get(row.origine_donnees, "")))
+            verdicts.append(row.statut_go)
+            missing = " : vide = non atteint" if pd.isna(row.valeur) else ""
+            d.track(f"{label} {part}".strip(), shown, kpi_source(row.kpi) + missing)
+        shown_values = {value.split(" centre")[0] for value, _ in values}
+        if len(values) > 1 and len(shown_values) == 1:  # same result in both formats
+            values = [(f"{shown_values.pop()}, deux formats", values[0][1])]
+        origins = {tag for _, tag in values}
+        text = " ; ".join(value for value, _ in values)
+        values = [f"{text} ({origins.pop()})" if len(origins) == 1 else text] if values else []
+        if prefix == "Croissance du secteur":
+            real = kpis[(kpis["pays"] == TARGET) & kpis["kpi"].str.startswith("Croissance des dép")]
+            if not real.empty:
+                value = fr(real["valeur"].iloc[0])
+                values.append(f"{value} % réel (Eurostat, toutes chaussures)")
+                d.track("Croissance Eurostat DE", f"{value} %", kpi_source(real["kpi"].iloc[0]))
+        verdict = " / ".join(dict.fromkeys(verdicts)) if verdicts else MISSING
+        rows.append((label, rules.get(label, MISSING), " ; ".join(values) or MISSING, verdict))
+    return rows
+
+
 # --------------------------------------------------------------------------------------
 # Readers of the README and of the CI (architecture slide)
 # --------------------------------------------------------------------------------------
-def readme_model(path: Path = README) -> tuple[int, int, int, int]:
-    """(tables, relations, facts, dimensions) of the constellation diagram, README 3.2."""
-    text = path.read_text(encoding="utf-8")
-    block = text.split("erDiagram", 1)[1].split("```", 1)[0]
-    relations = re.findall(r"^\s*(\w+)\s+\S+\s+(\w+)\s*:", block, flags=re.MULTILINE)
-    tables = {name for pair in relations for name in pair}
-    facts = sum(name.startswith("fact_") for name in tables)
-    return len(tables), len(relations), facts, len(tables) - facts
+def pipeline_state(path: Path = PIPELINE) -> tuple[int, int, int, int]:
+    """(tables, simulated, real, relations) of the gold warehouse, read in « État du
+    pipeline » (REGLES_COMMUNES.md, row « 3. Gold »), kept up to date at each merge."""
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| 3. Gold"):
+            found = re.search(
+                r"(\d+) tables \((\d+) simulées, (\d+) réelles\).*?(\d+) relations", line
+            )
+            if found:
+                return tuple(int(value) for value in found.groups())
+    raise ValueError("ligne « 3. Gold » introuvable dans l'état du pipeline")
+
+
+def readme_relations(path: Path = README) -> list[tuple[str, str]]:
+    """(parent, child) of each relation of the constellation diagram, README 3.2."""
+    block = path.read_text(encoding="utf-8").split("erDiagram", 1)[1].split("```", 1)[0]
+    return re.findall(r"^\s*(\w+)\s+\S+\s+(\w+)\s*:", block, flags=re.MULTILINE)
 
 
 def readme_period(path: Path = README) -> str:
@@ -552,76 +660,82 @@ def slide_1(deck: Deck) -> None:
         anchor=MSO_ANCHOR.MIDDLE,
         role="titre",
     )
-    team = ", ".join(readme_team())
     deck.text(
         3.3,
         2.55,
         WIDTH - 3.3 - MARGIN,
         0.4,
-        f"Comex Crocs France · {readme_period()} · {team}",
+        f"Comex Crocs France · {readme_period()}",
         color=t.grey,
         role="courant",
     )
-
-    products = d.frame("dim_produit")
-    sku = (
-        d.track(
-            "SKU du catalogue France", fr(len(products), 0), "dim_produit.csv : nombre de lignes"
-        )
-        if products is not None
-        else d.lack("nombre de SKU (dim_produit.csv)")
-    )
-    share = d.kpi("Part de marché Crocs")
-    share_fr = d.kpi("Part de marché Crocs", REFERENCE)
+    year, source = d.year(), "entreprise_france.csv"
+    total, opened = d.company("nb_magasins_total"), d.company("nb_magasins_ouverts")
+    revenue, online = d.company("ca_ttc_eur"), d.company("part_ecommerce_ca_ht_pct")
+    sku = d.company("nb_sku")
     cards = [
         (
-            f"Magasins France · {d.year()}",
-            d.lack("magasins France, ouverts / total (aucun export)"),
-            None,
-            "Simulé",
-        ),
-        (f"CA France · TTC · {d.year()}", d.lack("CA France TTC (aucun export)"), None, "Simulé"),
-        (
-            f"E-commerce · % CA HT · {d.year()}",
-            d.lack("part e-commerce (aucun export)"),
-            None,
-            "Simulé",
-        ),
-        ("SKU · catalogue France", sku, None, "Simulé"),
-    ]
-    if share is not None and share_fr is not None:
-        shown = d.track(
-            "Part de marché Crocs DE", f"{fr(share)} %", kpi_source("Part de marché Crocs")
-        )
-        cards.append(
+            f"Magasins France · ouverts / total · {year}",
             (
-                f"Part de marché Crocs · Allemagne · {d.year()}",
-                shown,
-                signed_gap(share, share_fr, "pt", "France", True),
-                "Simulé",
-            )
-        )
+                d.track("Magasins ouverts / total", f"{fr(opened, 0)} / {fr(total, 0)}", source)
+                if total is not None and opened is not None
+                else d.lack("magasins France (entreprise_france.csv)")
+            ),
+        ),
+        (
+            f"CA France · TTC · {year}",
+            (
+                d.track("CA France TTC", f"{fr(revenue / 1e6, 1)} M€", f"{source} : ca_ttc_eur")
+                if revenue is not None
+                else d.lack("CA France TTC (entreprise_france.csv)")
+            ),
+        ),
+        (
+            f"E-commerce · part du CA HT · France · {year}",
+            (
+                d.track(
+                    "Part e-commerce", f"{fr(online)} %", f"{source} : part_ecommerce_ca_ht_pct"
+                )
+                if online is not None
+                else d.lack("part e-commerce (entreprise_france.csv)")
+            ),
+        ),
+        (
+            f"SKU · catalogue France · {year}",
+            (
+                d.track("SKU", fr(sku, 0), f"{source} : nb_sku")
+                if sku is not None
+                else d.lack("nombre de SKU (entreprise_france.csv)")
+            ),
+        ),
+    ]
+    width = (WIDTH - 2 * MARGIN - 0.2 * (len(cards) - 1)) / len(cards)
+    for index, (label, value) in enumerate(cards):
+        deck.card(MARGIN + index * (width + 0.2), 3.3, width, 2.25, label, value, None, "Simulé")
+    share = d.kpi("Part de marché Crocs")
+    share_fr = d.kpi("Part de marché Crocs", REFERENCE)
+    if share is not None and share_fr is not None:
+        d.track("Part de marché Crocs DE", f"{fr(share)} %", kpi_source("Part de marché Crocs"))
         d.track(
             "Part de marché Crocs FR (référence)",
             f"{fr(share_fr)} %",
             kpi_source("Part de marché Crocs", REFERENCE),
         )
-    widths = [2.15] * (len(cards) - 1) + [WIDTH - 2 * MARGIN - 2.35 * (len(cards) - 1)]
-    x = MARGIN
-    for (label, value, variation, badge), width in zip(cards, widths):
-        deck.card(x, 3.3, width, 2.35, label, value, variation, badge)
-        x += width + 0.2
-    deck.insight(
-        "Crocs est déjà vendu en Allemagne, par des **revendeurs**.",
-        y=5.85,
-    )
+        gap = signed_gap(share, share_fr, "pt", "France", True).text.split(" ", 1)[1]
+        deck.insight(
+            f"Via des revendeurs, Crocs pèse déjà **{fr(share)} %** du segment allemand "
+            f"(**{gap}**).",
+            y=5.75,
+        )
+    else:
+        deck.insight(d.lack("part de marché Crocs DE / FR"), y=5.75)
     deck.text(
         MARGIN,
-        6.55,
+        6.5,
         WIDTH - 2 * MARGIN,
         0.4,
-        "Projet pédagogique, Eugenia School. Scénario fictif.",
-        size=SMALL_PT + 2,
+        f"{', '.join(readme_team())} · Projet pédagogique, Eugenia School. Scénario fictif.",
+        size=SMALL_PT + 3,
         color=t.grey,
         role="pied",
     )
@@ -635,27 +749,29 @@ def slide_1(deck: Deck) -> None:
         "chacun présente la partie qu'il a construite. Mehdi commence par les données."
     )
     deck.footer(
-        "dim_produit ; kpi_summary (part de marché du segment casual moulé & sandales)", True
+        f"entreprise_france ({year}) ; kpi_summary (part de marché {year}, segment casual "
+        "moulé & sandales, en valeur TTC)",
+        True,
     )
 
 
 def slide_2(deck: Deck) -> None:
-    d, t = deck.data, deck.theme
-    tables, relations, facts, dims = readme_model()
+    d = deck.data
+    tables, simulated, real, relations = pipeline_state()
     systems = ci_systems()
-    seed = d.config.get("seed")
     deck.new_slide(
         2,
         2,
         notes=(
             "Mehdi, 45 s. Toutes les données passent par la même chaîne : les sources réelles "
             "et le générateur simulé alimentent la couche bronze, brute et datée ; la couche "
-            "silver nettoie et type ; la couche gold est un entrepôt DuckDB en constellation, "
-            f"{facts} tables de faits autour de {dims} dimensions, reliées par {relations} "
-            "clés étrangères. Les vues KPI en sortent, et alimentent le dashboard et la brique "
-            "IA. Une seule commande, make all, reconstruit tout, et la CI rejoue les tests à "
-            f"chaque push sous {' et '.join(systems)}. Les chiffres que vous verrez sont donc "
-            "reproductibles par n'importe qui."
+            "silver nettoie et type ; la couche gold est un entrepôt DuckDB de "
+            f"{tables} tables, {simulated} simulées et {real} réelles, reliées par {relations} "
+            "clés étrangères. Le modèle est une constellation : plusieurs étoiles, chacune une "
+            "table de faits entourée de ses dimensions, qui partagent le temps, le pays et le "
+            "hub ; deux dimensions se rattachent à une autre, ce sont les branches en flocon. "
+            "Une seule commande, make all, reconstruit tout, et la CI rejoue les tests à "
+            f"chaque push sous {' et '.join(systems)}."
         ),
     )
     deck.title("Un entrepôt testé, reproductible en une commande")
@@ -664,102 +780,153 @@ def slide_2(deck: Deck) -> None:
         CONTENT_TOP,
         CARD_W,
         2.1,
-        "Tables du modèle en constellation · README 3.2",
-        d.track("Tables du modèle", fr(tables, 0), "README.md, section 3.2 (erDiagram)"),
-        Variation(f"{facts} faits · {dims} dimensions", None),
+        "Tables de l'entrepôt gold · DuckDB · modèle en constellation",
+        d.track("Tables de l'entrepôt", fr(tables, 0), "REGLES_COMMUNES.md : État du pipeline"),
+        Variation(f"{simulated} simulées · {real} réelles", None),
         None,
     )
-    d.track("Faits / dimensions", f"{facts} / {dims}", "README.md, section 3.2 (erDiagram)")
+    d.track(
+        "Tables simulées / réelles",
+        f"{simulated} / {real}",
+        "REGLES_COMMUNES.md : État du pipeline",
+    )
     deck.card(
         MARGIN,
         CONTENT_TOP + 2.25,
         CARD_W,
         2.1,
-        "Relations entre tables · clés étrangères · README 3.2",
-        d.track("Relations du modèle", fr(relations, 0), "README.md, section 3.2 (erDiagram)"),
+        "Relations entre tables · clés étrangères de l'entrepôt",
+        d.track("Relations", fr(relations, 0), "REGLES_COMMUNES.md : État du pipeline"),
         Variation(f"CI : {' et '.join(systems)}", None),
         None,
     )
-    deck.chart_title("Chaîne de données : des sources aux vues KPI")
-    # Flow, left to right, with the gold layer framed.
-    y, h = CONTENT_TOP + 0.75, 1.0
-    boxes = [
-        ("Sources\nréelles", t.pale_green),
-        (f"Simulé\nseed {seed}", t.light),
-    ]
-    x = CHART_X
-    deck.rect(x, y, 2.0, h, fill=boxes[0][1], rounded=True)
-    deck.text(
-        x,
-        y,
-        2.0,
-        h,
-        boxes[0][0],
-        size=TEXT_PT,
-        align=PP_ALIGN.CENTER,
-        anchor=MSO_ANCHOR.MIDDLE,
-        role="graphique",
+    draw_constellation(deck)
+    deck.insight("Des **étoiles** partagent leurs dimensions ; deux branches en **flocon**.")
+    deck.footer(
+        "docs/equipe/REGLES_COMMUNES.md (état du pipeline) ; README 3.1-3.2 ; "
+        ".github/workflows/ci.yml ; Makefile",
+        False,
     )
-    deck.rect(x, y + 1.35, 2.0, h, fill=boxes[1][1], rounded=True)
-    deck.text(
-        x,
-        y + 1.35,
-        2.0,
-        h,
-        boxes[1][0],
-        size=TEXT_PT,
-        align=PP_ALIGN.CENTER,
-        anchor=MSO_ANCHOR.MIDDLE,
-        role="graphique",
-    )
-    layers = [
-        ("Bronze\nbrut, daté", t.light),
-        ("Silver\nnettoyé, typé", t.light),
-        ("Gold\nDuckDB", t.pale_green),
-        ("Vues\nKPI", t.light),
+
+
+# Words for the tables of the diagram (README 3.2); a table missing here keeps its name.
+TABLE_LABELS = {
+    "dim_temps": "Temps",
+    "dim_produit": "Produit",
+    "dim_pays": "Pays",
+    "dim_concurrent": "Concurrent",
+    "dim_zone_chalandise": "Zone de chalandise",
+    "dim_magasin": "Magasin",
+    "dim_hub_logistique": "Hub logistique",
+    "fact_ventes_france": "Ventes France",
+}
+
+
+def draw_constellation(deck: Deck) -> None:
+    """The star / snowflake model of README 3.2, simplified: the facts grouped by the
+    dimension they hang on, every dimension, and the two snowflake branches framed."""
+    d, t = deck.data, deck.theme
+    relations = readme_relations()
+    facts_of = {}
+    for parent, child in relations:
+        if child.startswith("fact_"):
+            facts_of.setdefault(parent, set()).add(child)
+    flakes = [(p, c) for p, c in relations if p.startswith("dim_") and c.startswith("dim_")]
+    by_country = facts_of.get("dim_pays", set())
+    by_zone = facts_of.get("dim_zone_chalandise", set())
+    sales = {f for f in facts_of.get("dim_magasin", set())}
+    facts = {c for _, c in relations if c.startswith("fact_")}
+    d.track("Tables de faits (README 3.2)", fr(len(facts), 0), "README.md, section 3.2 (erDiagram)")
+    deck.chart_title("Modèle en constellation (README 3.2) · vert : faits · gris : dimensions")
+    x0 = CHART_X
+    boxes = {
+        # dimensions, top row and bottom row
+        "dim_temps": (x0, 2.25, 1.55),
+        "dim_pays": (x0 + 2.95, 2.25, 1.3),
+        "dim_zone_chalandise": (x0 + 5.6, 2.25, 2.25),
+        "dim_produit": (x0, 4.85, 1.4),
+        "dim_magasin": (x0 + 1.6, 4.85, 1.45),
+        "dim_hub_logistique": (x0 + 3.45, 4.85, 2.0),
+        "dim_concurrent": (x0 + 5.95, 4.85, 1.9),
+    }
+    facts_boxes = {
+        "ventes": (x0, 3.5, 2.05, TABLE_LABELS.get(next(iter(sales), ""), "Ventes")),
+        "pays": (x0 + 2.45, 3.5, 2.6, f"{len(by_country)} faits par pays"),
+        "zone": (x0 + 5.35, 3.5, 2.5, f"{len(by_zone)} faits par zone"),
+    }
+    d.track("Faits par pays / par zone", f"{len(by_country)} / {len(by_zone)}", "README.md, 3.2")
+    height = 0.55
+
+    def centre(box, top=True, fact=False):
+        x, y, w = box[:3]
+        h = 0.75 if fact else height
+        return x + w / 2, (y if top else y + h)
+
+    links = [
+        ("ventes", "dim_temps"),
+        ("ventes", "dim_produit"),
+        ("ventes", "dim_magasin"),
+        ("pays", "dim_pays"),
+        ("pays", "dim_temps"),
+        ("pays", "dim_concurrent"),
+        ("zone", "dim_zone_chalandise"),
+        ("zone", "dim_hub_logistique"),
+        ("zone", "dim_concurrent"),
     ]
-    lx, lw, mid = CHART_X + 2.35, 1.2, y + 0.5 + 0.675
-    for index, (label, fill) in enumerate(layers):
-        bx = lx + index * (lw + 0.28)
-        deck.rect(bx, mid - 0.6, lw, 1.2, fill=fill, rounded=True)
+    for fact, dim in links:
+        fx, fy_top = centre(facts_boxes[fact], top=True, fact=True)
+        _, fy_bottom = centre(facts_boxes[fact], top=False, fact=True)
+        dx, dy_top = centre(boxes[dim], top=True)
+        _, dy_bottom = centre(boxes[dim], top=False)
+        if dy_top < fy_top:  # dimension above the fact
+            deck.line(fx, fy_top, dx, dy_bottom, t.grey, width=1.25)
+        else:
+            deck.line(fx, fy_bottom, dx, dy_top, t.grey, width=1.25)
+    for parent, child in flakes:  # snowflake: a dimension hanging on another
+        if parent in boxes and child in boxes:
+            (px, py, pw), (cx, _, cw) = boxes[parent], boxes[child]
+            left, right = sorted([(px, pw), (cx, cw)])
+            deck.line(left[0] + left[1], py + height / 2, right[0], py + height / 2, t.green, 2)
+    for key, (x, y, w, label) in facts_boxes.items():
+        deck.rect(x, y, w, 0.75, fill=t.green, rounded=True)
         deck.text(
-            bx,
-            mid - 0.6,
-            lw,
-            1.2,
+            x,
+            y,
+            w,
+            0.75,
             label,
+            size=TEXT_PT,
+            bold=True,
+            color=t.white,
+            align=PP_ALIGN.CENTER,
+            anchor=MSO_ANCHOR.MIDDLE,
+            role="graphique",
+        )
+    for key, (x, y, w) in boxes.items():
+        deck.rect(x, y, w, height, fill=t.light, rounded=True)
+        deck.text(
+            x,
+            y,
+            w,
+            height,
+            TABLE_LABELS.get(key, key),
             size=TEXT_PT,
             align=PP_ALIGN.CENTER,
             anchor=MSO_ANCHOR.MIDDLE,
             role="graphique",
         )
-        if index:
-            deck.line(bx - 0.27, mid, bx - 0.02, mid, t.grey, arrow=True)
-    deck.line(x + 2.0, y + 0.5, lx - 0.02, mid - 0.2, t.grey, arrow=True)
-    deck.line(x + 2.0, y + 1.85, lx - 0.02, mid + 0.2, t.grey, arrow=True)
-    gold_x = lx + 2 * (lw + 0.28)
-    deck.frame_label(gold_x - 0.08, mid - 0.7, lw + 0.16, 1.4, f"{tables} tables", label_above=True)
-    out_x = lx + 3 * (lw + 0.28) + lw
-    for index, label in enumerate(("Dashboard", "Brique IA")):
-        oy = mid + 0.95 + index * 0.62
-        deck.rect(out_x - lw, oy, lw, 0.5, fill=t.white, line=t.border, rounded=True)
-        deck.text(
-            out_x - lw,
-            oy,
-            lw,
-            0.5,
-            label,
-            size=TEXT_PT,
-            align=PP_ALIGN.CENTER,
-            anchor=MSO_ANCHOR.MIDDLE,
-            role="graphique",
-        )
-    deck.line(out_x - lw / 2, mid + 0.6, out_x - lw / 2, mid + 0.93, t.grey, arrow=True)
-    deck.insight(
-        "**make all** reconstruit l'entrepôt ; la CI rejoue les tests sous "
-        f"**{' et '.join(systems)}**."
-    )
-    deck.footer("README 3.1-3.2 ; .github/workflows/ci.yml ; Makefile", False)
+    for parent, child in flakes:
+        if parent in boxes and child in boxes:
+            (px, py, pw), (cx, _, cw) = boxes[parent], boxes[child]
+            x1, x2 = min(px, cx), max(px + pw, cx + cw)
+            deck.frame_label(
+                x1 - 0.08,
+                py - 0.08,
+                x2 - x1 + 0.16,
+                height + 0.16,
+                "flocon",
+                label_above=False,
+            )
 
 
 def slide_3(deck: Deck) -> None:
@@ -802,8 +969,8 @@ def slide_3(deck: Deck) -> None:
         CONTENT_TOP + 0.55,
         CARD_W,
         2.3,
-        f"Distance routière au hub le plus proche · 12 villes · "
-        f"{d.guide_date('Distance moyenne au hub le plus proche')}",
+        "Distance au hub · Allemagne · calcul OSRM du "
+        f"{d.guide_date('Distance moyenne au hub le plus proche', full=True)}",
         value,
         variation,
         "Réel",
@@ -847,8 +1014,8 @@ def slide_3(deck: Deck) -> None:
     )
     deck.footer(
         "© contributeurs OpenStreetMap (ODbL) · "
-        "Population © Statistisches Bundesamt (Destatis), 2025 · "
-        f"itinéraires OSRM · Eurostat · TARIC · crocs.fr, crocs.de ({d.collected()})",
+        f"{DESTATIS} · itinéraires OSRM · Eurostat · TARIC · crocs.fr, crocs.de "
+        f"({d.collected()})",
         True,
     )
 
@@ -875,51 +1042,18 @@ def slide_4(deck: Deck) -> None:
         deck.text(MARGIN, 3, 6, 0.5, d.lack("kpi_guide.csv"), role="courant")
         deck.footer("kpi_guide.csv", False)
         return
-    with_threshold = guide[guide["seuil"].notna()].copy()
-    with_threshold["critere"] = with_threshold["nom"].str.split(" : ").str[0]
-    criteria = with_threshold.drop_duplicates("critere")
-    deck.title(f"{fr(len(criteria), 0)} seuils fixés avant l'analyse")
-    questions = {
-        "Croissance": "Le marché croît-il ?",
-        "Indice prix": "Le prix est-il aligné ?",
-        "Marge": "La marge tient-elle ?",
-        "% du catalogue": "Le catalogue est-il vendable ?",
-        "Coût d'occupation": "Le loyer est-il soutenable ?",
-        "Payback": "L'investissement revient-il vite ?",
-    }
-
-    def question(name: str) -> str:
-        return next((q for key, q in questions.items() if name.startswith(key)), "")
-
-    def threshold(text: str) -> str:
-        found = re.search(r"README 4\.2 : (.*)\)$", text)
-        rule = found.group(1) if found else text
-        return re.sub(r"\s*\(.*?\)", "", rule).split(",")[0].replace(" du CA magasin", "")
-
-    def criterion(name: str) -> str:
-        scenario = re.search(r"scénario (\w+)", name)
-        short = re.sub(r"\s*\(.*?\)", "", name).strip()
-        return f"{short} · {scenario.group(1)}" if scenario else short
-
-    order = ["Marché", "Prix", "Assortiment", "Rentabilité"]
-    criteria = criteria.assign(rang=criteria["axe"].map(order.index)).sort_values(
-        ["rang", "critere"]
-    )
-    header = ("Axe", "KPI", "Seuil (README 4.2)", "Décision éclairée")
-    widths = (1.9, 4.1, 2.9, WIDTH - 2 * MARGIN - 8.9)
+    grid = thresholds(d)
+    deck.title(f"{fr(len(grid), 0)} seuils fixés avant l'analyse")
+    header = ("Axe", "Critère", "Seuil", "Décision éclairée")
+    widths = (1.9, 4.6, 2.2, WIDTH - 2 * MARGIN - 8.7)
     top, height = CONTENT_TOP + 0.05, 0.6
-    rows = [header] + [
-        (row.axe, criterion(row.critere), threshold(row.seuil), question(row.critere))
-        for row in criteria.itertuples()
-    ]
+    rows = [header] + grid
     for r, row in enumerate(rows):
         y = top + r * height
         fill = t.green if r == 0 else (t.white if r % 2 else t.pale_green)
         deck.rect(MARGIN, y, WIDTH - 2 * MARGIN, height, fill=fill)
         x = MARGIN
         for c, cell in enumerate(row):
-            if r and c == 2:
-                d.track(f"Seuil {row[1]}", cell, "kpi_guide.csv : colonne seuil")
             deck.text(
                 x + 0.1,
                 y,
@@ -1046,7 +1180,7 @@ def slide_5(deck: Deck) -> None:
         words.append(f"Prix TTC : {d.lack('paires de prix crocs_produits')}")
     if price is not None and vat is not None and vat_fr is not None:
         words.append(
-            f"l'indice HT **{fr(price)}** vient de la TVA "
+            f"indice HT **{fr(price)}** dû à la TVA "
             f"(**{fr(vat, 0)} %** vs **{fr(vat_fr, 0)} %**)"
         )
         d.track("TVA DE / FR", f"{fr(vat, 0)} % / {fr(vat_fr, 0)} %", kpi_source("TVA standard"))
@@ -1168,8 +1302,8 @@ def slide_6(deck: Deck) -> None:
         CONTENT_TOP,
         CARD_W,
         2.1,
-        f"Magasins de chaussures {d.unit('Densité concurrentielle')} · top {len(top)} · "
-        f"{d.guide_date('Densité concurrentielle')}",
+        f"Magasins {d.unit('Densité concurrentielle').replace('pour ', '/ ')} · top {len(top)}, "
+        "Allemagne",
         d.track(
             "Densité moyenne top 6",
             fr(density_top),
@@ -1198,8 +1332,8 @@ def slide_6(deck: Deck) -> None:
         CONTENT_TOP + 2.25,
         CARD_W,
         2.1,
-        f"Distance routière au hub le plus proche · top {len(top)} · "
-        f"{d.guide_date('Distance moyenne au hub le plus proche')}",
+        f"Distance au hub le plus proche · top {len(top)}, Allemagne · "
+        f"OSRM {d.guide_date('Distance moyenne au hub le plus proche')}",
         d.track(
             "Distance moyenne top 6",
             f"{fr(distance_top, 0)} km",
@@ -1279,8 +1413,9 @@ def slide_6(deck: Deck) -> None:
         f"le top {len(top)} en est à **{fr(distance_top, 0)} km** en moyenne."
     )
     deck.footer(
-        f"city_scoring (score : {legend} ; loyers et revenus simulés, population Destatis "
-        f"{d.population_date()}) ; © contributeurs OpenStreetMap (ODbL) ; itinéraires OSRM",
+        "city_scoring (loyers et revenus simulés) ; "
+        f"{d.guide_period('Densité concurrentielle')} ; © contributeurs OpenStreetMap (ODbL) ; "
+        f"{DESTATIS} ; itinéraires OSRM",
         True,
     )
 
@@ -1294,6 +1429,7 @@ def slide_7(deck: Deck) -> None:
     etp, ratio = conditions.get("nb_etp"), conditions.get("ca_m2_min_vs_france")
     deck.new_slide(7, 4)
     deck.title("Le payback dépend de l'effectif et du CA/m²")
+    opening = d.config["business_case_allemagne"]["annee_premiere_ouverture"]
     payback_name = "Payback (scénario pessimiste) : Centre commercial"
     horizon = int(cases["horizon_annees"].iloc[0]) if cases is not None else None
     kpis = d.frame("kpi_summary")
@@ -1309,9 +1445,7 @@ def slide_7(deck: Deck) -> None:
             f"> {fr(months, 0)} mois",
             kpi_source(payback_name) + " : vide = non atteint ; business_case.csv : horizon_annees",
         )
-        variation = Variation(
-            f"▲ > +{fr(months - seuil, 0)} mois vs seuil {fr(seuil, 0)} mois", False
-        )
+        variation = Variation(f"non atteint sur {horizon} ans", False)
     else:
         value, variation = d.lack("payback pessimiste et seuil"), None
     deck.card(
@@ -1319,7 +1453,7 @@ def slide_7(deck: Deck) -> None:
         CONTENT_TOP,
         CARD_W,
         2.1,
-        f"Payback · pessimiste · centre commercial · horizon {horizon} ans",
+        f"Payback pessimiste · centre commercial · Allemagne {opening}",
         value,
         variation,
         "Simulé",
@@ -1341,12 +1475,12 @@ def slide_7(deck: Deck) -> None:
         CONTENT_TOP + 2.25,
         CARD_W,
         2.1,
-        "Coût d'occupation · % du CA HT · centre commercial · central",
+        f"Coût d'occupation central · % CA HT · Allemagne {opening}",
         shown,
         variation,
         "Simulé",
     )
-    deck.chart_title("Payback en scénario pessimiste, en mois · centre commercial · Allemagne")
+    deck.chart_title("Payback pessimiste, en mois · centre commercial · Allemagne")
     if grid is None or etp is None or ratio is None:
         deck.text(
             CHART_X,
@@ -1569,60 +1703,78 @@ def slide_8(deck: Deck) -> None:
         "Nombre absent : texte refusé",
         label_above=False,
     )
-    # The screenshot of the dashboard, or the generated text in its place.
+    # The screenshot of the dashboard, with a two-line excerpt of the generated text beside it
+    # (Jean-Li, 13/11/2026): the first sentence, the key message.
     box_y = y + 1.55
     box_h = CONTENT_BOTTOM - box_y
+    excerpt = None
+    if comments is not None:
+        row = comments[
+            (comments["page"] == "Où s'implanter") & (comments["valeur_filtre"] == "Dortmund")
+        ]
+        if not row.empty and str(row["verifie"].iloc[0]).lower() == "true":
+            candidate = re.split(r"(?<=[.!?])\s", str(row["texte"].iloc[0]).strip())[0]
+            if not FORBIDDEN_BEFORE_DECISION.search(candidate):
+                excerpt = candidate
+    text_x, text_w = CHART_X, CHART_W
     if CAPTURE_DORTMUND.exists():
         picture = deck.picture(CAPTURE_DORTMUND, CHART_X, box_y, height=box_h)
-        if picture.width > Inches(CHART_W):
-            ratio = Inches(CHART_W) / picture.width
-            picture.width, picture.height = Inches(CHART_W), int(picture.height * ratio)
+        if picture.width > Inches(CHART_W * 0.62):
+            ratio = Inches(CHART_W * 0.62) / picture.width
+            picture.width, picture.height = Inches(CHART_W * 0.62), int(picture.height * ratio)
+        text_x = CHART_X + picture.width / 914400 + 0.25
+        text_w = CHART_X + CHART_W - text_x
     else:
-        text = None
-        if comments is not None:
-            row = comments[
-                (comments["page"] == "Où s'implanter") & (comments["valeur_filtre"] == "Dortmund")
-            ]
-            if not row.empty and str(row["verifie"].iloc[0]).lower() == "true":
-                candidate = str(row["texte"].iloc[0])
-                if not FORBIDDEN_BEFORE_DECISION.search(candidate):
-                    text = candidate
-        deck.rect(CHART_X, box_y, CHART_W, box_h, fill=t.pale_green, line=t.border, rounded=True)
-        deck.text(
-            CHART_X + 0.2,
-            box_y + 0.1,
-            CHART_W - 0.4,
-            0.36,
-            "Commentaire IA · Où s'implanter · Dortmund",
-            bold=True,
-            role="graphique",
-        )
-        if text:
-            deck.text(CHART_X + 0.2, box_y + 0.5, CHART_W - 0.4, box_h - 0.6, text, role="capture")
-        else:
-            deck.text(
-                CHART_X + 0.2,
-                box_y + 0.5,
-                CHART_W - 0.4,
-                0.4,
-                d.lack("commentaire Dortmund vérifié, sans verdict"),
-                role="capture",
-            )
         d.lack("capture du dashboard, page Où s'implanter, Dortmund (slides/assets/)")
+    deck.rect(text_x, box_y, text_w, box_h, fill=t.pale_green, line=t.border, rounded=True)
+    deck.text(
+        text_x + 0.2,
+        box_y + 0.12,
+        text_w - 0.4,
+        0.36,
+        "Commentaire IA · Dortmund (extrait)",
+        bold=True,
+        role="graphique",
+    )
+    deck.text(
+        text_x + 0.2,
+        box_y + 0.55,
+        text_w - 0.4,
+        box_h - 0.65,
+        f"« {excerpt} »" if excerpt else d.lack("commentaire Dortmund vérifié, sans verdict"),
+        italic=True,
+        role="capture",
+    )
     deck.insight(
         "Le garde-fou vérifie **les chiffres** ; la relecture humaine reste **indispensable**."
     )
     deck.footer("ai_commentary.csv ; src/ai/commentary.py (garde-fou)", True)
 
 
+def lower_first(text: str) -> str:
+    return text[:1].lower() + text[1:]
+
+
+def decision_case(d: Data) -> tuple[float | None, float | None]:
+    """(CA/m² in €, payback in months) of the condition of the decision section."""
+    conditions = (d.config.get("decision") or {}).get("conditions") or {}
+    grid = d.frame("sensibilite_payback")
+    etp, ratio = conditions.get("nb_etp"), conditions.get("ca_m2_min_vs_france")
+    if grid is None or etp is None or ratio is None:
+        return None, None
+    match = grid[
+        (grid["nb_etp"].round(2) == round(etp, 2))
+        & (grid["ratio_ca_m2_vs_france"].round(2) == round(ratio, 2))
+    ]
+    if match.empty:
+        return None, None
+    return float(match["ca_m2_eur"].iloc[0]), float(match["payback_mois"].iloc[0])
+
+
 def slide_9(deck: Deck) -> None:
+    """The decision, revealed here only: the six criteria with their result, then the verdict."""
     d, t = deck.data, deck.theme
     decision = d.config.get("decision") or {}
-    conditions = decision.get("conditions") or {}
-    levers = decision.get("leviers_secondaires") or {}
-    plan = (d.config.get("slides") or {}).get("pilote") or {}
-    grid = d.frame("sensibilite_payback")
-    cities = d.frame("city_scoring")
     deck.new_slide(9, 5)
     deck.title("La recommandation au Comex")
     verdict = decision.get("verdict")
@@ -1634,23 +1786,88 @@ def slide_9(deck: Deck) -> None:
     parts = verdict.split(",", 1)
     content = f"{parts[0]},**{parts[1]}**" if len(parts) == 2 else verdict
     box = deck.text(
-        MARGIN, 1.5, WIDTH - 2 * MARGIN, 1.0, content, size=48, color=t.dark, role="verdict"
+        MARGIN, 1.42, WIDTH - 2 * MARGIN, 0.85, content, size=44, color=t.dark, role="verdict"
     )
     runs = box.text_frame.paragraphs[0].runs
     if len(runs) == 2:
         runs[1].font.color.rgb = t.green
-    target = None
-    payback = None
-    etp, ratio = conditions.get("nb_etp"), conditions.get("ca_m2_min_vs_france")
-    if grid is not None and etp is not None and ratio is not None:
-        match = grid[
-            (grid["nb_etp"].round(2) == round(etp, 2))
-            & (grid["ratio_ca_m2_vs_france"].round(2) == round(ratio, 2))
-        ]
-        if not match.empty:
-            target, payback = float(match["ca_m2_eur"].iloc[0]), float(
-                match["payback_mois"].iloc[0]
+    rows = results(d)
+    header = ("Critère", "Seuil", "Allemagne", "Verdict")
+    widths = (3.3, 1.35, WIDTH - 2 * MARGIN - 6.5, 1.85)
+    top, height = 2.3, 0.54
+    for r, row in enumerate([header] + rows):
+        y = top + r * height
+        fill = t.green if r == 0 else (t.white if r % 2 else t.pale_green)
+        deck.rect(MARGIN, y, WIDTH - 2 * MARGIN, height, fill=fill)
+        x = MARGIN
+        for c, cell in enumerate(row):
+            colour = t.dark
+            if r and c == 3:
+                colour = t.green if "NO-GO" not in cell else t.dark
+            deck.text(
+                x + 0.1,
+                y,
+                widths[c] - 0.15,
+                height,
+                cell,
+                size=TEXT_PT,
+                bold=(r == 0 or c == 3),
+                color=colour,
+                anchor=MSO_ANCHOR.MIDDLE,
+                role="graphique",
             )
+            x += widths[c]
+    blocking = [row[0] for row in rows if "NO-GO" in row[3]]
+    frame_rows = [i for i, row in enumerate(rows, start=1) if "NO-GO" in row[3]]
+    if frame_rows:
+        first, last = min(frame_rows), max(frame_rows)
+        deck.frame_label(
+            MARGIN - 0.05,
+            top + first * height - 0.04,
+            WIDTH - 2 * MARGIN + 0.1,
+            (last - first + 1) * height + 0.08,
+        )
+    deck.insight(
+        (
+            "Le NO-GO tient à "
+            f"**{' et '.join(lower_first(label.split(',')[0]) for label in blocking)}** ; "
+            "il se lève sous conditions."
+            if blocking
+            else "Tous les critères respectent leur seuil."
+        ),
+        y=6.32,
+    )
+    deck.notes(
+        "Aurélie, 45 s. Voici notre recommandation, que nous n'avons pas affichée avant pour "
+        "laisser parler les faits. Sur les six critères fixés à l'avance, le marché, le prix, "
+        "la marge et le catalogue respectent leur seuil. Deux critères bloquent : le loyer "
+        "rapporté au CA en centre-ville, et surtout le remboursement de l'investissement dans "
+        "le scénario pessimiste, non atteint sur l'horizon du modèle. En l'état, notre réponse "
+        "est donc non. Mais ce NO-GO peut se lever : c'est l'objet de la slide suivante."
+    )
+    deck.footer(
+        "kpi_summary (Allemagne ; coûts et ventes simulés) ; kpi_guide (seuils, README 4.2) ; "
+        "config/hypotheses.yaml (section decision)",
+        True,
+    )
+
+
+def slide_10(deck: Deck) -> None:
+    """The conditions that lift the NO-GO, the pilot and the next steps."""
+    d, t = deck.data, deck.theme
+    decision = d.config.get("decision") or {}
+    conditions = decision.get("conditions") or {}
+    levers = decision.get("leviers_secondaires") or {}
+    plan = (d.config.get("slides") or {}).get("pilote") or {}
+    cities = d.frame("city_scoring")
+    deck.new_slide(10, 5)
+    target, payback = decision_case(d)
+    etp, ratio = conditions.get("nb_etp"), conditions.get("ca_m2_min_vs_france")
+    gain = fr((ratio - 1) * 100, 0) if ratio else MISSING
+    deck.title(
+        f"Le GO tient à un format allégé : {fr(etp, 0) if etp else MISSING} ETP, "
+        f"CA/m² France + {gain} %"
+    )
     tiles = [
         ("Format", conditions.get("format") or d.lack("decision.conditions.format")),
         (
@@ -1664,8 +1881,7 @@ def slide_9(deck: Deck) -> None:
         (
             "CA/m²",
             (
-                f"≥ France + {fr((ratio - 1) * 100, 0)} % · {fr(target, 0)} €/m²"
-                f"\npayback {fr(payback, 1)} mois"
+                f"≥ France + {gain} % · {fr(target, 0)} €/m²\npayback {fr(payback, 1)} mois"
                 if ratio and target and payback
                 else d.lack("CA/m² cible")
             ),
@@ -1689,7 +1905,7 @@ def slide_9(deck: Deck) -> None:
             "sensibilite_payback.csv : payback_mois",
         )
     widths = [2.05, 2.05, 3.5, 2.85, 1.4]
-    x, y = MARGIN, 2.7
+    x, y = MARGIN, CONTENT_TOP + 0.1
     for (label, value), w in zip(tiles, widths):
         deck.rect(x, y, w, 1.35, fill=t.pale_green, rounded=True)
         deck.text(x + 0.12, y + 0.08, w - 0.24, 0.35, label, color=t.grey, role="carte")
@@ -1697,19 +1913,26 @@ def slide_9(deck: Deck) -> None:
         x += w + 0.1
     deck.frame_label(MARGIN - 0.06, y - 0.06, sum(widths) + 0.4 + 0.12, 1.47)
     lever = levers.get("preference_vietnam_gain_marge_pts")
-    lever_text = (
-        f"Levier secondaire : préférence Vietnam, **+{fr(lever, 1)} pt** de marge, insuffisant seul"
-        if lever is not None
-        else d.lack("levier Vietnam")
-    )
     if lever is not None:
         d.track(
             "Levier Vietnam",
             f"+{fr(lever, 1)} pt",
             "config/hypotheses.yaml : decision.leviers_secondaires",
         )
-    deck.text(MARGIN, 4.2, WIDTH - 2 * MARGIN, 0.4, lever_text, role="carte")
-    # Plan: pilot then milestones in €/m².
+    deck.text(
+        MARGIN,
+        y + 1.55,
+        WIDTH - 2 * MARGIN,
+        0.4,
+        (
+            f"Levier secondaire : préférence Vietnam, **+{fr(lever, 1)} pt** de marge, "
+            "insuffisant seul"
+            if lever is not None
+            else d.lack("levier Vietnam")
+        ),
+        role="carte",
+    )
+    # Plan: pilot, then milestones in €/m².
     stores = plan.get("nb_magasins")
     pilot = (
         list(cities.sort_values("rang")["ville"].head(stores))
@@ -1736,12 +1959,13 @@ def slide_9(deck: Deck) -> None:
                 f"{fr(amount, 0)} €/m²",
                 "slides.pilote.jalons × CA/m² cible (sensibilite_payback)",
             )
-    x, y, w = MARGIN, 4.75, (WIDTH - 2 * MARGIN - 0.5 * (len(steps) - 1)) / len(steps)
+    deck.text(MARGIN, y + 2.15, 6, 0.36, "Plan de pilote", bold=True, role="graphique")
+    x, sy, w = MARGIN, y + 2.6, (WIDTH - 2 * MARGIN - 0.5 * (len(steps) - 1)) / len(steps)
     for i, step in enumerate(steps):
-        deck.rect(x, y, w, 1.0, fill=t.white, line=t.green, rounded=True, width=1.5)
+        deck.rect(x, sy, w, 1.0, fill=t.white, line=t.green, rounded=True, width=1.5)
         deck.text(
             x + 0.1,
-            y,
+            sy,
             w - 0.2,
             1.0,
             step,
@@ -1751,37 +1975,35 @@ def slide_9(deck: Deck) -> None:
             role="carte",
         )
         if i:
-            deck.line(x - 0.47, y + 0.5, x - 0.03, y + 0.5, t.green, width=2, arrow=True)
+            deck.line(x - 0.47, sy + 0.5, x - 0.03, sy + 0.5, t.green, width=2, arrow=True)
         x += w + 0.5
     deck.insight(
-        f"Next steps : valider **{fr(etp, 0)} ETP** avec les opérations, prouver l'origine "
-        "Vietnam, acheter des données de marché.",
-        y=6.0,
+        f"Next steps : valider **{fr(etp, 0) if etp else MISSING} ETP** avec les opérations, "
+        "prouver l'origine Vietnam, acheter des données de marché.",
+        y=6.15,
     )
     if etp and ratio and pilot:
         deck.notes(
-            "Aurélie, 1 min 30. Voici notre recommandation. En l'état, c'est non : un magasin "
-            "calqué sur la France ne rembourse pas son investissement dans le scénario "
-            f"pessimiste. Mais c'est oui sous conditions : un format "
-            f"{str(conditions.get('format', '')).lower()}, environ {fr(etp, 0)} ETP, un CA au "
-            "mètre carré au moins égal à celui de la France plus "
-            f"{fr((ratio - 1) * 100, 0)} %, dans les {len(conditions.get('villes') or [])} villes "
-            f"du classement, approvisionnées depuis {conditions.get('hub')}. La préférence "
+            "Aurélie, 45 s. Le NO-GO se lève sous conditions, toutes chiffrées : un format "
+            f"{str(conditions.get('format', '')).lower()}, environ {fr(etp, 0)} ETP au lieu de "
+            "l'effectif moyen de la France, un CA au mètre carré au moins égal à celui de la "
+            f"France plus {gain} %, dans les {len(conditions.get('villes') or [])} villes du "
+            f"classement, approvisionnées depuis {conditions.get('hub')}. La préférence "
             "douanière Vietnam aide, sans suffire seule. Nous proposons un pilote de "
-            f"{len(pilot)} magasins à {' et '.join(pilot)}, avec des points d'étape chiffrés en "
-            "euros par mètre carré, avant d'ouvrir les autres villes. Merci, nous prenons vos "
-            "questions."
+            f"{len(pilot)} magasins à {' et '.join(pilot)}, avec deux points d'étape chiffrés "
+            "en euros par mètre carré, avant d'ouvrir les autres villes. Merci, nous prenons "
+            "vos questions."
         )
     deck.footer(
-        "config/hypotheses.yaml (section decision) ; sensibilite_payback ; city_scoring ; "
-        "README 4.4",
+        "config/hypotheses.yaml (sections decision et slides) ; sensibilite_payback ; "
+        "city_scoring ; README 4.4",
         True,
     )
 
 
-def slide_10(deck: Deck) -> None:
+def slide_11(deck: Deck) -> None:
     t = deck.theme
-    deck.new_slide(10, None)
+    deck.new_slide(11, None)
     deck.title("Annexe · Limites assumées")
     limits = [
         "Coûts et ventes simulés",
@@ -1817,7 +2039,19 @@ def slide_10(deck: Deck) -> None:
     deck.footer("README 3.4 et 4.4 ; docs/ENSEIGNEMENTS.md", True)
 
 
-SLIDES = (slide_1, slide_2, slide_3, slide_4, slide_5, slide_6, slide_7, slide_8, slide_9, slide_10)
+SLIDES = (
+    slide_1,
+    slide_2,
+    slide_3,
+    slide_4,
+    slide_5,
+    slide_6,
+    slide_7,
+    slide_8,
+    slide_9,
+    slide_10,
+    slide_11,
+)
 
 
 # --------------------------------------------------------------------------------------

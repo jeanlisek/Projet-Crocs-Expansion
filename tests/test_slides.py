@@ -33,7 +33,7 @@ def test_ten_slides_pass_the_checks_of_the_brief(deck):
     """No verdict before the decision slide, 30 words of running text at most, notes of 60
     to 120 words."""
     prs, _, problems, _ = deck
-    assert len(prs.slides) == 10
+    assert len(prs.slides) == len(slides.SLIDES)
     assert problems == []
 
 
@@ -128,7 +128,21 @@ def test_running_words_count_a_number_as_one_word():
 
 
 def test_readers_of_the_readme_and_the_ci():
-    tables, relations, facts, dims = slides.readme_model()
-    assert tables == facts + dims and relations > 0
+    tables, simulated, real, relations = slides.pipeline_state()
+    assert tables == simulated + real and relations > 0
     assert len(slides.readme_team()) == 5
     assert slides.ci_systems() == ["Linux", "Windows"]
+
+
+def test_the_decision_table_gives_each_criterion_its_result():
+    """Slide 9: the six criteria, their threshold, the value in Germany and the verdict."""
+    rows = slides.results(slides.Data())
+    assert [row[0] for row in rows] == [label for _, label, _ in slides.CRITERIA]
+    assert all(slides.MISSING not in " ".join(row) for row in rows)
+    assert any("NO-GO" in row[3] for row in rows)
+
+
+def test_the_criteria_slide_shows_thresholds_not_results(deck):
+    prs = deck[0]
+    texts = " ".join(text for number, _, text in slides.slide_texts(prs) if number == 4)
+    assert "≥ 66,91 %" in texts and "100,85" not in texts
