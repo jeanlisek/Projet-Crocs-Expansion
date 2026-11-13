@@ -7,9 +7,10 @@ it never calls the model, so the demo needs neither the network nor a key.
 
 Guard rail (docs/equipe/briac.md): the model only receives the rows of the page and of the
 filter concerned. Every number of the generated text must be a number of that input, rounded
-or not. The code also checks the length of the text and a list of forbidden phrases
-(config/hypotheses.yaml, section `ia`). A failed check triggers a regeneration, at most
-`regenerations_max` times, then `verifie = false`.
+or not: `verifie` is that check, and only that one. The code also checks the length of the
+text (`longueur_ok`) and a list of forbidden phrases (`formulations_ok`), from
+config/hypotheses.yaml, section `ia`. A failed check triggers a regeneration, at most
+`regenerations_max` times; the best attempt is kept, the numbers first.
 
 The dashboard pages only state facts and gaps, to France and to the thresholds: no verdict and
 no recommendation (feedback of the teacher, 13/11/2026). The recommendation, which repeats the
@@ -26,7 +27,7 @@ import math
 import os
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
@@ -44,7 +45,17 @@ DEFAULT_OUT = REPO_ROOT / "data" / "gold" / "ai_commentary.csv"
 
 API_KEY_NAME = "ANTHROPIC_API_KEY"
 TABLE = "ai_commentary"
-COLUMNS = ["page", "filtre", "valeur_filtre", "texte", "verifie", "date_generation"]
+COLUMNS = [
+    "page",
+    "filtre",
+    "valeur_filtre",
+    "texte",
+    "verifie",
+    "longueur_ok",
+    "formulations_ok",
+    "date_generation",
+]
+FLAGS = ("verifie", "longueur_ok", "formulations_ok")
 
 # Page names and filter values are the join keys of the dashboard (docs/equipe/aurelie.md):
 # the country filter sits on dim_pays[nom_pays] and the city filter on [ville].
@@ -186,6 +197,16 @@ class Request:
     max_words: int | None = None
     # A sentence of the team added by the code after the text of the model, word for word.
     ending: str | None = None
+    # Share of the limit asked of the model: it overshoots the limit it is given (334 words
+    # for 280 on 13/11/2026), so it is asked for less and checked against the limit itself.
+    target_ratio: float = 1.0
+
+    @property
+    def prompt_words(self) -> int | None:
+        """The number of words written in the prompt."""
+        if self.model_words is None:
+            return None
+        return math.floor(self.model_words * self.target_ratio)
 
     @property
     def model_words(self) -> int | None:
@@ -228,7 +249,7 @@ def threshold_bound(seuil: str | None) -> float | None:
 
 
 def gap(value: float, reference: float, unit: str | None) -> str:
-    """A difference computed by the code, so that the model never computes one itself."""
+    """value − reference, signed, computed by the code so that the model never computes one."""
     difference = round(value - reference, 2)
     if difference == 0:
         return "aucun écart"
@@ -238,8 +259,9 @@ def gap(value: float, reference: float, unit: str | None) -> str:
         unit = "point" if size < 2 else "points"
     elif unit == "indice":
         unit = "point d'indice" if size < 2 else "points d'indice"
-    side = "au-dessus" if difference > 0 else "au-dessous"
-    return f"{format_value(size)} {unit} {side}".replace("  ", " ")
+    # A signed gap (Jean-Li, 13/11/2026): "+2,21 points", "−10,06 points", typographic minus.
+    sign = "+" if difference > 0 else "\u2212"
+    return f"{sign}{format_value(size)} {unit}".rstrip()
 
 
 def scenario_stem(kpi: str) -> str:
@@ -247,9 +269,26 @@ def scenario_stem(kpi: str) -> str:
     return re.sub(r"scénario \w+", "scénario", kpi)
 
 
+SAME_SCOPE = " (même périmètre que l'Allemagne)"
+
+
 def country_stem(kpi: str) -> str:
-    """The name of a KPI shared by the countries: the provisional mark is not part of it."""
-    return kpi.replace(", données provisoires", "")
+    """The name of a KPI shared by the countries: the provisional mark is not part of it, nor
+    the mark of a French KPI computed on the German scope of costs."""
+    return kpi.replace(", données provisoires", "").replace(SAME_SCOPE, "")
+
+
+def france_references(kpis: list[dict]) -> dict:
+    """stem -> the French row a German KPI is compared to.
+
+    A French row on the same scope of costs as the German business case (business_case_france)
+    replaces the plain one: the break-even of a mall shop was compared to 412 861 €, the
+    French figure without the German costs, instead of 540 354 € (Jean-Li, 13/11/2026).
+    """
+    french = [row for row in kpis if row["pays"] == REFERENCE_COUNTRY]
+    references = {country_stem(row["kpi"]): row for row in french if SAME_SCOPE not in row["kpi"]}
+    references.update({country_stem(row["kpi"]): row for row in french if SAME_SCOPE in row["kpi"]})
+    return references
 
 
 def scenario_thresholds(kpis: list[dict]) -> dict:
@@ -308,7 +347,8 @@ def render_kpi(
         parts.append(f"écart au seuil : {gap(float(raw), bound, row['unite'])}")
     if france is not None and raw is not None and france["valeur"] is not None:
         french = format_value(france["valeur"])
-        parts.append(f"France : {french} {france['unite'] or ''}".rstrip())
+        label = "France, même périmètre de coûts" if SAME_SCOPE in france["kpi"] else "France"
+        parts.append(f"{label} : {french} {france['unite'] or ''}".rstrip())
         gap_france = gap(float(raw), float(france["valeur"]), row["unite"])
         parts.append(f"écart à la France : {gap_france}")
     origin = ORIGIN_LABELS.get(row["origine_donnees"], row["origine_donnees"])
@@ -504,7 +544,7 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
     decision = config.get(DECISION_SECTION)
     kpis = fetch_dicts(con, "SELECT * FROM kpi_summary ORDER BY axe, kpi")
     thresholds = scenario_thresholds(kpis)
-    france = {country_stem(r["kpi"]): r for r in kpis if r["pays"] == REFERENCE_COUNTRY}
+    france = france_references(kpis)
 
     def facts(row: dict) -> str:
         """The dashboard's reading of a row: gaps to France and to the thresholds."""
@@ -608,6 +648,28 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
             ending=str(confirmation).strip() if confirmation else None,
         )
     )
+    ratio = config["ia"].get("cible_mots_pct", 100) / 100
+    requests = [replace(request, target_ratio=ratio) for request in requests]
+    return apply_team_sentences(requests, config["ia"].get("phrases_equipe"))
+
+
+def apply_team_sentences(requests: list[Request], sentences) -> list[Request]:
+    """The sentences the team wrote itself (config/hypotheses.yaml, section `ia`, key
+    `phrases_equipe`): each is added word for word after the text of its page and filter
+    value, and the rows it replaces are taken out of the data, so that the model writes no
+    other version of it."""
+    for sentence in sentences or ():
+        for i, request in enumerate(requests):
+            if (request.page, request.valeur_filtre) != (
+                sentence["page"],
+                sentence["valeur_filtre"],
+            ):
+                continue
+            removed = sentence.get("retire")
+            lines = tuple(
+                line for line in request.lines if not (removed and line.startswith(f"- {removed}"))
+            )
+            requests[i] = replace(request, lines=lines, ending=sentence["phrase"].strip())
     return requests
 
 
@@ -622,7 +684,7 @@ def user_prompt(request: Request) -> str:
         valeur_filtre=request.valeur_filtre,
         question=request.question,
         lignes="\n".join(request.lines) or MISSING_VALUE,
-        mots_max=request.model_words,
+        mots_max=request.prompt_words,
     )
 
 
@@ -717,57 +779,75 @@ def forbidden_phrases(text: str, page: str, rules) -> list[str]:
     return problems
 
 
-def _problems(
-    text: str, truncated: bool, allowed: list[float], request: Request, rules
-) -> list[str]:
-    """Why a text cannot be shown as verified; empty when it can.
+@dataclass(frozen=True)
+class Outcome:
+    """A generated text and its three checks, kept apart (Jean-Li, 13/11/2026): the dashboard
+    shows the texts whose numbers are verified; the length and the phrases are reported."""
+
+    text: str
+    verifie: bool
+    longueur_ok: bool
+    formulations_ok: bool
+    probleme: str
+
+    @property
+    def score(self) -> tuple[bool, bool, bool]:
+        return (self.verifie, self.formulations_ok, self.longueur_ok)
+
+
+def _check(text: str, truncated: bool, allowed: list[float], request: Request, rules) -> Outcome:
+    """The checks of one text, before the team's ending is added.
 
     An empty text has no number at all and a truncated one may have only right numbers:
-    both would pass a check of the numbers alone, so they are rejected first.
+    both would pass a check of the numbers alone, so neither is ever verified.
     """
-    if truncated:
-        return ["texte tronqué"]
-    if not text:
-        return ["texte vide"]
+    if truncated or not text:
+        reason = "texte tronqué" if truncated else "texte vide"
+        return Outcome(text, False, False, False, reason)
     problems = []
     rejected = unsupported_numbers(text, allowed)
     if rejected:
         problems.append(f"chiffres hors données : {', '.join(rejected)}")
     limit = request.model_words
-    if limit is not None and count_words(text) > limit:
-        problems.append(f"{count_words(text)} mots pour {limit} au plus")
-    return problems + forbidden_phrases(text, request.page, rules)
+    words = count_words(text)
+    long_enough = limit is None or words <= limit
+    if not long_enough:
+        problems.append(f"{words} mots pour {limit} au plus")
+    forbidden = forbidden_phrases(text, request.page, rules)
+    problems += forbidden
+    return Outcome(text, not rejected, long_enough, not forbidden, "; ".join(problems))
 
 
-def comment(
-    model: Model, request: Request, rules=(), regenerations: int = 1
-) -> tuple[str, bool, str]:
-    """Generate one text and check it; regenerate while a check fails, at most
-    `regenerations` times: (text, verified, why). The team's ending, if any, is added last."""
+def comment(model: Model, request: Request, rules=(), regenerations: int = 1) -> Outcome:
+    """Generate one text and check it; regenerate while a check fails, at most `regenerations`
+    times. The best attempt is kept: verified numbers first, then the phrases, then the
+    length. The team's ending, if any, is added to it last."""
     system = read_prompt("systeme.md")
     user = user_prompt(request)
     # Built from the first prompt only: the correction prompt quotes the rejected text,
     # whose numbers must not become allowed by being quoted.
     allowed = allowed_values(user)
     prompt = user
+    best = None
     for attempt in range(1 + regenerations):
         text, truncated = _attempt(model, system, prompt)
-        text = normalize_numbers(text)
-        problems = _problems(text, truncated, allowed, request, rules)
-        if not problems:
+        outcome = _check(normalize_numbers(text), truncated, allowed, request, rules)
+        if best is None or outcome.score > best.score:
+            best = outcome
+        if not outcome.probleme:
             break
         # An empty or truncated text has nothing to correct: the same prompt is sent again.
         prompt = user
-        if text and not truncated:
+        if outcome.text and not truncated:
             correction = read_prompt("correction.md").format(
-                problemes="\n".join(f"- {problem}" for problem in problems),
-                texte=text,
-                mots_max=request.model_words or "",
+                problemes="\n".join(f"- {problem}" for problem in outcome.probleme.split("; ")),
+                texte=outcome.text,
+                mots_max=request.prompt_words or "",
             )
             prompt = f"{user}\n\n{correction}"
-    if request.ending and text and not truncated:
-        text = f"{text} {request.ending}"
-    return text, not problems, "; ".join(problems)
+    if request.ending and best.text and best.probleme not in ("texte tronqué", "texte vide"):
+        best = replace(best, text=f"{best.text} {request.ending}")
+    return best
 
 
 # --------------------------------------------------------------------------------------
@@ -817,7 +897,8 @@ def load_into_warehouse(csv_path: Path, warehouse: Path) -> int:
             CREATE OR REPLACE TABLE {TABLE} AS
             SELECT * FROM read_csv(?, header = true, quote = '"', columns = {{
                 'page': 'VARCHAR', 'filtre': 'VARCHAR', 'valeur_filtre': 'VARCHAR',
-                'texte': 'VARCHAR', 'verifie': 'BOOLEAN', 'date_generation': 'TIMESTAMP'
+                'texte': 'VARCHAR', 'verifie': 'BOOLEAN', 'longueur_ok': 'BOOLEAN',
+                'formulations_ok': 'BOOLEAN', 'date_generation': 'TIMESTAMP'
             }})
             """,
             [str(csv_path)],
@@ -854,25 +935,28 @@ def run(
     rules = settings.get("formulations_interdites") or ()
     regenerations = settings.get("regenerations_max", 1)
     for request in requests:
-        text, verified, problem = comment(model, request, rules, regenerations)
+        outcome = comment(model, request, rules, regenerations)
         rows.append(
             {
                 "page": request.page,
                 "filtre": request.filtre,
                 "valeur_filtre": request.valeur_filtre,
-                "texte": text,
-                "verifie": "true" if verified else "false",
+                "texte": outcome.text,
+                **{flag: "true" if getattr(outcome, flag) else "false" for flag in FLAGS},
                 "date_generation": stamp,
             }
         )
-        words = count_words(text)
-        status = f"vérifié, {words} mots" if verified else f"NON VÉRIFIÉ ({problem})"
+        status = f"{count_words(outcome.text)} mots"
+        if outcome.probleme:
+            status += f" ({outcome.probleme})"
         print(f"{request.page:24s} {request.valeur_filtre:14s} {status}")
 
     write_csv(rows, out)
     loaded = load_into_warehouse(out, warehouse)
-    checked = sum(row["verifie"] == "true" for row in rows)
-    print(f"\n{checked}/{loaded} commentaires vérifiés, écrits dans : {out.resolve()}")
+    counts = ", ".join(
+        f"{flag} {sum(row[flag] == 'true' for row in rows)}/{loaded}" for flag in FLAGS
+    )
+    print(f"\n{counts}, écrits dans : {out.resolve()}")
     return rows
 
 

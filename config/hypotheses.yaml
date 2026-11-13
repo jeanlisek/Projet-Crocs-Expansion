@@ -194,8 +194,14 @@ ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/com
   delai_entre_appels_s: 0.5     # CONVENTION : marge entre deux appels ; le SDK rejoue de lui-même une erreur 429
   tentatives_max: 3             # nouveaux essais du SDK sur 408, 409, 429 et 5xx (anthropic/_base_client.py)
   synthese_mots_max: 300        # CONVENTION : la synthèse tient dans une zone de texte du dashboard ; une version sans limite a été coupée à 816 mots au plafond max_tokens le 12/11/2026
-  commentaire_mots_max: 60      # CONVENTION : commentaire d'une page, deux ou trois phrases courtes (Jean-Li, 12/11/2026) ; contrôlé par code depuis le 13/11/2026
-  regenerations_max: 2          # CONVENTION : nouvelles générations quand un contrôle échoue (chiffres, nombre de mots, formulation interdite) ; ensuite verifie = false
+  commentaire_mots_max: 80      # CONVENTION : décision d'équipe du 12/11, tient dans les cadres du dashboard (portée de 60 à 80 mots le 13/11/2026 : 15 textes sur 24 dépassaient 60 mots)
+  cible_mots_pct: 85            # CONVENTION : le prompt demande 85 % de la limite, le contrôle porte sur la limite elle-même ; le modèle dépasse la limite qu'on lui donne (334 mots pour 280 sur la slide 9, 13/11/2026)
+  regenerations_max: 2          # CONVENTION : nouvelles générations quand un contrôle échoue ; la meilleure tentative est gardée ; verifie porte sur les chiffres seuls, longueur_ok et formulations_ok sur le reste (Jean-Li, 13/11/2026)
+  phrases_equipe:               # Jean-Li, 13/11/2026 : ajoutée telle quelle après le texte du modèle ; les lignes « retire » sont ôtées de ses données
+    - page: "Business case"
+      valeur_filtre: pessimiste
+      retire: Payback
+      phrase: "Dans le scénario pessimiste, aucun des deux formats ne rembourse l'investissement dans l'horizon de 10 ans."
   formulations_interdites:      # CONTRÔLE par code (Jean-Li, 13/11/2026) : expression régulière, casse ignorée ; une occurrence déclenche une régénération
     - motif: 'co[uû]ts? au m²'
       pages: toutes
@@ -203,6 +209,6 @@ ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/com
     - motif: 'deux villes'
       pages: ["Business case"]
       raison: "Centre commercial et Centre-ville sont deux formats"
-    - motif: '\b(no-)?go\b|verdict|recommand|préconis|\bconseil|\bil faut\b|\bil convient\b|\bdevr(ait|aient|a)\b|prioritaire|\bconclu|\bdécision'
+    - motif: '\b(no-)?go\b|verdict|recommand|préconis|\bconseil|\bil faut\b|\bil convient\b|\bdevr(ait|aient|a)\b|prioritaire|\bconclu|\bdécision|l[''’]équipe retient'
       pages: ["Synthèse Comex", "Marché & prix", "Où s'implanter", "Business case"]
       raison: "le dashboard ne donne que des constats et des écarts, sans verdict ni recommandation (retour du prof, 13/11/2026)"
