@@ -13,7 +13,7 @@ EXPORTS_DIR := data/gold/exports
 AI_COMMENTARY := data/gold/ai_commentary.csv
 CODE_DIRS := src tests
 
-.PHONY: all install simulate collect silver gold kpi exports ai format lint test
+.PHONY: all install simulate collect silver gold kpi exports ai slides format lint test
 
 all: simulate silver gold kpi exports
 
@@ -58,6 +58,12 @@ exports:
 ai:
 	$(PYTHON) -m src.ai.commentary --warehouse $(WAREHOUSE) --out $(AI_COMMENTARY)
 	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR) --ai-commentary $(AI_COMMENTARY)
+
+# T13: the slides of the oral, every figure read in the exports and in config/hypotheses.yaml.
+# Writes slides/*.pptx, then the PDF and the PNG previews when LibreOffice is installed.
+# Not part of `all`.
+slides:
+	$(PYTHON) slides/build_slides.py
 
 format:
 	$(PYTHON) -m black $(CODE_DIRS)

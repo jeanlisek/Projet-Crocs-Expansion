@@ -1,0 +1,70 @@
+slide,libelle,valeur_affichee,source
+1,Magasins ouverts / total,45 / 48,entreprise_france.csv
+1,CA France TTC,"52,5 M€",entreprise_france.csv : ca_ttc_eur
+1,Part e-commerce,"36,38 %",entreprise_france.csv : part_ecommerce_ca_ht_pct
+1,SKU,147,entreprise_france.csv : nb_sku
+1,Part de marché Crocs DE,"13,97 %",kpi_summary.csv : Part de marché Crocs (DE)
+1,Part de marché Crocs FR (référence),"24,03 %",kpi_summary.csv : Part de marché Crocs (FR)
+2,Tables de l'entrepôt,28,REGLES_COMMUNES.md : État du pipeline
+2,Tables simulées / réelles,19 / 9,REGLES_COMMUNES.md : État du pipeline
+2,Relations,30,REGLES_COMMUNES.md : État du pipeline
+2,Tables de faits (README 3.2),12,"README.md, section 3.2 (erDiagram)"
+2,Faits par pays / par zone,8 / 3,"README.md, 3.2"
+3,Distance moyenne au hub DE (réel),517 km,kpi_summary.csv : Distance moyenne au hub le plus proche (DE)
+3,Distance moyenne au hub DE (simulé),515 km,"kpi_summary.csv : Distance moyenne au hub le plus proche (comparaison, jeu simulé) (DE)"
+4,Seuil Croissance du marché,≥ 2 %,kpi_guide.csv : colonne seuil
+4,Seuil Indice de prix HT,95 à 110,kpi_guide.csv : colonne seuil
+4,Seuil Marge après taxes,"≥ 66,91 %",kpi_guide.csv : colonne seuil
+4,Seuil Catalogue vendable,≥ 80 %,kpi_guide.csv : colonne seuil
+4,"Seuil Loyer ÷ CA, scénario central",≤ 15 %,kpi_guide.csv : colonne seuil
+4,"Seuil Remboursement, scénario pessimiste",≤ 36 mois,kpi_guide.csv : colonne seuil
+5,TCAM dépenses chaussures DE,"5,54 %","kpi_summary.csv : Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires) (DE)"
+5,TCAM dépenses chaussures FR (référence),"−0,24 %","kpi_summary.csv : Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires) (FR)"
+5,Indice prix relatif HT DE,"100,85","kpi_summary.csv : Indice prix relatif (HT, base pays de référence = 100) (DE)"
+5,Indice dépenses chaussures DE 2025 (base 2022),"117,6",eurostat_series.csv : depenses_menages_chaussures_meur
+5,Indice dépenses chaussures FR 2025 (base 2022),"99,3",eurostat_series.csv : depenses_menages_chaussures_meur
+5,Paires FR/DE au même prix TTC,128 / 128,crocs_produits.csv : paires disponibles sur les deux sites
+5,TVA DE / FR,19 % / 20 %,kpi_summary.csv : TVA standard (DE)
+5,% du catalogue éligible DE,100 %,kpi_summary.csv : % du catalogue éligible (DE)
+6,Densité moyenne top 6,"6,85","city_scoring.csv : moyenne de densite_pour_100k_hab, est_prioritaire"
+6,Densité moyenne 12 villes,"8,01",city_scoring.csv : moyenne de densite_pour_100k_hab
+6,Distance moyenne top 6,463 km,"distance_hub.csv : moyenne de distance_reelle_km, villes est_prioritaire"
+6,Score Berlin,"63,8",city_scoring.csv : score
+6,Score Dortmund,"58,8",city_scoring.csv : score
+6,Score Hamburg,"55,6",city_scoring.csv : score
+6,Score Köln,"44,1",city_scoring.csv : score
+6,Score Hannover,"43,0",city_scoring.csv : score
+6,Score Nürnberg,"42,3",city_scoring.csv : score
+6,Score Leipzig,"39,5",city_scoring.csv : score
+6,Score Frankfurt,"37,4",city_scoring.csv : score
+6,Score Düsseldorf,"34,6",city_scoring.csv : score
+6,Score München,"28,4",city_scoring.csv : score
+6,Score Dresden,"28,1",city_scoring.csv : score
+6,Score Stuttgart,"26,4",city_scoring.csv : score
+6,Villes dont Dordrecht est le hub le plus proche,11 / 12,distance_hub.csv : commune_hub_le_plus_proche
+7,Payback pessimiste CC,> 120 mois,kpi_summary.csv : Payback (scénario pessimiste) : Centre commercial (DE) : vide = non atteint ; business_case.csv : horizon_annees
+7,Coût d'occupation central CC,"14,94 %","kpi_summary.csv : Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre commercial (DE)"
+7,Payback à la condition de la section decision,"35,5 mois","sensibilite_payback.csv : nb_etp, ratio_ca_m2_vs_france de la section decision"
+8,Commentaires du dashboard vérifiés,23 / 23,"ai_commentary.csv : verifie, pages du dashboard"
+8,"capture du dashboard, page Où s'implanter, Dortmund (slides/assets/)",À COMPLÉTER,absent
+9,Verdict,"NO-GO en l'état, GO conditionnel",config/hypotheses.yaml : decision.verdict
+9,Seuil Croissance du marché,≥ 2 %,kpi_guide.csv : colonne seuil
+9,Seuil Indice de prix HT,95 à 110,kpi_guide.csv : colonne seuil
+9,Seuil Marge après taxes,"≥ 66,91 %",kpi_guide.csv : colonne seuil
+9,Seuil Catalogue vendable,≥ 80 %,kpi_guide.csv : colonne seuil
+9,"Seuil Loyer ÷ CA, scénario central",≤ 15 %,kpi_guide.csv : colonne seuil
+9,"Seuil Remboursement, scénario pessimiste",≤ 36 mois,kpi_guide.csv : colonne seuil
+9,Croissance du marché,"3,89 %",kpi_summary.csv : Croissance du secteur (TCAM 2022-2025) (DE)
+9,Croissance Eurostat DE,"5,54 %","kpi_summary.csv : Croissance des dépenses des ménages en chaussures (Eurostat, TCAM 2022-2025, toutes chaussures, en valeur, inflation comprise, données provisoires) (DE)"
+9,Indice de prix HT,"100,85","kpi_summary.csv : Indice prix relatif (HT, base pays de référence = 100) (DE)"
+9,Marge après taxes,"70,47 %",kpi_summary.csv : Marge brute post-taxe (DE)
+9,Catalogue vendable,"100,00 %",kpi_summary.csv : % du catalogue éligible (DE)
+9,"Loyer ÷ CA, scénario central centre commercial","14,94 %","kpi_summary.csv : Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre commercial (DE)"
+9,"Loyer ÷ CA, scénario central centre-ville","16,86 %","kpi_summary.csv : Coût d'occupation (loyer + charges ÷ CA, scénario central) : Centre-ville (DE)"
+9,"Remboursement, scénario pessimiste centre commercial",non atteint en 10 ans,kpi_summary.csv : Payback (scénario pessimiste) : Centre commercial (DE) : vide = non atteint
+9,"Remboursement, scénario pessimiste centre-ville",non atteint en 10 ans,kpi_summary.csv : Payback (scénario pessimiste) : Centre-ville (DE) : vide = non atteint
+10,CA/m² cible,5 707 €/m²,"sensibilite_payback.csv : ca_m2_eur, condition de la section decision"
+10,Payback à la condition,"35,5 mois",sensibilite_payback.csv : payback_mois
+10,Levier Vietnam,"+1,6 pt",config/hypotheses.yaml : decision.leviers_secondaires
+10,Jalon 12 mois,3 424 €/m²,slides.pilote.jalons × CA/m² cible (sensibilite_payback)
+10,Jalon 24 mois,4 566 €/m²,slides.pilote.jalons × CA/m² cible (sensibilite_payback)
