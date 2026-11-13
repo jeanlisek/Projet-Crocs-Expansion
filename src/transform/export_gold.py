@@ -46,6 +46,7 @@ REQUIRED = (
     "sensibilite_payback",
     "eurostat_series",
     "crocs_produits",
+    "entreprise_france",
 )
 # Delivered by later tasks (T8 business case and city scoring, T9 AI commentary).
 OPTIONAL = ("business_case", "city_scoring", "ai_commentary")
