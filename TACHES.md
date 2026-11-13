@@ -68,9 +68,9 @@ Les phases suivent l'ordre de la démarche du cours.
 | T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 20 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/` et `kpi_guide.csv`, le guide des 79 KPI) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | Fait (projet Power BI dans `dashboard/`, guide de lecture et 4 pages, mergé le 13/11/2026 ; **reste à faire : refaire la capture de la page 1**, `dashboard/captures/01_synthese_comex.png`, antérieure aux dernières finitions) |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | Fait (généré par `python -m src.collect.dictionnaire` ; les vues sont listées avec leur définition, sans détail champ par champ) |
-| T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | Fait (11 slides générées par `make slides` depuis les exports, PPTX et PDF dans `slides/`, chiffres listés dans `slides/controle_chiffres.csv`, mergé le 13/11/2026 ; **retouches restantes** : slides 5, 8 et 10 au-dessus de 30 mots de texte courant ; libellé « Loyer ÷ CA » de la slide 9 à compléter, le KPI inclut les charges ; capture du dashboard sur Dortmund à ajouter en slide 8, dans `slides/assets/`) |
+| T13 | Slides Comex (11 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | Fait (11 slides générées par `make slides` depuis les exports, PPTX et PDF dans `slides/`, chiffres listés dans `slides/controle_chiffres.csv`, mergé le 13/11/2026 ; **retouches restantes** : slides 5, 8 et 10 au-dessus de 30 mots de texte courant ; libellé « Loyer ÷ CA » de la slide 9 à compléter, le KPI inclut les charges ; capture du dashboard sur Dortmund à ajouter en slide 8, dans `slides/assets/`) |
 | T14 | README final : Next steps, recommandation, liens | Jean-Li | T13 | Toutes les sections du sujet sont remplies | Fait (recommandation et next steps en section 4.4 ; résultat en une phrase en tête du README) |
-| T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | À faire |
+| T15 | Répétition chronométrée | Tous | T13 | 10 minutes tenues, démo live testée | Fait (répétition chronométrée le 13/11/2026) |
 
 ### Transverse
 
@@ -115,12 +115,16 @@ Règles de dataviz du cours : titre explicite sur chaque graphique, pas de doubl
 
 ## Les slides (T13)
 
-1. Crocs France, 48 magasins, la question du Comex
-2. Le modèle de données et les sources (réel vs simulé)
-3. Les 5 axes et leurs KPIs, avec les seuils fixés à l'avance
-4. Marché & prix : le plafond de CA allemand
-5. Où s'implanter : les villes prioritaires
-6. Business case : 3 scénarios
-7. La brique IA (capture et principe des garde-fous)
-8. **Recommandation Go / No-Go**, conditions de succès, next steps
-9. (Annexe) Limites et biais assumés
+Le deck final compte 11 slides, générées par `make slides` (`slides/Crocs_Expansion_Allemagne_Comex.pptx` et `.pdf`). Section de l'oral entre crochets.
+
+1. Faut-il ouvrir un réseau Crocs en propre en Allemagne ? Crocs France en chiffres : 45 magasins ouverts sur 48, CA, e-commerce, catalogue [1. Entreprise]
+2. Un entrepôt testé, reproductible en une commande : modèle en constellation, étoiles et flocons [2. Données]
+3. Chaque axe a sa source réelle ou simulée, étiquetée, avec les mentions de licence [2. Données]
+4. 6 seuils fixés avant l'analyse [3. KPIs]
+5. Marché & prix : le marché allemand croît, prix alignés [4. Analyse]
+6. Où s'implanter : 6 villes prioritaires, desservies depuis Dordrecht [4. Analyse]
+7. Business case : le payback selon l'effectif et le CA/m² [4. Analyse]
+8. La brique IA : l'IA rédige, le code vérifie chaque chiffre [4. Analyse]
+9. **Recommandation Go / No-Go** : critère par critère [5. Décision]
+10. Les conditions du GO, le plan de pilote et les next steps [5. Décision]
+11. (Annexe) Limites assumées
