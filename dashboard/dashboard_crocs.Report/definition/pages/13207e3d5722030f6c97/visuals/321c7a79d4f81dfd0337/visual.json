@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "321c7a79d4f81dfd0337",
+  "position": {
+    "x": 196,
+    "y": 68,
+    "z": 400,
+    "height": 44,
+    "width": 800,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Périmètre : ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#84BD00",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Allemagne · magasin type · scénario et format choisis dans le bandeau · montants HT · horizon 10 ans · Simulé",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#E0E0E0",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

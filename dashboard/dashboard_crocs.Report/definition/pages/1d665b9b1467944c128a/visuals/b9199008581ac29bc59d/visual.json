@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b9199008581ac29bc59d",
+  "position": {
+    "x": 20,
+    "y": 1046,
+    "z": 1400,
+    "height": 30,
+    "width": 1880,
+    "tabOrder": 14
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Sources : ",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "voir l'onglet 0 « Guide de lecture » (sources, licences, définitions des KPIs).",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

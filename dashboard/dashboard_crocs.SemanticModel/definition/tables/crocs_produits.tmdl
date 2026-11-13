@@ -1,0 +1,100 @@
+table crocs_produits
+	lineageTag: 53cf3cb9-4ee0-4b83-8ca6-f5b0a30633e4
+
+	column site
+		dataType: string
+		lineageTag: b78f89bc-ce8a-4c74-a05d-5f2f001f89ba
+		sourceColumn: site
+
+	column code_modele
+		dataType: string
+		lineageTag: 34cbbe26-7954-4b6b-aef4-39b931abe663
+		sourceColumn: code_modele
+
+	column nom
+		dataType: string
+		lineageTag: d8e17254-55b6-4789-8653-fbc63092cbb2
+		sourceColumn: nom
+
+	column code_coloris
+		dataType: string
+		lineageTag: be03cd78-c6a4-4277-ad1a-692a40221f72
+		sourceColumn: code_coloris
+
+	column coloris
+		dataType: string
+		lineageTag: 05d3da81-68c7-4acb-92f4-0116ef43eb83
+		sourceColumn: coloris
+
+	column categorie
+		dataType: string
+		lineageTag: 7594648a-f035-4713-a30c-cbc52495c062
+		sourceColumn: categorie
+
+	column silhouette
+		dataType: string
+		lineageTag: b1e2937e-38c7-4746-9151-32403565ae1b
+		sourceColumn: silhouette
+
+	column categorie_site
+		dataType: string
+		lineageTag: 0c2f1a09-5894-4010-bb95-118f93aabc7a
+		sourceColumn: categorie_site
+
+	column genre
+		dataType: string
+		lineageTag: 867046fe-ee6d-4ee5-a34e-3b02b8cf1c5c
+		sourceColumn: genre
+
+	column prix_affiche
+		dataType: double
+		lineageTag: 28f7fd81-b13c-4ec6-92e5-d1f70c1d90cf
+		summarizeBy: sum
+		sourceColumn: prix_affiche
+
+	column prix_barre
+		dataType: double
+		lineageTag: 30d900a4-2b92-4c3b-9ff8-7118a8d4e9d9
+		summarizeBy: sum
+		sourceColumn: prix_barre
+
+	column devise
+		dataType: string
+		lineageTag: 8abd9f17-7878-4209-b5fd-a6b8be722ad2
+		sourceColumn: devise
+
+	column disponible
+		dataType: boolean
+		lineageTag: 22b62ec8-9297-4ed2-99a0-8a9e9e7a1b43
+		sourceColumn: disponible
+
+	column url
+		dataType: string
+		lineageTag: 06657abf-5a96-4f51-bb97-50f3c2239d3d
+		sourceColumn: url
+
+	column date_collecte
+		dataType: string
+		lineageTag: 0031480b-5200-4825-90d1-a73bd241f369
+		sourceColumn: date_collecte
+
+	column source
+		dataType: string
+		lineageTag: fe733d93-1748-41ca-a69c-d17c877b6469
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: 95a1fafb-59e5-40da-b1f0-d951249aaaa5
+		sourceColumn: est_simule
+
+	partition crocs_produits = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "crocs_produits.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"site", type text}, {"code_modele", type text}, {"nom", type text}, {"code_coloris", type text}, {"coloris", type text}, {"categorie", type text}, {"silhouette", type text}, {"categorie_site", type text}, {"genre", type text}, {"prix_affiche", type number}, {"prix_barre", type number}, {"devise", type text}, {"disponible", type logical}, {"url", type text}, {"date_collecte", type text}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

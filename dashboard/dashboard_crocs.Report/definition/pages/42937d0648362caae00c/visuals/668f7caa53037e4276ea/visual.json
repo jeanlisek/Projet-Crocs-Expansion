@@ -1,0 +1,224 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "668f7caa53037e4276ea",
+  "position": {
+    "x": 656,
+    "y": 210,
+    "z": 1500,
+    "height": 285,
+    "width": 570,
+    "tabOrder": 15
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Légende",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "▲ +x / ▼ −x : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "écart signé avec la France, le 1er concurrent, le top 5 des marques, l'année 2024, la moyenne des 6 villes prioritaires ou le seuil.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Vert ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#2E7D32",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": ": écart favorable (plus haut pour la croissance, la marge, les parts de marché ; plus bas pour les coûts, le payback, la densité, la distance).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Rouge ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#C62828",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": ": écart défavorable.  ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  },
+                  {
+                    "value": "Gris ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#80868B",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": ": pas de comparaison possible.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Seuil : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "valeur cible fixée par l'équipe avant l'analyse (README, section 4.2). Le dashboard affiche l'écart au seuil, pas de verdict.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Réel / Simulé : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Réel = relevé à une source datée ; Simulé = jeu calibré (générateur Python, seed 2027). Le badge figure dans le libellé de chaque carte.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Pointillés : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "données projetées (2026-2029).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Couleurs des marques : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Crocs en vert, concurrents en gris dans les graphiques de marques.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Dégradé de vert (densité) : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "plus foncé = moins de magasins de chaussures pour 100 000 habitants.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

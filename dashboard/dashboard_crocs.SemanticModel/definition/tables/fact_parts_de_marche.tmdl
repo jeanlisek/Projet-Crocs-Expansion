@@ -1,0 +1,169 @@
+table fact_parts_de_marche
+	lineageTag: c28a2a24-f413-4833-8127-c78b24e088c0
+
+	measure 'PdM 2025' = /* #v8 */ CALCULATE ( AVERAGE ( fact_parts_de_marche[part_marche_valeur_pct] ), fact_parts_de_marche[annee] = 2025 )
+		formatString: 0.00
+		lineageTag: 4877cee4-5af7-48f6-a7a0-12fe8943e6df
+
+	measure 'PdM 2024' = /* #v8 */ CALCULATE ( AVERAGE ( fact_parts_de_marche[part_marche_valeur_pct] ), fact_parts_de_marche[annee] = 2024 )
+		formatString: 0.00
+		lineageTag: ee390ec0-c4ba-49e7-b12f-0b1478dbccb0
+
+	measure 'CA 2025' = /* #v8 */ CALCULATE ( SUM ( fact_parts_de_marche[ca_estime_meur] ), fact_parts_de_marche[annee] = 2025 )
+		formatString: 0.0
+		lineageTag: 06b1bd52-e630-4944-8492-076da5c742b2
+
+	measure 'CA 2024' = /* #v8 */ CALCULATE ( SUM ( fact_parts_de_marche[ca_estime_meur] ), fact_parts_de_marche[annee] = 2024 )
+		formatString: 0.0
+		lineageTag: 1d8f46c1-7561-4b1d-9a44-a67d5cf8ed3f
+
+	measure 'Rang PdM 2025' = /* #v8 */ IF ( HASONEVALUE ( dim_concurrent[nom_concurrent] ), RANKX ( FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Autres / MDD" ), [PdM 2025] ) )
+		formatString: 0
+		lineageTag: 25234b1e-aef3-41bf-9a04-a37c14e48f69
+
+	measure 'Top 5 + Crocs' = /* #v8 */ VAR n = SELECTEDVALUE ( dim_concurrent[nom_concurrent] ) RETURN IF ( NOT ISBLANK ( [PdM 2025] ) && n <> "Autres / MDD" && ( n = "Crocs" || [Rang PdM 2025] <= 5 ), 1, 0 )
+		formatString: 0
+		lineageTag: 934040b7-d88b-416d-b9f8-027165b6a914
+
+	measure 'Rang 2025' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, [Rang PdM 2025] )
+		formatString: 0
+		lineageTag: ea78048b-4fd9-4084-a779-d14e97668b20
+
+	measure 'Txt PdM 2025' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, SUBSTITUTE ( SUBSTITUTE ( FORMAT ( [PdM 2025], "0.00" ), ",", " " ), ".", "," ) & " %" )
+		lineageTag: 50ef2d79-214b-4125-bbd0-9f345913b073
+
+	measure 'Txt PdM 2024' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, SUBSTITUTE ( SUBSTITUTE ( FORMAT ( [PdM 2024], "0.00" ), ",", " " ), ".", "," ) & " %" )
+		lineageTag: ccc08994-b323-4679-afb9-5dae5d5bea74
+
+	measure 'Txt écart PdM' = /* #v8 */ VAR d = [PdM 2025] - [PdM 2024] RETURN IF ( [Top 5 + Crocs] = 1, IF ( d >= 0, "+", "−" ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.00" ), ",", " " ), ".", "," ) & " pt" )
+		lineageTag: 6f4042e6-91d6-4ee5-a5ee-04de0417b105
+
+	measure 'Txt CA 2025' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, SUBSTITUTE ( SUBSTITUTE ( FORMAT ( [CA 2025], "#,0.0" ), ",", " " ), ".", "," ) & " M€" )
+		lineageTag: e7488f7f-0b10-4ce4-b421-909259af04a7
+
+	measure 'Txt écart CA' = /* #v8 */ VAR d = [CA 2025] - [CA 2024] RETURN IF ( [Top 5 + Crocs] = 1, IF ( d >= 0, "+", "−" ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "#,0.0" ), ",", " " ), ".", "," ) & " M€" )
+		lineageTag: 4d2dc1a7-6e1c-4bec-8aab-3c1ef644a035
+
+	measure 'Couleur écart PdM' = /* #v8 */ VAR d = [PdM 2025] - [PdM 2024] RETURN IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) )
+		lineageTag: 974f3342-3d31-4c76-8958-dd1ee00be07b
+
+	measure 'Couleur écart CA' = /* #v8 */ VAR d = [CA 2025] - [CA 2024] RETURN IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) )
+		lineageTag: 051aabbd-7a65-4310-84c9-bfc630d2cd55
+
+	measure 'Fond Crocs' = /* #v8 */ IF ( SELECTEDVALUE ( dim_concurrent[nom_concurrent] ) = "Crocs", "#E6F2CC", "#FFFFFF" )
+		lineageTag: 9c85976b-2fe4-4df8-a0fe-448d8fb0871b
+
+	measure 'PdM Crocs Allemagne' = /* #v8 */ CALCULATE ( AVERAGE ( fact_parts_de_marche[part_marche_valeur_pct] ), REMOVEFILTERS ( dim_pays ), REMOVEFILTERS ( dim_concurrent ), fact_parts_de_marche[code_pays] = "DE", dim_concurrent[nom_concurrent] = "Crocs" )
+		formatString: 0.0
+		lineageTag: 80d56343-4a70-4049-b334-23577e4f472c
+
+	measure 'PdM Crocs France' = /* #v8 */ CALCULATE ( AVERAGE ( fact_parts_de_marche[part_marche_valeur_pct] ), REMOVEFILTERS ( dim_pays ), REMOVEFILTERS ( dim_concurrent ), fact_parts_de_marche[code_pays] = "FR", dim_concurrent[nom_concurrent] = "Crocs" )
+		formatString: 0.0
+		lineageTag: 86b9375e-30e6-4245-a60f-3b725d26991d
+
+	measure 'Crocs PdM vs leader' = /* #v8 */ VAR ln = MAXX ( TOPN ( 1, FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Crocs" && dim_concurrent[nom_concurrent] <> "Autres / MDD" && NOT ISBLANK ( [PdM 2025] ) ), [PdM 2025], DESC ), dim_concurrent[nom_concurrent] ) VAR v = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR w = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = ln ) VAR d = v - w RETURN IF ( ISBLANK ( v ) || ISBLANK ( w ), "–", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.00" ), ",", " " ), ".", "," ) & " pt vs " & ln )
+		lineageTag: afaab63c-6403-4acf-84c3-ceb9e7fd0c49
+
+	measure 'Crocs PdM vs leader couleur' = /* #v8 */ VAR ln = MAXX ( TOPN ( 1, FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Crocs" && dim_concurrent[nom_concurrent] <> "Autres / MDD" && NOT ISBLANK ( [PdM 2025] ) ), [PdM 2025], DESC ), dim_concurrent[nom_concurrent] ) VAR v = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR w = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = ln ) VAR d = v - w RETURN IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) )
+		lineageTag: e651c271-29d4-49aa-80b3-4cabc7c1d004
+
+	measure 'Crocs CA' = /* #v8 */ VAR v = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "#,0.0" ), ",", " " ), ".", "," ) & " M€"
+		lineageTag: a1fd51e4-0e69-4c04-a078-bda4ae55ee4f
+
+	measure 'Crocs CA vs leader' = /* #v8 */ VAR ln = MAXX ( TOPN ( 1, FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Crocs" && dim_concurrent[nom_concurrent] <> "Autres / MDD" && NOT ISBLANK ( [PdM 2025] ) ), [PdM 2025], DESC ), dim_concurrent[nom_concurrent] ) VAR v = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR w = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = ln ) VAR d = v - w RETURN IF ( ISBLANK ( v ) || ISBLANK ( w ), "–", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "#,0.0" ), ",", " " ), ".", "," ) & " M€ vs " & ln )
+		lineageTag: 2366df37-6095-4d84-8173-df9ae30c41ab
+
+	measure 'Crocs CA vs leader couleur' = /* #v8 */ VAR ln = MAXX ( TOPN ( 1, FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Crocs" && dim_concurrent[nom_concurrent] <> "Autres / MDD" && NOT ISBLANK ( [PdM 2025] ) ), [PdM 2025], DESC ), dim_concurrent[nom_concurrent] ) VAR v = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR w = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = ln ) VAR d = v - w RETURN IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) )
+		lineageTag: 2455258e-f400-4078-bba2-018431d10603
+
+	measure 'Crocs CA vs 2024' = /* #v8 */ VAR v = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR a = CALCULATE ( [CA 2024], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR d = DIVIDE ( v - a, a ) * 100 RETURN IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.0" ), ",", " " ), ".", "," ) & " % vs 2024"
+		lineageTag: 6efb9205-4bd2-49b5-a692-90a1a6fbace5
+
+	measure 'Crocs CA vs 2024 couleur' = /* #v8 */ VAR v = CALCULATE ( [CA 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR a = CALCULATE ( [CA 2024], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR d = v - a RETURN IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) )
+		lineageTag: 0a4c65e7-4e63-4c75-afb5-3f06583d4bd3
+
+	measure 'Prix moyen' = /* #v8 */ CALCULATE ( AVERAGE ( fact_prix_releves[prix_affiche_eur] ), fact_prix_releves[en_promotion] = FALSE () )
+		formatString: 0.00
+		lineageTag: 9c9d2909-ae2e-4845-b6bc-c3982e0f3343
+
+	measure 'Crocs prix' = /* #v8 */ VAR v = CALCULATE ( [Prix moyen], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "0.00" ), ",", " " ), ".", "," ) & " €"
+		lineageTag: 352c4d9e-8a30-4f1f-9846-12b4e27cdae1
+
+	measure 'Crocs prix vs top 5' = /* #v8 */ VAR v = CALCULATE ( [Prix moyen], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR w = AVERAGEX ( FILTER ( ALL ( dim_concurrent[nom_concurrent] ), dim_concurrent[nom_concurrent] <> "Crocs" && dim_concurrent[nom_concurrent] <> "Autres / MDD" && [Rang PdM 2025] <= 5 && NOT ISBLANK ( [PdM 2025] ) ), [Prix moyen] ) VAR d = DIVIDE ( v - w, w ) * 100 RETURN IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0" ), ",", " " ), ".", "," ) & " % vs top 5 (" & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( w, "0.00" ), ",", " " ), ".", "," ) & " €)"
+		lineageTag: 248098d0-22a1-4596-93cd-e2d1e7d02729
+
+	measure 'Txt écart vs Crocs' = /* #v8 */ VAR c = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR d = [PdM 2025] - c VAR n = SELECTEDVALUE ( dim_concurrent[nom_concurrent] ) RETURN IF ( [Top 5 + Crocs] = 1, IF ( n = "Crocs", "–", IF ( d >= 0, "+", "−" ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.00" ), ",", " " ), ".", "," ) & " pt" ) )
+		lineageTag: 3f24d8a0-c175-4a25-8dad-880357f62020
+
+	measure 'Couleur écart vs Crocs' = /* #v8 */ VAR c = CALCULATE ( [PdM 2025], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) VAR d = [PdM 2025] - c RETURN IF ( SELECTEDVALUE ( dim_concurrent[nom_concurrent] ) = "Crocs", "#80868B", IF ( d > 0, "#C62828", "#2E7D32" ) )
+		lineageTag: 397fe3a2-0f4d-4923-a623-e26ad1967348
+
+	measure 'Txt prix moyen' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, SUBSTITUTE ( SUBSTITUTE ( FORMAT ( [Prix moyen], "0.00" ), ",", " " ), ".", "," ) & " €" )
+		lineageTag: 50ad48f1-d34f-490e-b370-d332c15e6c72
+
+	measure 'Indice prix top' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, DIVIDE ( [Prix moyen], CALCULATE ( [Prix moyen], REMOVEFILTERS ( dim_concurrent ), dim_concurrent[nom_concurrent] = "Crocs" ) ) * 100 )
+		formatString: 0
+		lineageTag: 63392cd4-072d-473b-a039-a6e6d1beb959
+
+	measure 'Txt indice prix' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, FORMAT ( [Indice prix top], "0" ) )
+		lineageTag: 63453a28-cf3b-42a9-bebd-9fda8943bb85
+
+	measure 'PdM top' = /* #v8 */ IF ( [Top 5 + Crocs] = 1, [PdM 2025 annee] )
+		formatString: 0.0
+		lineageTag: ee42e8e6-b0b1-4060-ac91-aa60a39240ee
+
+	measure 'PdM 2025 annee' = /* #v8 */ AVERAGE ( fact_parts_de_marche[part_marche_valeur_pct] )
+		formatString: 0.0
+		lineageTag: e0006dc2-3b12-4c8f-920f-0cbe72d56297
+
+	measure 'Couleur marque' = /* #v8 */ IF ( SELECTEDVALUE ( dim_concurrent[nom_concurrent] ) = "Crocs", "#84BD00", "#9AA0A6" )
+		lineageTag: 79737725-ddf1-4044-8ee8-a5637e4c696b
+
+	column code_pays
+		dataType: string
+		lineageTag: 83e9f9ed-2204-460c-9dc0-3f3e104ad55b
+		sourceColumn: code_pays
+
+	column annee
+		dataType: int64
+		lineageTag: f4d49876-bad5-474c-82f1-21ac704bd83d
+		summarizeBy: none
+		sourceColumn: annee
+
+	column id_concurrent
+		dataType: string
+		lineageTag: 026aa70b-cff1-4ba1-b78e-94c3ac633a40
+		sourceColumn: id_concurrent
+
+	column part_marche_valeur_pct
+		dataType: double
+		lineageTag: 49afd165-26ca-4774-b679-91bb2cd6baee
+		summarizeBy: sum
+		sourceColumn: part_marche_valeur_pct
+
+	column ca_estime_meur
+		dataType: double
+		lineageTag: 3a816caf-4a41-4154-b0a8-faea45454e6f
+		summarizeBy: sum
+		sourceColumn: ca_estime_meur
+
+	column source
+		dataType: string
+		lineageTag: 35df7de2-fb43-458c-ae91-f306368952bd
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: 8682b0f2-bcb2-429e-8001-dac2dcfaad1b
+		sourceColumn: est_simule
+
+	partition fact_parts_de_marche = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "fact_parts_de_marche.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"annee", Int64.Type}, {"id_concurrent", type text}, {"part_marche_valeur_pct", type number}, {"ca_estime_meur", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

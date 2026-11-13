@@ -1,0 +1,102 @@
+table sensibilite_payback
+	lineageTag: b4f8f0fe-bb00-4ed9-88ca-e8188791f0ed
+
+	measure 'Payback sensi' = VAR p = SELECTEDVALUE ( sensibilite_payback[payback_mois] ) RETURN IF ( COUNTROWS ( sensibilite_payback ) <> 1, BLANK (), IF ( ISBLANK ( p ), "> 120", SUBSTITUTE ( FORMAT ( p, "0.0" ), ".", "," ) ) )
+		lineageTag: f2b3ce4a-d2d7-45c2-955d-c04b14c8c587
+
+	measure 'Couleur sensi' = VAR p = SELECTEDVALUE ( sensibilite_payback[payback_mois] ) RETURN IF ( COUNTROWS ( sensibilite_payback ) <> 1, BLANK (), SWITCH ( TRUE (), ISBLANK ( p ), "#E3A857", p <= 30, "#6FA800", p <= 36, "#A6D45A", p <= 48, "#F3EBC8", p <= 72, "#F2D29B", "#EBB872" ) )
+		lineageTag: 167acb7a-8b5a-4e1e-a5d7-b5718e53f854
+
+	column etp_libelle = SUBSTITUTE ( FORMAT ( sensibilite_payback[nb_etp], "0.0#" ), ".", "," ) & " ETP" & IF ( sensibilite_payback[nb_etp] > 5.35, " (actuel)", "" )
+		dataType: string
+		lineageTag: c6144c3f-fc51-4b4c-b265-aed7603c6f64
+		summarizeBy: none
+		sortByColumn: nb_etp
+
+	column ratio_libelle = FORMAT ( sensibilite_payback[ratio_ca_m2_vs_france] * 100, "0" ) & " %"
+		dataType: string
+		lineageTag: f7f60572-f397-46ab-a813-9d66d110e531
+		summarizeBy: none
+		sortByColumn: ratio_ca_m2_vs_france
+
+	column code_pays
+		dataType: string
+		lineageTag: f5ddeab1-3342-4ff5-a1bf-c02c5c0dcb3e
+		sourceColumn: code_pays
+
+	column scenario
+		dataType: string
+		lineageTag: e1d63e98-f05f-46ea-81f7-5b41c7a1ba87
+		sourceColumn: scenario
+
+	column format
+		dataType: string
+		lineageTag: e0fdde18-d4f4-4633-8f9b-569f09633b0e
+		sourceColumn: format
+
+	column nb_etp
+		dataType: double
+		lineageTag: d0ff086d-c825-4b5d-a028-d04ce6ab421d
+		summarizeBy: none
+		sourceColumn: nb_etp
+
+	column ratio_ca_m2_vs_france
+		dataType: double
+		lineageTag: f6d3bc3f-115b-4171-8a10-22f8730bb55c
+		summarizeBy: none
+		sourceColumn: ratio_ca_m2_vs_france
+
+	column ca_m2_eur
+		dataType: double
+		lineageTag: f729ed6b-d7a1-4f41-a1f7-67dcd40aa20d
+		summarizeBy: none
+		sourceColumn: ca_m2_eur
+
+	column payback_mois
+		dataType: double
+		lineageTag: 7be74582-067a-4b91-aea5-29623a7cae78
+		summarizeBy: none
+		sourceColumn: payback_mois
+
+	column seuil
+		dataType: string
+		lineageTag: 445b0fa0-6bfd-45c4-88c0-7555f0be466d
+		sourceColumn: seuil
+
+	column statut_go
+		dataType: string
+		lineageTag: d5578759-6d17-4bc5-9dd6-1ea13864bb81
+		sourceColumn: statut_go
+
+	column ca_m2_ratio_min_go
+		dataType: double
+		lineageTag: a0d0a2c5-1e6a-4856-bed8-4e15fe18be3f
+		summarizeBy: none
+		sourceColumn: ca_m2_ratio_min_go
+
+	column etp_max_go
+		dataType: double
+		lineageTag: 6fe08b13-f219-460f-a302-4eeb085b606e
+		summarizeBy: none
+		sourceColumn: etp_max_go
+
+	column est_cas_business_case
+		dataType: boolean
+		lineageTag: 5d092369-d05f-422e-9b62-ca3890368d17
+		sourceColumn: est_cas_business_case
+
+	column origine_donnees
+		dataType: string
+		lineageTag: 71355706-699d-4527-9657-158d42a91a30
+		sourceColumn: origine_donnees
+
+	partition sensibilite_payback = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "sensibilite_payback.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"scenario", type text}, {"format", type text}, {"nb_etp", type number}, {"ratio_ca_m2_vs_france", type number}, {"ca_m2_eur", type number}, {"payback_mois", type number}, {"seuil", type text}, {"statut_go", type text}, {"ca_m2_ratio_min_go", type number}, {"etp_max_go", type number}, {"est_cas_business_case", type logical}, {"origine_donnees", type text}}, "en-US")
+				in
+					Types
+

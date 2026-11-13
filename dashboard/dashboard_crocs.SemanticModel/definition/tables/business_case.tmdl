@@ -1,0 +1,192 @@
+table business_case
+	lineageTag: 7634f4d2-84dc-4285-92ef-cfbd4ca913f0
+
+	measure 'Payback affiché' =
+			VAR p = SELECTEDVALUE ( business_case[payback_mois] )
+			VAR h = SELECTEDVALUE ( business_case[horizon_annees] )
+			RETURN IF ( COUNTROWS ( business_case ) <> 1, "Choisir scénario et format", IF ( ISBLANK ( p ), "Non remboursé en " & h & " ans", SUBSTITUTE ( FORMAT ( p, "0.0" ), ".", "," ) & " mois" ) )
+		lineageTag: b53daa58-ffb9-43e7-8e01-dbc5fcfb7f69
+
+	measure 'Point mort affiché' = IF ( COUNTROWS ( business_case ) <> 1, "-", FORMAT ( SELECTEDVALUE ( business_case[point_mort_ca_ht_eur] ) / 1000, "#,0" ) & " k€ de CA HT" )
+		lineageTag: 53b29283-ae3f-43d9-8a0a-2a0e404016e7
+
+	measure 'Coût d occupation affiché' = IF ( COUNTROWS ( business_case ) <> 1, "-", FORMAT ( SELECTEDVALUE ( business_case[cout_occupation_pct] ), "0.0" ) & " % du CA" )
+		lineageTag: 0ab9cee5-087d-46a5-afff-93cff35bed83
+
+	measure 'Résultat affiché' = IF ( COUNTROWS ( business_case ) <> 1, "-", FORMAT ( SELECTEDVALUE ( business_case[resultat_croisiere_eur] ) / 1000, "#,0" ) & " k€ / an" )
+		lineageTag: 01ae0027-0f73-42e1-8101-cb3e7f9dc579
+
+	measure 'Payback libellé' = VAR p = SELECTEDVALUE ( business_case[payback_mois] ) RETURN IF ( COUNTROWS ( business_case ) <> 1, BLANK (), IF ( ISBLANK ( p ), "> 120 mois", SUBSTITUTE ( FORMAT ( p, "0.0" ), ".", "," ) & " mois" ) )
+		lineageTag: 230a3289-4fda-4962-b3da-086b6baef584
+
+	measure 'Couleur payback' = VAR p = SELECTEDVALUE ( business_case[payback_mois] ) RETURN IF ( COUNTROWS ( business_case ) <> 1, BLANK (), IF ( NOT ISBLANK ( p ) && p <= 36, "#DDEFB8", "#F6E3C2" ) )
+		lineageTag: 2344966a-3409-4f70-850e-4e9e0691a274
+
+	measure 'BC payback' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR p = SELECTEDVALUE ( business_case[payback_mois] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Payback (même périmètre de coûts que l'Allemagne) : " & f ) RETURN IF ( NOT one, "choisir un scénario et un format", IF ( ISBLANK ( p ), "> 120 mois", SUBSTITUTE ( SUBSTITUTE ( FORMAT ( p, "0.0" ), ",", " " ), ".", "," ) & " mois" ) )
+		lineageTag: 4f1902d9-3988-453f-ab80-1301d724ca9b
+
+	measure 'BC payback vs France' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR p = SELECTEDVALUE ( business_case[payback_mois] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Payback (même périmètre de coûts que l'Allemagne) : " & f ) RETURN IF ( NOT one, BLANK (), IF ( ISBLANK ( p ), "Non atteint en 10 ans · France : " & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( w, "0.0" ), ",", " " ), ".", "," ) & " mois", IF ( p - w > 0, "▲ +", IF ( p - w < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( p - w ), "0.0" ), ",", " " ), ".", "," ) & " mois vs France" ) )
+		lineageTag: 2e3f5a88-997a-46a8-b6b8-58004809a7f7
+
+	measure 'BC payback vs France couleur' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR p = SELECTEDVALUE ( business_case[payback_mois] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Payback (même périmètre de coûts que l'Allemagne) : " & f ) RETURN IF ( NOT one, "#80868B", IF ( ISBLANK ( p ) || p > w, "#C62828", "#2E7D32" ) )
+		lineageTag: 8c4f18a5-7716-4b03-95ed-1dc491c58287
+
+	measure 'BC payback seuil' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR p = SELECTEDVALUE ( business_case[payback_mois] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Payback (même périmètre de coûts que l'Allemagne) : " & f ) RETURN IF ( NOT one, BLANK (), IF ( ISBLANK ( p ), "> 120 mois (seuil 36)", IF ( p - 36 >= 0, "+", "−" ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( p - 36 ), "0.0" ), ",", " " ), ".", "," ) & " mois vs seuil 36" ) )
+		lineageTag: 5886ebb2-a228-4221-8f9e-08a55f972c37
+
+	measure 'BC payback seuil couleur' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR p = SELECTEDVALUE ( business_case[payback_mois] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Payback (même périmètre de coûts que l'Allemagne) : " & f ) RETURN IF ( NOT one, "#80868B", IF ( NOT ISBLANK ( p ) && p <= 36, "#2E7D32", "#C62828" ) )
+		lineageTag: ebb6b037-3671-4c93-9826-bcc8ced47690
+
+	measure 'BC point mort' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[point_mort_ca_ht_eur] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Point mort par magasin (même périmètre que l'Allemagne) : " & f ) RETURN IF ( NOT one, "-", SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "#,0" ), ",", " " ), ".", "," ) & " €" )
+		lineageTag: 7b00daf8-46f8-4266-ae59-2864448afe2f
+
+	measure 'BC point mort vs France' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[point_mort_ca_ht_eur] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Point mort par magasin (même périmètre que l'Allemagne) : " & f ) VAR d = v - w RETURN IF ( NOT one, BLANK (), IF ( ISBLANK ( w ), "pas de valeur France", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "#,0" ), ",", " " ), ".", "," ) & " € vs France" ) )
+		lineageTag: 6562d858-0cd7-4424-8b24-39f447e02ce2
+
+	measure 'BC point mort vs France couleur' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[point_mort_ca_ht_eur] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Point mort par magasin (même périmètre que l'Allemagne) : " & f ) VAR d = v - w RETURN IF ( NOT one || ISBLANK ( w ), "#80868B", IF ( d < 0, "#2E7D32", IF ( d > 0, "#C62828", "#80868B" ) ) )
+		lineageTag: cfb2f7ae-0170-4fc4-a449-8d1a1b00d0c1
+
+	measure 'BC occupation' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[cout_occupation_pct] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : " & f ) RETURN IF ( NOT one, "-", SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "0.00" ), ",", " " ), ".", "," ) & " %" )
+		lineageTag: 0dcdf8c8-2fab-49a4-8f5b-02fc2a4dd6dc
+
+	measure 'BC occupation vs France' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[cout_occupation_pct] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : " & f ) VAR d = v - w RETURN IF ( NOT one, BLANK (), IF ( ISBLANK ( w ), "pas de valeur France", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.00" ), ",", " " ), ".", "," ) & " pt vs France" ) )
+		lineageTag: c1b03a79-ca7e-4b3a-b9d9-d02b4f8dbd2f
+
+	measure 'BC occupation vs France couleur' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[cout_occupation_pct] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : " & f ) VAR d = v - w RETURN IF ( NOT one || ISBLANK ( w ), "#80868B", IF ( d < 0, "#2E7D32", IF ( d > 0, "#C62828", "#80868B" ) ) )
+		lineageTag: 4c774a26-52bd-4a74-b9b1-5a876638d55f
+
+	measure 'BC occupation seuil' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[cout_occupation_pct] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : " & f ) RETURN IF ( NOT one, BLANK (), IF ( v - 15 >= 0, "+", "−" ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( v - 15 ), "0.00" ), ",", " " ), ".", "," ) & " pt vs seuil 15 %" )
+		lineageTag: e3e7af7a-ecad-4cfb-8989-d0375180afe8
+
+	measure 'BC occupation seuil couleur' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[cout_occupation_pct] ) VAR w = CALCULATE ( AVERAGE ( kpi_summary[valeur] ), REMOVEFILTERS ( kpi_summary ), REMOVEFILTERS ( dim_pays ), kpi_summary[pays] = "FR", kpi_summary[kpi] = "Coût d'occupation (loyer + charges ÷ CA, même périmètre que l'Allemagne) : " & f ) RETURN IF ( NOT one, "#80868B", IF ( v <= 15, "#2E7D32", "#C62828" ) )
+		lineageTag: b58dbf59-f5a6-488e-869d-711a3a3831c3
+
+	measure 'BC résultat' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[resultat_croisiere_eur] ) / 1000 VAR i = SELECTEDVALUE ( business_case[investissement_eur] ) / 1000 VAR ca = SELECTEDVALUE ( business_case[ca_ht_croisiere_eur] ) / 1000 RETURN IF ( NOT one, "-", SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "#,0" ), ",", " " ), ".", "," ) & " k€ / an" )
+		lineageTag: 10afa487-dff3-4fe0-9584-132b9992c9de
+
+	measure 'BC investissement' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[resultat_croisiere_eur] ) / 1000 VAR i = SELECTEDVALUE ( business_case[investissement_eur] ) / 1000 VAR ca = SELECTEDVALUE ( business_case[ca_ht_croisiere_eur] ) / 1000 RETURN IF ( NOT one, BLANK (), "Investissement initial : " & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( i, "#,0" ), ",", " " ), ".", "," ) & " k€" )
+		lineageTag: 30a18c97-b654-465b-b696-c3631e748e60
+
+	measure 'BC CA' = /* #v8 */ VAR one = COUNTROWS ( business_case ) = 1 VAR f = SELECTEDVALUE ( business_case[format] ) VAR v = SELECTEDVALUE ( business_case[resultat_croisiere_eur] ) / 1000 VAR i = SELECTEDVALUE ( business_case[investissement_eur] ) / 1000 VAR ca = SELECTEDVALUE ( business_case[ca_ht_croisiere_eur] ) / 1000 RETURN IF ( NOT one, BLANK (), "CA HT en croisière : " & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ca, "#,0" ), ",", " " ), ".", "," ) & " k€ / an" )
+		lineageTag: 9fe9711c-08bd-4ee6-aaef-6025dbf73e92
+
+	column code_pays
+		dataType: string
+		lineageTag: 93ddd1c3-358c-4e2d-af01-006dab96225f
+		sourceColumn: code_pays
+
+	column scenario
+		dataType: string
+		lineageTag: 21f89378-8f94-4e1a-a001-63036ef8b3c9
+		sourceColumn: scenario
+
+	column format
+		dataType: string
+		lineageTag: 0ce9d593-e5f2-47b7-8219-de0cee59f904
+		sourceColumn: format
+
+	column surface_m2
+		dataType: double
+		lineageTag: 72d4edc4-d95e-49a5-ad61-e874fabd290d
+		summarizeBy: none
+		sourceColumn: surface_m2
+
+	column ca_m2_croisiere_eur
+		dataType: double
+		lineageTag: 9fcd0dd2-a5f3-43bb-97fd-9ffc77d50ee5
+		summarizeBy: sum
+		sourceColumn: ca_m2_croisiere_eur
+
+	column ca_ht_croisiere_eur
+		dataType: double
+		lineageTag: 2f704b98-b106-4cab-915d-d880a2f4b49b
+		summarizeBy: sum
+		sourceColumn: ca_ht_croisiere_eur
+
+	column taux_marge_brute_pct
+		dataType: double
+		lineageTag: 6afa8b92-730e-4944-b87e-707efd251d97
+		summarizeBy: sum
+		sourceColumn: taux_marge_brute_pct
+
+	column loyer_charges_eur
+		dataType: double
+		lineageTag: 11c0be90-708d-4c4c-ba9a-d43d6adb1992
+		summarizeBy: sum
+		sourceColumn: loyer_charges_eur
+
+	column personnel_eur
+		dataType: double
+		lineageTag: fdd6ecd3-2845-4ed2-a7cd-c65b521a46b3
+		summarizeBy: sum
+		sourceColumn: personnel_eur
+
+	column energie_eur
+		dataType: double
+		lineageTag: 66fe0411-4733-4b4e-b09b-e480929217c9
+		summarizeBy: sum
+		sourceColumn: energie_eur
+
+	column couts_variables_eur
+		dataType: double
+		lineageTag: e83bb1b4-e299-4a73-80fb-3b24829cd763
+		summarizeBy: sum
+		sourceColumn: couts_variables_eur
+
+	column ebitda_croisiere_eur
+		dataType: double
+		lineageTag: 5d769528-c441-4898-8a30-af2b91027303
+		summarizeBy: sum
+		sourceColumn: ebitda_croisiere_eur
+
+	column resultat_croisiere_eur
+		dataType: double
+		lineageTag: a4dd3fd3-fcf1-4beb-abf7-470060176b0e
+		summarizeBy: sum
+		sourceColumn: resultat_croisiere_eur
+
+	column investissement_eur
+		dataType: double
+		lineageTag: 1728b4e3-6242-4994-8c06-1bb372ee71b4
+		summarizeBy: sum
+		sourceColumn: investissement_eur
+
+	column cout_occupation_pct
+		dataType: double
+		lineageTag: 7486d666-cba7-4242-8f57-8a2f081c23ec
+		summarizeBy: sum
+		sourceColumn: cout_occupation_pct
+
+	column point_mort_ca_ht_eur
+		dataType: double
+		lineageTag: bdf17e89-c561-4fdf-8f18-5d8a84fd1c60
+		summarizeBy: sum
+		sourceColumn: point_mort_ca_ht_eur
+
+	column payback_mois
+		dataType: double
+		lineageTag: 5ed0c8d6-7cb7-4e4c-83cc-541ddeaec611
+		summarizeBy: sum
+		sourceColumn: payback_mois
+
+	column horizon_annees
+		dataType: int64
+		lineageTag: aa63f43f-f626-4aba-987b-42f49a3ffba1
+		summarizeBy: none
+		sourceColumn: horizon_annees
+
+	column origine_donnees
+		dataType: string
+		lineageTag: 0a7e61d3-9a6d-440c-b3df-470c1cdfbe38
+		sourceColumn: origine_donnees
+
+	partition business_case = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "business_case.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"scenario", type text}, {"format", type text}, {"surface_m2", type number}, {"ca_m2_croisiere_eur", type number}, {"ca_ht_croisiere_eur", type number}, {"taux_marge_brute_pct", type number}, {"loyer_charges_eur", type number}, {"personnel_eur", type number}, {"energie_eur", type number}, {"couts_variables_eur", type number}, {"ebitda_croisiere_eur", type number}, {"resultat_croisiere_eur", type number}, {"investissement_eur", type number}, {"cout_occupation_pct", type number}, {"point_mort_ca_ht_eur", type number}, {"payback_mois", type number}, {"horizon_annees", Int64.Type}, {"origine_donnees", type text}}, "en-US")
+				in
+					Types
+

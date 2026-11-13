@@ -1,0 +1,68 @@
+relationship rel_kpi_summary_pays
+	fromColumn: kpi_summary.pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_dim_zone_chalandise_code_pays
+	fromColumn: dim_zone_chalandise.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_fact_marche_code_pays
+	fromColumn: fact_marche.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_fact_parts_de_marche_code_pays
+	fromColumn: fact_parts_de_marche.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_fact_prix_releves_code_pays
+	fromColumn: fact_prix_releves.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_fact_immobilier_id_zone
+	fromColumn: fact_immobilier.id_zone
+	toColumn: dim_zone_chalandise.id_zone
+
+relationship rel_densite_concurrentielle_id_zone
+	fromColumn: densite_concurrentielle.id_zone
+	toColumn: dim_zone_chalandise.id_zone
+
+relationship rel_distance_hub_id_zone
+	fromColumn: distance_hub.id_zone
+	toColumn: dim_zone_chalandise.id_zone
+
+relationship rel_fact_parts_de_marche_id_concurrent
+	fromColumn: fact_parts_de_marche.id_concurrent
+	toColumn: dim_concurrent.id_concurrent
+
+relationship rel_fact_prix_releves_id_concurrent
+	fromColumn: fact_prix_releves.id_concurrent
+	toColumn: dim_concurrent.id_concurrent
+
+relationship rel_fact_prix_releves_id_produit
+	fromColumn: fact_prix_releves.id_produit
+	toColumn: dim_produit.id_produit
+
+relationship rel_fact_prix_releves_id_date
+	fromColumn: fact_prix_releves.id_date
+	toColumn: dim_temps.id_date
+
+relationship rel_city_scoring_id_zone
+	fromColumn: city_scoring.id_zone
+	toColumn: dim_zone_chalandise.id_zone
+
+relationship rel_business_case_code_pays
+	fromColumn: business_case.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_sensibilite_payback_code_pays
+	fromColumn: sensibilite_payback.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_eurostat_series_code_pays
+	fromColumn: eurostat_series.code_pays
+	toColumn: dim_pays.code_pays
+
+relationship rel_crocs_produits_site
+	fromColumn: crocs_produits.site
+	toColumn: dim_pays.code_pays
+

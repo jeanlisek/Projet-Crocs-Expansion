@@ -1,0 +1,87 @@
+table kpi_guide
+	lineageTag: 606ad5af-54ee-4718-b04a-65afd0a008df
+
+	column nom
+		dataType: string
+		lineageTag: 8ba49145-180d-4748-b70c-de95c36533d9
+		summarizeBy: none
+		sourceColumn: nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column axe
+		dataType: string
+		lineageTag: 726b669a-dce3-4a23-b52f-2e3460710264
+		summarizeBy: none
+		sourceColumn: axe
+
+		annotation SummarizationSetBy = Automatic
+
+	column definition
+		dataType: string
+		lineageTag: 81a11fc0-8521-45c3-bb9a-88bdecd99b1f
+		summarizeBy: none
+		sourceColumn: definition
+
+		annotation SummarizationSetBy = Automatic
+
+	column formule
+		dataType: string
+		lineageTag: ec47fe84-7a89-4d0f-a638-383624353220
+		summarizeBy: none
+		sourceColumn: formule
+
+		annotation SummarizationSetBy = Automatic
+
+	column unite
+		dataType: string
+		lineageTag: 077e84e4-65a7-48f1-a508-7f422b9e990d
+		summarizeBy: none
+		sourceColumn: unite
+
+		annotation SummarizationSetBy = Automatic
+
+	column perimetre
+		dataType: string
+		lineageTag: a5f8a7d1-21c5-433c-9ecd-bf02db3a219d
+		summarizeBy: none
+		sourceColumn: perimetre
+
+		annotation SummarizationSetBy = Automatic
+
+	column source
+		dataType: string
+		lineageTag: b6a27aea-2047-420b-9d50-eb6b47f89459
+		summarizeBy: none
+		sourceColumn: source
+
+		annotation SummarizationSetBy = Automatic
+
+	column origine
+		dataType: string
+		lineageTag: 1eb8b353-3875-4744-a3bc-fb1f1c454a88
+		summarizeBy: none
+		sourceColumn: origine
+
+		annotation SummarizationSetBy = Automatic
+
+	column seuil
+		dataType: string
+		lineageTag: 20f73fda-c92d-475c-8ae3-7d38c8259f2b
+		summarizeBy: none
+		sourceColumn: seuil
+
+		annotation SummarizationSetBy = Automatic
+
+	partition kpi_guide = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "kpi_guide.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"nom", type text}, {"axe", type text}, {"definition", type text}, {"formule", type text}, {"unite", type text}, {"perimetre", type text}, {"source", type text}, {"origine", type text}, {"seuil", type text}}, "en-US")
+				in
+					Types
+
+	annotation PBI_ResultType = Table
+

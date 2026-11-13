@@ -1,0 +1,87 @@
+table densite_concurrentielle
+	lineageTag: 1923dbfa-5161-4ae1-8d10-aa6b476f1c65
+
+	column id_zone
+		dataType: string
+		lineageTag: 876b9e53-d502-4703-8b5a-5f655534ed83
+		sourceColumn: id_zone
+
+	column ville
+		dataType: string
+		lineageTag: 5813b7f8-139c-45b1-ba31-61929507ba0f
+		sourceColumn: ville
+
+	column nb_magasins_chaussures
+		dataType: int64
+		lineageTag: df038e32-91d3-4bb1-9820-a652f84a2277
+		summarizeBy: sum
+		sourceColumn: nb_magasins_chaussures
+
+	column population_destatis
+		dataType: int64
+		lineageTag: e6b335ca-0013-4f88-9c92-3607a2e762df
+		summarizeBy: sum
+		sourceColumn: population_destatis
+
+	column date_reference_population
+		dataType: string
+		lineageTag: e9ad41ab-fd7f-4f37-ab95-878da7097220
+		sourceColumn: date_reference_population
+
+	column densite_pour_100k_hab
+		dataType: double
+		lineageTag: 46b19b82-67bd-4f67-8f97-34e187c11485
+		summarizeBy: sum
+		sourceColumn: densite_pour_100k_hab
+
+	column population_osm
+		dataType: double
+		lineageTag: 59dcf40c-5adb-45fa-8e32-bff82a465214
+		summarizeBy: sum
+		sourceColumn: population_osm
+
+	column annee_population_osm
+		dataType: double
+		lineageTag: c6caa377-efcb-40ce-8401-04911f489ff4
+		summarizeBy: none
+		sourceColumn: annee_population_osm
+
+	column densite_population_osm
+		dataType: double
+		lineageTag: d8fd5648-9270-407b-86dd-ff039392dc7e
+		summarizeBy: sum
+		sourceColumn: densite_population_osm
+
+	column population_simulee
+		dataType: int64
+		lineageTag: b1aac2a3-e519-423b-9377-35000c016049
+		summarizeBy: sum
+		sourceColumn: population_simulee
+
+	column densite_population_simulee
+		dataType: double
+		lineageTag: 0baed09d-0d14-4fbc-8032-d679298c6395
+		summarizeBy: sum
+		sourceColumn: densite_population_simulee
+
+	column densite_simulee
+		dataType: double
+		lineageTag: 2da6e20c-2da5-438b-a9ba-cbb1d5b804ac
+		summarizeBy: sum
+		sourceColumn: densite_simulee
+
+	column origine_donnees
+		dataType: string
+		lineageTag: 501b5bfc-16db-4d15-86b4-9dbe14aead67
+		sourceColumn: origine_donnees
+
+	partition densite_concurrentielle = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "densite_concurrentielle.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"ville", type text}, {"nb_magasins_chaussures", Int64.Type}, {"population_destatis", Int64.Type}, {"date_reference_population", type text}, {"densite_pour_100k_hab", type number}, {"population_osm", type number}, {"annee_population_osm", type number}, {"densite_population_osm", type number}, {"population_simulee", Int64.Type}, {"densite_population_simulee", type number}, {"densite_simulee", type number}, {"origine_donnees", type text}}, "en-US")
+				in
+					Types
+

@@ -1,0 +1,78 @@
+table distance_hub
+	lineageTag: 4895b5ff-63d5-4feb-af8a-1aff51d0760d
+
+	column id_zone
+		dataType: string
+		lineageTag: cab9a835-c8fb-4a97-9e89-96191dc69fe4
+		sourceColumn: id_zone
+
+	column ville
+		dataType: string
+		lineageTag: e36f566e-32a2-4d7e-93b2-9035abdd4841
+		sourceColumn: ville
+
+	column id_hub_le_plus_proche
+		dataType: string
+		lineageTag: 9177194a-47d8-48fe-b28e-f887f5001065
+		sourceColumn: id_hub_le_plus_proche
+
+	column commune_hub_le_plus_proche
+		dataType: string
+		lineageTag: 335f9791-5608-41f1-9ff3-9d87ca826206
+		sourceColumn: commune_hub_le_plus_proche
+
+	column distance_reelle_km
+		dataType: double
+		lineageTag: 96a744a1-552b-4410-abeb-7fca53f45b5e
+		summarizeBy: sum
+		sourceColumn: distance_reelle_km
+
+	column duree_conduite_h
+		dataType: double
+		lineageTag: f77ca937-7194-4386-a8f0-cdf068f91784
+		summarizeBy: sum
+		sourceColumn: duree_conduite_h
+
+	column id_hub_le_plus_proche_simule
+		dataType: string
+		lineageTag: d8f16847-4d27-4eaa-8c92-5af5bf49427a
+		sourceColumn: id_hub_le_plus_proche_simule
+
+	column distance_simulee_km
+		dataType: int64
+		lineageTag: 295483b6-633f-463c-8773-2b64570c5950
+		summarizeBy: sum
+		sourceColumn: distance_simulee_km
+
+	column meme_hub
+		dataType: boolean
+		lineageTag: a263868a-3bd9-426e-9ae5-e2146fe32aa5
+		sourceColumn: meme_hub
+
+	column ecart_km
+		dataType: double
+		lineageTag: 4bb1a863-1ee4-48d9-8b1c-b7232b437781
+		summarizeBy: sum
+		sourceColumn: ecart_km
+
+	column ecart_pct
+		dataType: double
+		lineageTag: 782fe6ff-292e-4709-b069-34c61c083a03
+		summarizeBy: sum
+		sourceColumn: ecart_pct
+
+	column origine_donnees
+		dataType: string
+		lineageTag: 50e02fe3-9ba0-4b3c-ad8c-ed1202b1b293
+		sourceColumn: origine_donnees
+
+	partition distance_hub = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "distance_hub.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"ville", type text}, {"id_hub_le_plus_proche", type text}, {"commune_hub_le_plus_proche", type text}, {"distance_reelle_km", type number}, {"duree_conduite_h", type number}, {"id_hub_le_plus_proche_simule", type text}, {"distance_simulee_km", Int64.Type}, {"meme_hub", type logical}, {"ecart_km", type number}, {"ecart_pct", type number}, {"origine_donnees", type text}}, "en-US")
+				in
+					Types
+

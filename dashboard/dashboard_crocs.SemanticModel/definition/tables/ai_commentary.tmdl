@@ -1,0 +1,55 @@
+table ai_commentary
+	lineageTag: 1c243bc1-d6ed-4b70-9f86-f3bb5074a547
+
+	measure 'Commentaire Synthèse' = LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "Synthèse Comex", ai_commentary[valeur_filtre], "tous", ai_commentary[verifie], TRUE () )
+		lineageTag: 37d43b63-c48a-4735-945d-34e439910cb9
+
+	measure 'Commentaire Marché' = LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "Marché & prix", ai_commentary[valeur_filtre], SELECTEDVALUE ( dim_pays[nom_pays], "Allemagne" ), ai_commentary[verifie], TRUE () )
+		lineageTag: e22dad3e-3ab6-4f10-9830-18f1098b31fc
+
+	measure 'Commentaire Implantation' = VAR v = SELECTEDVALUE ( dim_zone_chalandise[ville] ) RETURN IF ( ISBLANK ( v ), "Choisissez une ville dans le bandeau de filtres (Ville) pour afficher son analyse.", LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "Où s'implanter", ai_commentary[valeur_filtre], v, ai_commentary[verifie], TRUE () ) )
+		lineageTag: ae6a6f70-1083-455b-aad1-53f7dc37cd49
+
+	measure 'Commentaire Business case' = LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "Business case", ai_commentary[valeur_filtre], SELECTEDVALUE ( business_case[scenario], "pessimiste" ), ai_commentary[verifie], TRUE () )
+		lineageTag: a70c95ae-0b9f-4692-bb6e-4b332f3559dd
+
+	column page
+		dataType: string
+		lineageTag: b77d1702-68db-44e0-97af-448fb5f7ece4
+		sourceColumn: page
+
+	column filtre
+		dataType: string
+		lineageTag: d28e146f-0b53-4d20-b4f4-5fe8ad72a9dc
+		sourceColumn: filtre
+
+	column valeur_filtre
+		dataType: string
+		lineageTag: a6079156-8234-49cd-bae8-30b24656a7b4
+		sourceColumn: valeur_filtre
+
+	column texte
+		dataType: string
+		lineageTag: 8e160baf-f6b4-4ce3-8996-94d03a8e342c
+		sourceColumn: texte
+
+	column verifie
+		dataType: boolean
+		lineageTag: d54a5451-afa6-485a-8157-3931842396ab
+		sourceColumn: verifie
+
+	column date_generation
+		dataType: string
+		lineageTag: 1e0c0cdd-a418-4903-8eb6-f7ac653d3893
+		sourceColumn: date_generation
+
+	partition ai_commentary = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "ai_commentary.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"page", type text}, {"filtre", type text}, {"valeur_filtre", type text}, {"texte", type text}, {"verifie", type logical}, {"date_generation", type text}}, "en-US")
+				in
+					Types
+

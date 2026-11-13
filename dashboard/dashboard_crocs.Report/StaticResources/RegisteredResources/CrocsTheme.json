@@ -1,0 +1,148 @@
+{
+  "name": "Crocs",
+  "dataColors": [
+    "#84BD00",
+    "#3A3A3A",
+    "#B5D96B",
+    "#006DA4",
+    "#5A8200",
+    "#9A9A9A",
+    "#7FB8D6",
+    "#D9EDB0",
+    "#1E1E1E",
+    "#C9C9C9"
+  ],
+  "foreground": "#3A3A3A",
+  "foregroundNeutralSecondary": "#6E6E6E",
+  "foregroundNeutralTertiary": "#9E9E9E",
+  "background": "#FFFFFF",
+  "backgroundLight": "#F4F8EC",
+  "backgroundNeutral": "#E6E6E6",
+  "tableAccent": "#84BD00",
+  "good": "#84BD00",
+  "neutral": "#9E9E9E",
+  "bad": "#E08A00",
+  "maximum": "#5A8200",
+  "center": "#B5D96B",
+  "minimum": "#EEF6DC",
+  "hyperlink": "#006DA4",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 28,
+      "color": "#444444"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 13,
+      "color": "#444444"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#444444"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#444444"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E3E6DC"
+              }
+            },
+            "radius": 12
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "title": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#444444"
+              }
+            },
+            "fontFamily": "Segoe UI Semibold"
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F5F6F2"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "items": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#444444"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [
+          {
+            "backColor": {
+              "solid": {
+                "color": "#84BD00"
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": "#2E2E2E"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "textbox": {
+      "*": {
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "background": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}

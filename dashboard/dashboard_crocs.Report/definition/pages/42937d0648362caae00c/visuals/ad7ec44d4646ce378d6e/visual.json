@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "ad7ec44d4646ce378d6e",
+  "position": {
+    "x": 20,
+    "y": 1046,
+    "z": 1000,
+    "height": 30,
+    "width": 1880,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Sources : ",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Eurostat · Destatis · OpenStreetMap (ODbL) · OSRM · crocs.fr / crocs.de · jeu simulé calibré (config/hypotheses.yaml).",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

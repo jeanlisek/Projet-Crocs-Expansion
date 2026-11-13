@@ -1,0 +1,161 @@
+table dim_produit
+	lineageTag: f5b82223-d7f6-4694-8ace-dcdb268e5141
+
+	column id_produit
+		dataType: string
+		lineageTag: 1b276c09-d73a-4a83-9d79-aa7727b3c52f
+		sourceColumn: id_produit
+
+	column sku
+		dataType: string
+		lineageTag: 64a60155-e563-43a1-8b64-d1cad4628dfa
+		sourceColumn: sku
+
+	column marque
+		dataType: string
+		lineageTag: f53cdd0b-9319-4958-81cc-246575dde211
+		sourceColumn: marque
+
+	column categorie
+		dataType: string
+		lineageTag: bf132bc8-1edd-4fd0-9354-aaa9d0cebf82
+		sourceColumn: categorie
+
+	column sous_categorie
+		dataType: string
+		lineageTag: 1ed30832-9dd0-4da4-aa63-3738d4fda609
+		sourceColumn: sous_categorie
+
+	column modele
+		dataType: string
+		lineageTag: 64fc5d8a-3bc7-4b09-8e70-84e5add370fc
+		sourceColumn: modele
+
+	column coloris
+		dataType: string
+		lineageTag: 94647be0-bc57-47f4-8b19-e768cc1e379a
+		sourceColumn: coloris
+
+	column cible
+		dataType: string
+		lineageTag: 66f0300b-da18-4d3f-8254-4057cc8003d8
+		sourceColumn: cible
+
+	column prix_vente_ttc_fr
+		dataType: double
+		lineageTag: 57d45462-0e63-4c8e-870e-a00024477db0
+		summarizeBy: sum
+		sourceColumn: prix_vente_ttc_fr
+
+	column prix_vente_ht_fr
+		dataType: double
+		lineageTag: bf1dca85-f191-4743-af2f-2bdb1ab0240a
+		summarizeBy: sum
+		sourceColumn: prix_vente_ht_fr
+
+	column cout_fob_usd
+		dataType: double
+		lineageTag: ffa5cb3d-451c-49d5-a209-4a7b08c8a7ca
+		summarizeBy: sum
+		sourceColumn: cout_fob_usd
+
+	column cout_fob_eur
+		dataType: double
+		lineageTag: c8c91a77-de0c-4b41-bd92-c44c8a3a3f28
+		summarizeBy: sum
+		sourceColumn: cout_fob_eur
+
+	column cout_fret_unitaire_eur
+		dataType: double
+		lineageTag: 15a2c932-0e75-490c-8d59-2e16c10821c0
+		summarizeBy: sum
+		sourceColumn: cout_fret_unitaire_eur
+
+	column droits_douane_ue_eur
+		dataType: double
+		lineageTag: 9cb86a15-d3da-403b-8abc-ab6d8243e4da
+		summarizeBy: sum
+		sourceColumn: droits_douane_ue_eur
+
+	column cout_debarque_eur
+		dataType: double
+		lineageTag: dc209837-7681-40bd-8363-f96ed879b944
+		summarizeBy: sum
+		sourceColumn: cout_debarque_eur
+
+	column code_sh
+		dataType: double
+		lineageTag: c5a49483-2307-4fab-9df8-881e9651dc97
+		summarizeBy: none
+		sourceColumn: code_sh
+
+	column taux_droit_ue_pct
+		dataType: double
+		lineageTag: 42c46e12-7714-4dcc-8230-a557999ac06c
+		summarizeBy: sum
+		sourceColumn: taux_droit_ue_pct
+
+	column taux_droit_uk_pct
+		dataType: double
+		lineageTag: c83245f6-5be6-4232-a13f-59c7783373eb
+		summarizeBy: sum
+		sourceColumn: taux_droit_uk_pct
+
+	column pays_origine
+		dataType: string
+		lineageTag: f9343b83-5ca6-40f8-a223-ead93f425151
+		sourceColumn: pays_origine
+
+	column poids_unitaire_kg
+		dataType: double
+		lineageTag: afc99a60-81d9-4b41-bc40-db967039f175
+		summarizeBy: sum
+		sourceColumn: poids_unitaire_kg
+
+	column profil_saisonnier
+		dataType: string
+		lineageTag: b6aa0289-4f20-4f39-95ee-694d5f0037b1
+		sourceColumn: profil_saisonnier
+
+	column produit_sous_licence
+		dataType: boolean
+		lineageTag: 25c2576c-2091-438d-821c-f81172f7b692
+		sourceColumn: produit_sous_licence
+
+	column annee_lancement
+		dataType: int64
+		lineageTag: 37de5617-be63-43e7-b5f8-eef6e8642b69
+		summarizeBy: none
+		sourceColumn: annee_lancement
+
+	column statut
+		dataType: string
+		lineageTag: b70a04d1-84cb-45c2-9f1f-2618fd49a339
+		sourceColumn: statut
+
+	column taux_marge_theorique_pct
+		dataType: double
+		lineageTag: c6419e7f-7763-40b3-aa07-c779315b4960
+		summarizeBy: sum
+		sourceColumn: taux_marge_theorique_pct
+
+	column source
+		dataType: string
+		lineageTag: 51e93959-05d2-4705-8e43-fe641465713b
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: 149a41a5-5656-4107-8bea-003bdf96fd43
+		sourceColumn: est_simule
+
+	partition dim_produit = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "dim_produit.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_produit", type text}, {"sku", type text}, {"marque", type text}, {"categorie", type text}, {"sous_categorie", type text}, {"modele", type text}, {"coloris", type text}, {"cible", type text}, {"prix_vente_ttc_fr", type number}, {"prix_vente_ht_fr", type number}, {"cout_fob_usd", type number}, {"cout_fob_eur", type number}, {"cout_fret_unitaire_eur", type number}, {"droits_douane_ue_eur", type number}, {"cout_debarque_eur", type number}, {"code_sh", type number}, {"taux_droit_ue_pct", type number}, {"taux_droit_uk_pct", type number}, {"pays_origine", type text}, {"poids_unitaire_kg", type number}, {"profil_saisonnier", type text}, {"produit_sous_licence", type logical}, {"annee_lancement", Int64.Type}, {"statut", type text}, {"taux_marge_theorique_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

@@ -1,0 +1,181 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "37fbbeccf92dd91f8c5c",
+  "position": {
+    "x": 36,
+    "y": 210,
+    "z": 1400,
+    "height": 285,
+    "width": 570,
+    "tabOrder": 14
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "La question du Comex",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Faut-il ouvrir un réseau de magasins Crocs en propre en Allemagne sur 2027-2029, et à quelles conditions serait-il rentable ?",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Périmètre",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Pays : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Allemagne, comparée à la France (réseau existant, référence des indices = 100).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Période : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "historique 2019-2025 ; projections 2026-2029, signalées en pointillés ; croissances en TCAM 2022-2025.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "HT ou TTC : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "prix, marges, coûts et business case en HT ; tailles de marché, parts de marché et dépenses des ménages en TTC.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Scénarios : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "pessimiste, central, optimiste ; formats centre commercial et centre-ville ; 12 grandes villes allemandes.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Filtres : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "le bandeau en haut de chaque page (Pays, Ville, Scénario, Format) s'applique aux cartes, graphiques et commentaires IA.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

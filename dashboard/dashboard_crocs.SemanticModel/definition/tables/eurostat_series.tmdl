@@ -1,0 +1,70 @@
+table eurostat_series
+	lineageTag: 380cd3ed-502c-414d-b120-5096f8bf1b3f
+
+	column code_pays
+		dataType: string
+		lineageTag: 5fba83f6-105d-47eb-884f-b3b18f0d9021
+		sourceColumn: code_pays
+
+	column indicateur
+		dataType: string
+		lineageTag: 8710db48-d23b-48f5-8f51-7b52e63dab8a
+		sourceColumn: indicateur
+
+	column annee
+		dataType: int64
+		lineageTag: a42a129c-7646-479c-995f-b7018d27aa6b
+		summarizeBy: none
+		sourceColumn: annee
+
+	column valeur
+		dataType: double
+		lineageTag: 39b13019-74a3-4f35-835d-8aef87a241fd
+		summarizeBy: none
+		sourceColumn: valeur
+
+	column unite
+		dataType: string
+		lineageTag: 8f6a39df-1f2c-417c-9fe0-659e753d4548
+		sourceColumn: unite
+
+	column statut_eurostat
+		dataType: string
+		lineageTag: 464e2678-840b-489d-af96-86d5c46412c7
+		sourceColumn: statut_eurostat
+
+	column jeu_donnees
+		dataType: string
+		lineageTag: 7e3a70c5-22f4-4c8c-8ab7-b0586f7e8565
+		sourceColumn: jeu_donnees
+
+	column filtre
+		dataType: string
+		lineageTag: 972f0b6c-5ef6-41c9-be88-967afdf3a24a
+		sourceColumn: filtre
+
+	column date_collecte
+		dataType: string
+		lineageTag: 8aece524-5dd2-4464-88d0-6d21422291fc
+		sourceColumn: date_collecte
+
+	column source
+		dataType: string
+		lineageTag: b2bcd2af-4526-4a4b-a657-530e3c652c9d
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: fd90f1bc-35d8-4418-a9bb-9b7ff797495d
+		sourceColumn: est_simule
+
+	partition eurostat_series = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "eurostat_series.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"indicateur", type text}, {"annee", Int64.Type}, {"valeur", type number}, {"unite", type text}, {"statut_eurostat", type text}, {"jeu_donnees", type text}, {"filtre", type text}, {"date_collecte", type text}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

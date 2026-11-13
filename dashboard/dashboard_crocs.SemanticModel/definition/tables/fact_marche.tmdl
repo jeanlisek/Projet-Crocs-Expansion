@@ -1,0 +1,56 @@
+table fact_marche
+	lineageTag: 2a2e1650-aac1-4dd5-b1a0-7cdf5f38bdc5
+
+	column code_pays
+		dataType: string
+		lineageTag: 88651a13-b3cc-4c39-8bb6-9e26921b4c29
+		sourceColumn: code_pays
+
+	column annee
+		dataType: int64
+		lineageTag: 059a0110-e8c2-4fd6-9712-4862b993a708
+		summarizeBy: none
+		sourceColumn: annee
+
+	column segment
+		dataType: string
+		lineageTag: c716dd24-06c5-40ee-89a6-6521ed844643
+		sourceColumn: segment
+
+	column taille_marche_meur
+		dataType: double
+		lineageTag: 681de2fe-ecde-48a0-8ffe-ff4e883adbc4
+		summarizeBy: sum
+		sourceColumn: taille_marche_meur
+
+	column taux_croissance_annuel_pct
+		dataType: double
+		lineageTag: d7730cb5-fabc-4e7b-a008-639ffb6e4d50
+		summarizeBy: sum
+		sourceColumn: taux_croissance_annuel_pct
+
+	column est_projection
+		dataType: boolean
+		lineageTag: 030aaa96-92fa-4146-a1b4-e4fd2467caac
+		sourceColumn: est_projection
+
+	column source
+		dataType: string
+		lineageTag: 1ce03370-407a-4130-b29a-07c6234a12ae
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: e6aeda9c-8aa8-4949-bcd9-4fe379b16fd0
+		sourceColumn: est_simule
+
+	partition fact_marche = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "fact_marche.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"annee", Int64.Type}, {"segment", type text}, {"taille_marche_meur", type number}, {"taux_croissance_annuel_pct", type number}, {"est_projection", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

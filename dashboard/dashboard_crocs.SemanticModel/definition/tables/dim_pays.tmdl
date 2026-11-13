@@ -1,0 +1,94 @@
+table dim_pays
+	lineageTag: a8310b18-bd7a-41cc-9475-7aa9e79a2378
+
+	column code_pays
+		dataType: string
+		lineageTag: c3b48c44-f40c-478c-8a6c-a360c5628072
+		sourceColumn: code_pays
+
+	column nom_pays
+		dataType: string
+		lineageTag: e07e07ae-7a39-4bf5-8f4b-61f03d30c9aa
+		sourceColumn: nom_pays
+
+	column devise
+		dataType: string
+		lineageTag: 71e7716f-5b5f-4cde-aeb1-48c4d09b98bb
+		sourceColumn: devise
+
+	column taux_change_vs_eur
+		dataType: double
+		lineageTag: 8a2dd3a4-6fdc-4334-bc4a-19bce8e0e90d
+		summarizeBy: sum
+		sourceColumn: taux_change_vs_eur
+
+	column population_millions
+		dataType: double
+		lineageTag: 471ef433-a726-49a4-9ed3-7f5253eb87eb
+		summarizeBy: sum
+		sourceColumn: population_millions
+
+	column pib_habitant_spa_ue100
+		dataType: int64
+		lineageTag: 92cc4fbf-da83-40c7-880c-86454be52a6c
+		summarizeBy: sum
+		sourceColumn: pib_habitant_spa_ue100
+
+	column taux_chomage_pct
+		dataType: double
+		lineageTag: 8f4df706-9682-4888-b010-993a63adf023
+		summarizeBy: sum
+		sourceColumn: taux_chomage_pct
+
+	column indice_niveau_prix_chaussures_ue100
+		dataType: int64
+		lineageTag: c833148f-0bdf-4875-a36b-df7c5b6a67b8
+		summarizeBy: sum
+		sourceColumn: indice_niveau_prix_chaussures_ue100
+
+	column indice_confiance_conso
+		dataType: int64
+		lineageTag: 915bc6a0-79ae-4a1c-abb8-ac3f6e3fc1d9
+		summarizeBy: sum
+		sourceColumn: indice_confiance_conso
+
+	column langue_principale
+		dataType: string
+		lineageTag: 68dc0588-be9e-4c80-b51f-00e03e5dfe36
+		sourceColumn: langue_principale
+
+	column membre_ue
+		dataType: boolean
+		lineageTag: 33e20d1b-1286-40cb-862c-57acc6d25c05
+		sourceColumn: membre_ue
+
+	column union_douaniere_avec_fr
+		dataType: boolean
+		lineageTag: a01b8e9f-10ab-4f46-8414-f1afea7982e2
+		sourceColumn: union_douaniere_avec_fr
+
+	column est_pays_reference
+		dataType: boolean
+		lineageTag: fea1475b-745b-43d7-b125-94d09e7faa55
+		sourceColumn: est_pays_reference
+
+	column source
+		dataType: string
+		lineageTag: 76db5b14-a1d7-412d-9569-546598afda87
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: 815f6f3e-ee91-4e08-9f55-c782a266a111
+		sourceColumn: est_simule
+
+	partition dim_pays = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "dim_pays.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"nom_pays", type text}, {"devise", type text}, {"taux_change_vs_eur", type number}, {"population_millions", type number}, {"pib_habitant_spa_ue100", Int64.Type}, {"taux_chomage_pct", type number}, {"indice_niveau_prix_chaussures_ue100", Int64.Type}, {"indice_confiance_conso", Int64.Type}, {"langue_principale", type text}, {"membre_ue", type logical}, {"union_douaniere_avec_fr", type logical}, {"est_pays_reference", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

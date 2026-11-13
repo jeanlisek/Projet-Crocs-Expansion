@@ -1,0 +1,76 @@
+table dim_temps
+	lineageTag: 4fde22dd-c928-4c57-8424-6d05cbd1dd88
+
+	column id_date
+		dataType: int64
+		lineageTag: 9b5a1552-9256-4f48-880b-eba27e45f49c
+		summarizeBy: none
+		sourceColumn: id_date
+
+	column date_debut_mois
+		dataType: string
+		lineageTag: d03b7418-d08c-42b7-8a2c-7fa9f0acad21
+		sourceColumn: date_debut_mois
+
+	column annee
+		dataType: int64
+		lineageTag: d943d9b7-f88b-4b20-b46e-62089f540c86
+		summarizeBy: none
+		sourceColumn: annee
+
+	column trimestre
+		dataType: string
+		lineageTag: 7c506dfe-d5a1-4a16-898d-61d0ff77a8d7
+		sourceColumn: trimestre
+
+	column mois
+		dataType: int64
+		lineageTag: 731c9867-65ff-4f09-b342-9c0a638c974b
+		summarizeBy: none
+		sourceColumn: mois
+
+	column nom_mois
+		dataType: string
+		lineageTag: 401831ea-b6c9-4622-97d9-d4a1950c6f34
+		sourceColumn: nom_mois
+
+	column saison
+		dataType: string
+		lineageTag: 122c16b0-e321-427c-935e-63e3855a4a1f
+		sourceColumn: saison
+
+	column periode_soldes_fr
+		dataType: boolean
+		lineageTag: 3eb3e1b2-c0bd-482a-b349-f1922bad6ed1
+		sourceColumn: periode_soldes_fr
+
+	column black_friday
+		dataType: boolean
+		lineageTag: ce1d79ad-cbd8-4817-b0a0-c17340a36ccf
+		sourceColumn: black_friday
+
+	column est_historique
+		dataType: boolean
+		lineageTag: 45f6479a-8566-4e60-af95-1886ba509212
+		sourceColumn: est_historique
+
+	column source
+		dataType: string
+		lineageTag: 3e4166a1-9b4b-4255-b4c4-f33af3738f2e
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: f5be9377-6e18-445b-9f2b-32199199958f
+		sourceColumn: est_simule
+
+	partition dim_temps = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "dim_temps.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_date", Int64.Type}, {"date_debut_mois", type text}, {"annee", Int64.Type}, {"trimestre", type text}, {"mois", Int64.Type}, {"nom_mois", type text}, {"saison", type text}, {"periode_soldes_fr", type logical}, {"black_friday", type logical}, {"est_historique", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+
