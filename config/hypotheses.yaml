@@ -186,6 +186,16 @@ go_no_go:              # CONVENTION fixée avant analyse (README 4.2)
   payback_pessimiste_max_mois: 36
   catalogue_eligible_min_pct: 80
 
+slides:                     # T13 (Briac) : support de l'oral, slides/build_slides.py ; mise en forme et plan, aucun résultat de KPI
+  pilote:                   # plan d'action du README 4.4 (Jean-Li, 12/11/2026) ; à déplacer dans `decision` si l'équipe le souhaite
+    nb_magasins: 2          # les premières villes du classement city_scoring (Berlin, Dortmund au 12/11/2026)
+    jalons:                 # CA/m² à atteindre, en % du CA/m² cible (France + 2 %, lu dans sensibilite_payback)
+      - {mois: 12, pct_ca_m2_cible: 60}   # point d'étape (README 4.4)
+      - {mois: 24, pct_ca_m2_cible: 80}   # décision d'ouvrir les autres villes (README 4.4)
+  sensibilite_affichee:     # CONVENTION : extrait de la grille sensibilite_payback montré en carte de chaleur, lisible à 16 pt ; la ligne du magasin type (est_cas_business_case) est ajoutée en bas
+    nb_etp: [3.0, 3.25, 3.5, 4.0, 4.5]
+    ratio_ca_m2_vs_france: [0.75, 0.9, 1.0, 1.02, 1.05]
+
 ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/commentary.py
   modele: claude-haiku-5-5      # HYPOTHÈSE : identifiant relevé dans une source secondaire (iclarified.com, 08/10/2026), à confirmer dans la console Anthropic
   reflexion: disabled          # HYPOTHÈSE : la réflexion du modèle consomme le plafond max_tokens (doc du SDK, paramètre thinking) et a laissé 14 textes vides le 12/11/2026 ; si l'API refuse disabled, mettre adaptive et max_tokens à 4000
