@@ -67,10 +67,11 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 | `sensibilite_payback.csv` | Payback du magasin type (scénario pessimiste, centre commercial) selon le nombre d'ETP et le CA/m² : grille pour une carte de chaleur | 1 519 |
 | `eurostat_series.csv` | Séries annuelles Eurostat par pays et indicateur (dépenses en chaussures, prix, population, chômage...), réelles | 463 |
 | `crocs_produits.csv` | Prix relevés sur crocs.fr et crocs.de, par modèle et coloris, le 12/11/2026, réels | 577 |
-| `ai_commentary.csv` | Commentaires générés par IA, un par page et valeur de filtre, avec la synthèse Comex | 23 |
+| `ai_commentary.csv` | Commentaires générés par IA, un par page et valeur de filtre, et le texte de la slide 9 | 24 |
 | `kpi_guide.csv` | Guide des KPI : une ligne par KPI de `kpi_summary` (jointure sur `kpi_summary[kpi]` = `kpi_guide[nom]`), avec définition, formule, unité HT / TTC, périmètre, source, origine et seuil ; pour une infobulle ou une page d'aide | 79 |
+| `entreprise_france.csv` | Crocs France en chiffres pour la présentation de l'entreprise : magasins physiques (total, ouverts), CA de l'année de référence TTC et HT, part de l'e-commerce dans le CA HT, nombre de SKU | 1 |
 
-`ai_commentary.csv` (T9) contient 23 textes : la synthèse Comex (`page` = « Synthèse Comex »), un commentaire par pays (« Marché & prix »), par ville allemande (« Où s'implanter ») et par scénario (« Business case »). `make exports` le copie tel quel depuis `data/gold/ai_commentary.csv`. La colonne `verifie` vaut `true` quand chaque chiffre du texte a été retrouvé dans les données par le garde-fou de T9 : n'afficher que ces textes.
+`ai_commentary.csv` (T9) contient 24 textes : le commentaire de la page Synthèse Comex (`page` = « Synthèse Comex »), un commentaire par pays (« Marché & prix »), par ville allemande (« Où s'implanter ») et par scénario (« Business case »), et le texte de la recommandation (`page` = « Slide 9 (recommandation) »), destiné à la slide 9 et jamais affiché dans le dashboard. Les commentaires du dashboard ne donnent que des constats et des écarts, à la France et aux seuils, sans verdict ni recommandation (retour du prof, 13/11/2026). `make exports` le copie tel quel depuis `data/gold/ai_commentary.csv`. La colonne `verifie` vaut `true` quand chaque chiffre du texte a été retrouvé dans les données par le garde-fou de T9 : n'afficher que ces textes. Deux colonnes informatives s'y ajoutent (13/11/2026) : `longueur_ok` (80 mots au plus par commentaire, 300 pour la slide 9) et `formulations_ok` (aucune formulation interdite, verdicts compris) ; elles ne servent pas de filtre.
 
 ### Format des fichiers
 

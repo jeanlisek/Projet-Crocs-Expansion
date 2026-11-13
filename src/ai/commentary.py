@@ -7,7 +7,14 @@ it never calls the model, so the demo needs neither the network nor a key.
 
 Guard rail (docs/equipe/briac.md): the model only receives the rows of the page and of the
 filter concerned. Every number of the generated text must be a number of that input, rounded
-or not; any other number triggers one regeneration, then `verifie = false`.
+or not: `verifie` is that check, and only that one. The code also checks the length of the
+text (`longueur_ok`) and a list of forbidden phrases (`formulations_ok`), from
+config/hypotheses.yaml, section `ia`. A failed check triggers a regeneration, at most
+`regenerations_max` times; the best attempt is kept, the numbers first.
+
+The dashboard pages only state facts and gaps, to France and to the thresholds: no verdict and
+no recommendation (feedback of the teacher, 13/11/2026). The recommendation, which repeats the
+team's decision, is a separate text for slide 9 (page "Slide 9 (recommandation)").
 
 Usage:  python -m src.ai.commentary [--warehouse FILE] [--out FILE] [--load-only]
 """
@@ -20,7 +27,7 @@ import math
 import os
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
@@ -38,7 +45,17 @@ DEFAULT_OUT = REPO_ROOT / "data" / "gold" / "ai_commentary.csv"
 
 API_KEY_NAME = "ANTHROPIC_API_KEY"
 TABLE = "ai_commentary"
-COLUMNS = ["page", "filtre", "valeur_filtre", "texte", "verifie", "date_generation"]
+COLUMNS = [
+    "page",
+    "filtre",
+    "valeur_filtre",
+    "texte",
+    "verifie",
+    "longueur_ok",
+    "formulations_ok",
+    "date_generation",
+]
+FLAGS = ("verifie", "longueur_ok", "formulations_ok")
 
 # Page names and filter values are the join keys of the dashboard (docs/equipe/aurelie.md):
 # the country filter sits on dim_pays[nom_pays] and the city filter on [ville].
@@ -46,15 +63,20 @@ PAGE_SYNTHESIS = "Synthèse Comex"
 PAGE_MARKET = "Marché & prix"
 PAGE_CITIES = "Où s'implanter"
 PAGE_BUSINESS = "Business case"
+# Not a page of the dashboard: the text of the recommendation slide (slide 9).
+PAGE_SLIDE = "Slide 9 (recommandation)"
+DASHBOARD_PAGES = (PAGE_SYNTHESIS, PAGE_MARKET, PAGE_CITIES, PAGE_BUSINESS)
 NO_FILTER = "aucun"
 ALL_VALUES = "tous"
 TARGET_COUNTRY = "DE"
+REFERENCE_COUNTRY = "FR"
 MARKET_AXES = ("Marché", "Prix")
 BUSINESS_AXIS = "Rentabilité"
 COMEX_QUESTION = (
     "L'ouverture d'un réseau de magasins Crocs en propre en Allemagne sur 2027-2029 "
     "est-elle réalisable et rentable ?"
 )
+OVERVIEW_QUESTION = "Que montrent les indicateurs de l'Allemagne, axe par axe ?"
 
 # sql/kpi/kpi_summary.sql: "vide = non atteint dans l'horizon -> NO-GO" for the payback.
 MISSING_PAYBACK = "non atteint dans l'horizon"
@@ -134,6 +156,31 @@ def allowed_values(prompt: str) -> list[float]:
     return [n.value * n.scale for n in extract_numbers(prompt)]
 
 
+# French typography: a no-break space between groups of three digits ("565 010 €"), from
+# five digits on, so that a year ("2027") is never split. The no-break space keeps the
+# number on one line in the text box of the dashboard.
+THOUSANDS = "\u00a0"
+_UNGROUPED = re.compile(r"(?<![\d,.])(\d{5,})(?!\d)")
+
+
+def group_thousands(digits: str) -> str:
+    """'565010' -> '565 010' (no-break space); fewer than five digits are left as they are."""
+    if len(digits) < 5:
+        return digits
+    return f"{int(digits):,}".replace(",", THOUSANDS)
+
+
+def normalize_numbers(text: str) -> str:
+    """Write the thousands separator the model left out: '565010 €' -> '565 010 €'."""
+    return _UNGROUPED.sub(lambda match: group_thousands(match.group(1)), text)
+
+
+def count_words(text: str) -> int:
+    """Words of a text; a number counts as one word ("565 010" too), a sign alone as none."""
+    collapsed = NUMBER_PATTERN.sub("0", text)
+    return sum(1 for token in collapsed.split() if re.search(r"\w", token))
+
+
 # --------------------------------------------------------------------------------------
 # Requests: one per page and filter value, built from the rows of that page only
 # --------------------------------------------------------------------------------------
@@ -148,6 +195,25 @@ class Request:
     lines: tuple[str, ...]
     template: str = "commentaire.md"
     max_words: int | None = None
+    # A sentence of the team added by the code after the text of the model, word for word.
+    ending: str | None = None
+    # Share of the limit asked of the model: it overshoots the limit it is given (334 words
+    # for 280 on 13/11/2026), so it is asked for less and checked against the limit itself.
+    target_ratio: float = 1.0
+
+    @property
+    def prompt_words(self) -> int | None:
+        """The number of words written in the prompt."""
+        if self.model_words is None:
+            return None
+        return math.floor(self.model_words * self.target_ratio)
+
+    @property
+    def model_words(self) -> int | None:
+        """The limit given to the model: max_words, less the words of the ending."""
+        if self.max_words is None:
+            return None
+        return self.max_words - (count_words(self.ending) if self.ending else 0)
 
 
 def format_value(value) -> str | None:
@@ -162,30 +228,140 @@ def format_value(value) -> str | None:
         if math.isnan(value):
             return None
         if value.is_integer():
-            return str(int(value))
-        return f"{value:.3f}".rstrip("0").rstrip(".").replace(".", ",")
+            return group_thousands(str(int(value)))
+        whole, _, decimals = f"{value:.3f}".rstrip("0").partition(".")
+        return group_thousands(whole) + ("," + decimals if decimals else "")
+    if isinstance(value, int):
+        return group_thousands(str(value))
     return str(value)
 
 
-def render_kpi(row: dict) -> str:
-    """One row of kpi_summary, with every column of the contract."""
-    value = format_value(row["valeur"])
+# Position of a value against its threshold, the dashboard's wording of statut_go: a fact
+# (the value is above or below a number), where GO / NO-GO is a verdict.
+POSITIONS = {"GO": "seuil respecté", "NO-GO": "seuil non respecté"}
+_BOUND = re.compile(r"\s*([≥≤<>])\s*(-?\d+(?:[.,]\d+)?)")
+
+
+def threshold_bound(seuil: str | None) -> float | None:
+    """The number of a one-sided threshold ("≥ 2 %", "≤ 36 mois"); None for a range."""
+    match = _BOUND.match(seuil or "")
+    return float(match.group(2).replace(",", ".")) if match else None
+
+
+def gap(value: float, reference: float, unit: str | None) -> str:
+    """value − reference, signed, computed by the code so that the model never computes one."""
+    difference = round(value - reference, 2)
+    if difference == 0:
+        return "aucun écart"
+    size = abs(difference)
+    unit = unit or ""
+    if unit.startswith("%"):
+        unit = "point" if size < 2 else "points"
+    elif unit == "indice":
+        unit = "point d'indice" if size < 2 else "points d'indice"
+    # A signed gap (Jean-Li, 13/11/2026): "+2,21 points", "−10,06 points", typographic minus.
+    sign = "+" if difference > 0 else "\u2212"
+    return f"{sign}{format_value(size)} {unit}".rstrip()
+
+
+def scenario_stem(kpi: str) -> str:
+    """The name of a KPI without its scenario: one stem for central, optimiste, pessimiste."""
+    return re.sub(r"scénario \w+", "scénario", kpi)
+
+
+SAME_SCOPE = " (même périmètre que l'Allemagne)"
+
+
+def country_stem(kpi: str) -> str:
+    """The name of a KPI shared by the countries: the provisional mark is not part of it, nor
+    the mark of a French KPI computed on the German scope of costs."""
+    return kpi.replace(", données provisoires", "").replace(SAME_SCOPE, "")
+
+
+def france_references(kpis: list[dict]) -> dict:
+    """stem -> the French row a German KPI is compared to.
+
+    A French row on the same scope of costs as the German business case (business_case_france)
+    replaces the plain one: the break-even of a mall shop was compared to 412 861 €, the
+    French figure without the German costs, instead of 540 354 € (Jean-Li, 13/11/2026).
+    """
+    french = [row for row in kpis if row["pays"] == REFERENCE_COUNTRY]
+    references = {country_stem(row["kpi"]): row for row in french if SAME_SCOPE not in row["kpi"]}
+    references.update({country_stem(row["kpi"]): row for row in french if SAME_SCOPE in row["kpi"]})
+    return references
+
+
+def scenario_thresholds(kpis: list[dict]) -> dict:
+    """(country, stem) -> (threshold, scenario), for the KPIs judged on one scenario only.
+
+    README 4.2 judges the occupancy cost on the central scenario and the payback on the
+    pessimistic one: the other scenarios have no threshold of their own. Without this, the
+    pessimistic page said "sans seuil fixé" for an occupancy cost of 17,92 % (13/11/2026).
+    """
+    thresholds = {}
+    for row in kpis:
+        found = re.search(r"scénario (\w+)", row["kpi"])
+        if found and row["seuil"]:
+            thresholds[(row["pays"], scenario_stem(row["kpi"]))] = (row["seuil"], found.group(1))
+    return thresholds
+
+
+def render_kpi(
+    row: dict,
+    verdict: bool = True,
+    france: dict | None = None,
+    thresholds: dict | None = None,
+) -> str:
+    """One row of kpi_summary, with every column of the contract.
+
+    verdict=False is the dashboard's reading: the position against the threshold and the gap
+    to it, never GO / NO-GO. `france` is the same KPI for France, given with the gap to it;
+    `thresholds` comes from scenario_thresholds. Every gap is computed here, in the code.
+    """
+    raw = row["valeur"]
+    value = format_value(raw)
     if value is None:
         value = MISSING_PAYBACK if row["kpi"].startswith("Payback") else MISSING_VALUE
     else:
-        value = f"{value} {row['unite'] or ''}".strip()
+        unit = row["unite"] or ""
+        # A TCAM is a yearly mean rate: "3,89 %" alone reads as a total growth.
+        if "TCAM" in row["kpi"] and unit == "%":
+            unit = "% par an"
+        value = f"{value} {unit}".strip()
+    seuil = row["seuil"]
+    parts = [f"- {row['kpi']}", f"axe : {row['axe']}", f"valeur : {value}"]
+    reference = (thresholds or {}).get((row.get("pays"), scenario_stem(row["kpi"])))
+    if seuil:
+        parts.append(f"seuil : {seuil}")
+    elif reference:
+        seuil = reference[0]
+        parts.append(f"seuil : {seuil}, jugé sur le scénario {reference[1]}")
+    else:
+        parts.append("seuil : aucun")
+    if verdict:
+        parts.append(f"verdict : {row['statut_go']}")
+    elif row["statut_go"] in POSITIONS:
+        parts.append(f"position : {POSITIONS[row['statut_go']]}")
+    bound = threshold_bound(seuil)
+    if bound is not None and raw is not None:
+        parts.append(f"écart au seuil : {gap(float(raw), bound, row['unite'])}")
+    if france is not None and raw is not None and france["valeur"] is not None:
+        french = format_value(france["valeur"])
+        label = "France, même périmètre de coûts" if SAME_SCOPE in france["kpi"] else "France"
+        parts.append(f"{label} : {french} {france['unite'] or ''}".rstrip())
+        gap_france = gap(float(raw), float(france["valeur"]), row["unite"])
+        parts.append(f"écart à la France : {gap_france}")
     origin = ORIGIN_LABELS.get(row["origine_donnees"], row["origine_donnees"])
-    return (
-        f"- {row['kpi']} | axe : {row['axe']} | valeur : {value} | "
-        f"seuil : {row['seuil'] or 'aucun'} | verdict : {row['statut_go']} | "
-        f"statut : {row['statut_epistemique']} | données : {origin}"
-    )
+    parts += [f"statut : {row['statut_epistemique']}", f"données : {origin}"]
+    return " | ".join(parts)
 
 
-def render_record(row: dict) -> tuple[str, ...]:
+def render_record(row: dict, skip: tuple[str, ...] = ()) -> tuple[str, ...]:
     """One row of a gold view other than kpi_summary, one line per column."""
     lines = []
     for column, raw in row.items():
+        if column in skip:
+            continue
         if column == "origine_donnees":
             lines.append(f"- données : {ORIGIN_LABELS.get(raw, raw)}")
             continue
@@ -207,19 +383,96 @@ DECISION_OPEN = (
 )
 
 
-def _decision_items(prefix: str, value) -> list[str]:
+# Words for the keys of the decision section. A bare key was misread: "ca_m2_min_vs_france :
+# 1,02" became "un coût au m² d'au moins 1,02 fois le niveau France" (13/11/2026). An unknown
+# key is shown as it is.
+DECISION_LABELS = {
+    "conditions": "conditions du GO",
+    "format": "format de magasin",
+    "nb_etp": "effectif par magasin, en ETP",
+    "nb_etp_max": "effectif maximal par magasin, en ETP",
+    "ca_m2_min_vs_france": (
+        "chiffre d'affaires par m² (CA/m²) minimal, en multiple du CA/m² de la France au même "
+        "format"
+    ),
+    "villes": "villes retenues",
+    "hub": "hub logistique",
+    "leviers_secondaires": "leviers secondaires",
+    "preference_vietnam_gain_marge_pts": "préférence tarifaire Vietnam, gain de marge en points",
+}
+# The team's sentence on how the GO will be confirmed: added word for word after the text of
+# the slide, never given to the model to rephrase (Jean-Li, 13/11/2026).
+CONFIRMATION_KEY = "confirmation_go"
+
+
+def _decision_value(key: str, value) -> str:
+    text = format_value(value) or MISSING_VALUE
+    if key.endswith("_vs_france") and isinstance(value, (int, float)):
+        text += f" (France + {format_value(round((value - 1) * 100, 2))} %)"
+    return text
+
+
+def _decision_items(prefix: str, value, key: str = "") -> list[str]:
     """Flatten the decision section, whatever its keys, into one line per value."""
     if isinstance(value, dict):
         return [
             line
-            for key, item in value.items()
-            for line in _decision_items(f"{prefix} / {key}", item)
+            for name, item in value.items()
+            if name != CONFIRMATION_KEY
+            for line in _decision_items(f"{prefix} / {DECISION_LABELS.get(name, name)}", item, name)
         ]
     if isinstance(value, list):
         if all(not isinstance(item, (dict, list)) for item in value):
             return [f"- {prefix} : " + " ; ".join(format_value(item) or "" for item in value)]
-        return [line for item in value for line in _decision_items(prefix, item)]
-    return [f"- {prefix} : {format_value(value) or MISSING_VALUE}"]
+        return [line for item in value for line in _decision_items(prefix, item, key)]
+    return [f"- {prefix} : {_decision_value(key, value)}"]
+
+
+# README 4.2: the payback criterion is judged on the pessimistic scenario.
+PAYBACK_SCENARIO = "pessimiste"
+SENSITIVITY_VIEW = "sensibilite_payback"
+CONDITION_KEYS = ("format", "nb_etp", "ca_m2_min_vs_france")
+
+
+def lifting_condition(con: duckdb.DuckDBPyConnection, decision) -> str | None:
+    """The team condition that lifts the NO-GO of the payback, with the payback it gives.
+
+    The payback is read in the sensitivity view, on the row of the conditions of the
+    decision: a value of the warehouse, which the guard rail accepts, and not the figure of
+    a comment of the config, which the model never receives. None without a decision, a
+    complete set of conditions or a matching row.
+    """
+    conditions = decision.get("conditions") if isinstance(decision, dict) else None
+    # Another layout of the section (a list, missing keys) gives no condition, never a crash.
+    if not isinstance(conditions, dict) or any(conditions.get(k) is None for k in CONDITION_KEYS):
+        return None
+    objects = con.execute("SELECT table_name FROM information_schema.tables").fetchall()
+    if SENSITIVITY_VIEW not in {name for (name,) in objects}:
+        return None
+    rows = fetch_dicts(
+        con,
+        f"SELECT * FROM {SENSITIVITY_VIEW} WHERE code_pays = ? AND scenario = ? AND format = ? "
+        "AND nb_etp = ? AND abs(ratio_ca_m2_vs_france - ?) < 1e-9",
+        (
+            TARGET_COUNTRY,
+            PAYBACK_SCENARIO,
+            conditions["format"],
+            conditions["nb_etp"],
+            conditions["ca_m2_min_vs_france"],
+        ),
+    )
+    if not rows:
+        return None
+    row = rows[0]
+    gain = format_value(round((row["ratio_ca_m2_vs_france"] - 1) * 100, 2))
+    origin = ORIGIN_LABELS.get(row["origine_donnees"], row["origine_donnees"])
+    return (
+        f"- condition de l'équipe qui lève le NO-GO du payback (section decision, vue "
+        f"{SENSITIVITY_VIEW}) : format {row['format']}, {format_value(row['nb_etp'])} ETP, "
+        f"CA/m² au moins égal à la France + {gain} % ({format_value(row['ca_m2_eur'])} €/m²), "
+        f"payback {format_value(row['payback_mois'])} mois pour un seuil {row['seuil']}, "
+        f"verdict {row['statut_go']} | données : {origin}"
+    )
 
 
 def decision_lines(decision) -> tuple[str, ...]:
@@ -241,38 +494,76 @@ def city_reading(n_cities: int, weights: dict) -> tuple[str, ...]:
         f"- lecture des notes : chaque note va de 0 à 100 et classe les {n_cities} villes entre "
         f"elles sur un critère ; 100 = la plus favorable des {n_cities}, 0 = la moins favorable "
         f"des {n_cities}, jamais une valeur nulle",
-        "- sens des critères : loyer moins cher = mieux ; densité concurrentielle moins dense = "
-        "mieux ; distance au hub plus proche = mieux ; potentiel plus élevé = mieux",
+        # One line per note: "densité moins dense = mieux" alone was read as "forte densité
+        # favorable" for Dortmund (note 100, 5,8 shops per 100 000 inhabitants), 12/11/2026.
+        "- note_potentiel élevée : le plus fort potentiel de clientèle",
+        "- note_loyer élevée : le loyer le plus bas",
+        "- note_densite élevée : le moins de magasins de chaussures par habitant, donc la "
+        "concurrence la plus faible ; une note de densité élevée signifie une densité faible",
+        "- note_distance élevée : la ville la plus proche d'un hub logistique",
         f"- score : moyenne des notes pondérée par {weighting}",
         "- densite_pour_100k_hab : magasins de chaussures pour 100 000 habitants",
     )
 
 
+def criterion_ranks(city: dict, cities: list[dict]) -> tuple[str, ...]:
+    """The rank of the city on each note, 1 being the best of the cities.
+
+    A good overall rank says nothing of each criterion: Dortmund, 2nd, was said to have a
+    "potentiel solide" with a note of 6,4 (12/11/2026). The rank on each note is a fact of
+    city_scoring that leaves no room for that reading.
+    """
+    columns = [c for c in city if c.startswith("note_") and city[c] is not None]
+    if not columns:
+        return ()
+    n = len(cities)
+    ranks = [
+        f"{column} rang {1 + sum((other[column] or 0) > city[column] for other in cities)} sur {n}"
+        for column in columns
+    ]
+    return (f"- rang de la ville sur chaque note (rang 1 = la meilleure) : {' ; '.join(ranks)}",)
+
+
+# On a Business case page, the two labels are formats of shop: the pessimistic page said
+# "dans les deux villes" (13/11/2026).
+FORMATS_LINE = (
+    "- Centre commercial et Centre-ville désignent les deux formats de magasin comparés "
+    "(deux types d'emplacement)"
+)
+# A team choice, not a fact of the city: a verdict the dashboard does not give.
+CITY_SKIPPED = ("est_prioritaire",)
+
+
 def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -> list[Request]:
-    """Every (page, filter value) of the dashboard, each with the rows it is allowed to see.
+    """Every (page, filter value) of the dashboard, each with the rows it is allowed to see,
+    then the text of slide 9.
 
     `config` is the whole of config/hypotheses.yaml (read from the file when omitted).
     """
     config = config if config is not None else load_config()
+    decision = config.get(DECISION_SECTION)
     kpis = fetch_dicts(con, "SELECT * FROM kpi_summary ORDER BY axe, kpi")
+    thresholds = scenario_thresholds(kpis)
+    france = france_references(kpis)
+
+    def facts(row: dict) -> str:
+        """The dashboard's reading of a row: gaps to France and to the thresholds."""
+        if row["pays"] == REFERENCE_COUNTRY:
+            reference = None
+        else:
+            reference = france.get(country_stem(row["kpi"]))
+        return render_kpi(row, verdict=False, france=reference, thresholds=thresholds)
+
     target = [row for row in kpis if row["pays"] == TARGET_COUNTRY]
-    verdicts = [row["statut_go"] for row in target]
+    page_words = config["ia"]["commentaire_mots_max"]
     requests = [
         Request(
             page=PAGE_SYNTHESIS,
             filtre=NO_FILTER,
             valeur_filtre=ALL_VALUES,
-            question=COMEX_QUESTION,
-            lines=(
-                *(render_kpi(row) for row in target),
-                f"- Verdicts des KPI à seuil : {verdicts.count('GO')} GO, "
-                f"{verdicts.count('NO-GO')} NO-GO",
-                *decision_lines(config.get(DECISION_SECTION)),
-            ),
-            template="synthese.md",
-            # A text box of the dashboard, not a report: a longer synthesis was cut at
-            # max_tokens on 12/11/2026, ending in the middle of a word.
-            max_words=config["ia"]["synthese_mots_max"],
+            question=OVERVIEW_QUESTION,
+            lines=tuple(facts(row) for row in target),
+            max_words=page_words,
         )
     ]
 
@@ -287,7 +578,8 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
                 filtre="pays",
                 valeur_filtre=country["nom_pays"],
                 question=f"Que disent le marché et les prix pour : {country['nom_pays']} ?",
-                lines=tuple(render_kpi(row) for row in rows),
+                lines=tuple(facts(row) for row in rows),
+                max_words=page_words,
             )
         )
 
@@ -300,7 +592,12 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
                 filtre="ville",
                 valeur_filtre=city["ville"],
                 question=f"Quel est l'intérêt de {city['ville']} pour un magasin Crocs ?",
-                lines=(*reading, *render_record(city)),
+                lines=(
+                    *reading,
+                    *render_record(city, skip=CITY_SKIPPED),
+                    *criterion_ranks(city, cities),
+                ),
+                max_words=page_words,
             )
         )
 
@@ -322,9 +619,57 @@ def build_requests(con: duckdb.DuckDBPyConnection, config: dict | None = None) -
                 filtre="scenario",
                 valeur_filtre=scenario,
                 question=f"Que montre le business case allemand dans le scénario {scenario} ?",
-                lines=tuple(render_kpi(row) for row in rows),
+                lines=(FORMATS_LINE, *(facts(row) for row in rows)),
+                max_words=page_words,
             )
         )
+
+    # Slide 9: the only text with the verdicts and the team's decision.
+    verdicts = [row["statut_go"] for row in target]
+    condition = lifting_condition(con, decision)
+    confirmation = decision.get(CONFIRMATION_KEY) if isinstance(decision, dict) else None
+    requests.append(
+        Request(
+            page=PAGE_SLIDE,
+            filtre=NO_FILTER,
+            valeur_filtre=ALL_VALUES,
+            question=COMEX_QUESTION,
+            lines=(
+                *(render_kpi(row, thresholds=thresholds) for row in target),
+                f"- Verdicts des KPI à seuil : {verdicts.count('GO')} GO, "
+                f"{verdicts.count('NO-GO')} NO-GO",
+                *decision_lines(decision),
+                *((condition,) if condition else ()),
+            ),
+            template="synthese.md",
+            # A slide, not a report: a longer synthesis was cut at max_tokens on 12/11/2026,
+            # ending in the middle of a word.
+            max_words=config["ia"]["synthese_mots_max"],
+            ending=str(confirmation).strip() if confirmation else None,
+        )
+    )
+    ratio = config["ia"].get("cible_mots_pct", 100) / 100
+    requests = [replace(request, target_ratio=ratio) for request in requests]
+    return apply_team_sentences(requests, config["ia"].get("phrases_equipe"))
+
+
+def apply_team_sentences(requests: list[Request], sentences) -> list[Request]:
+    """The sentences the team wrote itself (config/hypotheses.yaml, section `ia`, key
+    `phrases_equipe`): each is added word for word after the text of its page and filter
+    value, and the rows it replaces are taken out of the data, so that the model writes no
+    other version of it."""
+    for sentence in sentences or ():
+        for i, request in enumerate(requests):
+            if (request.page, request.valeur_filtre) != (
+                sentence["page"],
+                sentence["valeur_filtre"],
+            ):
+                continue
+            removed = sentence.get("retire")
+            lines = tuple(
+                line for line in request.lines if not (removed and line.startswith(f"- {removed}"))
+            )
+            requests[i] = replace(request, lines=lines, ending=sentence["phrase"].strip())
     return requests
 
 
@@ -339,7 +684,7 @@ def user_prompt(request: Request) -> str:
         valeur_filtre=request.valeur_filtre,
         question=request.question,
         lignes="\n".join(request.lines) or MISSING_VALUE,
-        mots_max=request.max_words,
+        mots_max=request.prompt_words,
     )
 
 
@@ -419,40 +764,90 @@ def _attempt(model: Model, system: str, prompt: str) -> tuple[str, bool]:
         return answer.text.strip(), True
 
 
-def _problem(text: str, truncated: bool, allowed: list[float]) -> str:
-    """Why a text cannot be shown as verified; empty when it can.
+def forbidden_phrases(text: str, page: str, rules) -> list[str]:
+    """The forbidden phrases of a text, as problems: config/hypotheses.yaml, section `ia`,
+    key `formulations_interdites`; each rule is a regular expression, case ignored, for every
+    page ("toutes") or a list of pages."""
+    problems = []
+    for rule in rules or ():
+        pages = rule.get("pages", "toutes")
+        if pages != "toutes" and page not in pages:
+            continue
+        for match in re.finditer(rule["motif"], text, flags=re.IGNORECASE):
+            reason = f" ({rule['raison']})" if rule.get("raison") else ""
+            problems.append(f"formulation interdite « {match.group(0)} »{reason}")
+    return problems
+
+
+@dataclass(frozen=True)
+class Outcome:
+    """A generated text and its three checks, kept apart (Jean-Li, 13/11/2026): the dashboard
+    shows the texts whose numbers are verified; the length and the phrases are reported."""
+
+    text: str
+    verifie: bool
+    longueur_ok: bool
+    formulations_ok: bool
+    probleme: str
+
+    @property
+    def score(self) -> tuple[bool, bool, bool]:
+        return (self.verifie, self.formulations_ok, self.longueur_ok)
+
+
+def _check(text: str, truncated: bool, allowed: list[float], request: Request, rules) -> Outcome:
+    """The checks of one text, before the team's ending is added.
 
     An empty text has no number at all and a truncated one may have only right numbers:
-    both would pass a check of the numbers alone, so they are rejected first.
+    both would pass a check of the numbers alone, so neither is ever verified.
     """
-    if truncated:
-        return "texte tronqué"
-    if not text:
-        return "texte vide"
+    if truncated or not text:
+        reason = "texte tronqué" if truncated else "texte vide"
+        return Outcome(text, False, False, False, reason)
+    problems = []
     rejected = unsupported_numbers(text, allowed)
-    return f"chiffres hors données : {', '.join(rejected)}" if rejected else ""
+    if rejected:
+        problems.append(f"chiffres hors données : {', '.join(rejected)}")
+    limit = request.model_words
+    words = count_words(text)
+    long_enough = limit is None or words <= limit
+    if not long_enough:
+        problems.append(f"{words} mots pour {limit} au plus")
+    forbidden = forbidden_phrases(text, request.page, rules)
+    problems += forbidden
+    return Outcome(text, not rejected, long_enough, not forbidden, "; ".join(problems))
 
 
-def comment(model: Model, request: Request) -> tuple[str, bool, str]:
-    """Generate one text and check it; regenerate once if it fails: (text, verified, why)."""
+def comment(model: Model, request: Request, rules=(), regenerations: int = 1) -> Outcome:
+    """Generate one text and check it; regenerate while a check fails, at most `regenerations`
+    times. The best attempt is kept: verified numbers first, then the phrases, then the
+    length. The team's ending, if any, is added to it last."""
     system = read_prompt("systeme.md")
     user = user_prompt(request)
-    # Built from the first prompt only: the correction prompt quotes the rejected numbers,
-    # which must not become allowed by being quoted.
+    # Built from the first prompt only: the correction prompt quotes the rejected text,
+    # whose numbers must not become allowed by being quoted.
     allowed = allowed_values(user)
-    text, truncated = _attempt(model, system, user)
-    problem = _problem(text, truncated, allowed)
-    if problem:
+    prompt = user
+    best = None
+    for attempt in range(1 + regenerations):
+        text, truncated = _attempt(model, system, prompt)
+        outcome = _check(normalize_numbers(text), truncated, allowed, request, rules)
+        if best is None or outcome.score > best.score:
+            best = outcome
+        if not outcome.probleme:
+            break
+        # An empty or truncated text has nothing to correct: the same prompt is sent again.
         prompt = user
-        rejected = [] if truncated else unsupported_numbers(text, allowed)
-        if rejected:
+        if outcome.text and not truncated:
             correction = read_prompt("correction.md").format(
-                nombres=", ".join(rejected), texte=text
+                problemes="\n".join(f"- {problem}" for problem in outcome.probleme.split("; ")),
+                texte=outcome.text,
+                mots_max=request.prompt_words or "",
             )
             prompt = f"{user}\n\n{correction}"
-        text, truncated = _attempt(model, system, prompt)
-        problem = _problem(text, truncated, allowed)
-    return text, not problem, problem
+    if request.ending and best.text and best.probleme not in ("texte tronqué", "texte vide"):
+        best = replace(best, text=f"{best.text} {request.ending}")
+    return best
 
 
 # --------------------------------------------------------------------------------------
@@ -502,7 +897,8 @@ def load_into_warehouse(csv_path: Path, warehouse: Path) -> int:
             CREATE OR REPLACE TABLE {TABLE} AS
             SELECT * FROM read_csv(?, header = true, quote = '"', columns = {{
                 'page': 'VARCHAR', 'filtre': 'VARCHAR', 'valeur_filtre': 'VARCHAR',
-                'texte': 'VARCHAR', 'verifie': 'BOOLEAN', 'date_generation': 'TIMESTAMP'
+                'texte': 'VARCHAR', 'verifie': 'BOOLEAN', 'longueur_ok': 'BOOLEAN',
+                'formulations_ok': 'BOOLEAN', 'date_generation': 'TIMESTAMP'
             }})
             """,
             [str(csv_path)],
@@ -536,25 +932,31 @@ def run(
     model = Throttled(model, settings["delai_entre_appels_s"], sleep)
     stamp = now().isoformat(timespec="seconds")
     rows = []
+    rules = settings.get("formulations_interdites") or ()
+    regenerations = settings.get("regenerations_max", 1)
     for request in requests:
-        text, verified, problem = comment(model, request)
+        outcome = comment(model, request, rules, regenerations)
         rows.append(
             {
                 "page": request.page,
                 "filtre": request.filtre,
                 "valeur_filtre": request.valeur_filtre,
-                "texte": text,
-                "verifie": "true" if verified else "false",
+                "texte": outcome.text,
+                **{flag: "true" if getattr(outcome, flag) else "false" for flag in FLAGS},
                 "date_generation": stamp,
             }
         )
-        status = f"vérifié, {len(text)} caractères" if verified else f"NON VÉRIFIÉ ({problem})"
-        print(f"{request.page:16s} {request.valeur_filtre:14s} {status}")
+        status = f"{count_words(outcome.text)} mots"
+        if outcome.probleme:
+            status += f" ({outcome.probleme})"
+        print(f"{request.page:24s} {request.valeur_filtre:14s} {status}")
 
     write_csv(rows, out)
     loaded = load_into_warehouse(out, warehouse)
-    checked = sum(row["verifie"] == "true" for row in rows)
-    print(f"\n{checked}/{loaded} commentaires vérifiés, écrits dans : {out.resolve()}")
+    counts = ", ".join(
+        f"{flag} {sum(row[flag] == 'true' for row in rows)}/{loaded}" for flag in FLAGS
+    )
+    print(f"\n{counts}, écrits dans : {out.resolve()}")
     return rows
 
 

@@ -59,13 +59,13 @@ Les phases suivent l'ordre de la démarche du cours.
 |---|---|---|---|---|---|
 | T7 | Vues KPI (les 14 du README) | Alexis | T6 | Une vue SQL par KPI + `kpi_summary` (valeur, seuil, statut Go/No-Go) | Fait |
 | T8 | Business case Allemagne : compte de résultat magasin, 3 scénarios, scoring des villes | Alexis | T7 | Vues `business_case` et `city_scoring` ; hypothèses dans `config/hypotheses.yaml` | Fait (sensibilité du payback, population Destatis et référence France mergées le 12/11/2026 ; voir `docs/ENSEIGNEMENTS.md`, section 4) |
-| T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | Fait (`data/gold/ai_commentary.csv`, 23 textes, tous vérifiés ; `make ai` les régénère avec la clé de `.env`) |
+| T9 | Brique IA : commentaires par valeur de filtre + synthèse Comex | Briac | T7 | Table `ai_commentary` ; chaque chiffre cité est vérifié par code | Fait (`data/gold/ai_commentary.csv`, 24 textes : 23 pour le dashboard, constats et écarts sans verdict, et la recommandation de la slide 9 ; `make ai` les régénère avec la clé de `.env`) |
 
 ### 5. Restitution
 
 | ID | Tâche | Responsable | Dépend de | Fini quand | Statut |
 |---|---|---|---|---|---|
-| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 19 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/` et `kpi_guide.csv`, le guide des 79 KPI) |
+| T10 | Exports pour le dashboard | Jean-Li | T7, T9 | CSV ou Parquet dans `data/gold/exports/` | Fait (`make exports` : exports complets, 20 fichiers CSV dans `data/gold/exports/`, dont `ai_commentary.csv` copié depuis `data/gold/` et `kpi_guide.csv`, le guide des 79 KPI) |
 | T11 | Dashboard : 4 pages, template homogène | Aurélie | T10 (maquette dès maintenant) | Les filtres pays / ville / scénario changent les visuels **et** le commentaire IA | Fait (projet Power BI dans `dashboard/`, guide de lecture et 4 pages, mergé le 13/11/2026 ; **reste à faire : refaire la capture de la page 1**, `dashboard/captures/01_synthese_comex.png`, antérieure aux dernières finitions) |
 | T12 | Dictionnaire champ par champ | Mehdi | T6 | `docs/DICTIONNAIRE_CHAMPS.md` au format du cours | Fait (généré par `python -m src.collect.dictionnaire` ; les vues sont listées avec leur définition, sans détail champ par champ) |
 | T13 | Slides Comex (7 à 9 slides) | Aurélie + Briac | T8, T11 | Une question business par slide, recommandation lisible en 3 secondes | À faire |
