@@ -155,6 +155,7 @@ def test_every_page_and_filter_value_gets_one_request(warehouse):
         (ai.PAGE_CITIES, "Köln"),
         (ai.PAGE_BUSINESS, "central"),
         (ai.PAGE_BUSINESS, "pessimiste"),
+        (ai.PAGE_SLIDE, ai.ALL_VALUES),
     ]
 
 
@@ -162,7 +163,8 @@ def test_a_market_request_only_sees_its_country_and_its_axes(warehouse):
     germany = next(r for r in requests_of(warehouse) if r.valeur_filtre == "Allemagne")
     text = "\n".join(germany.lines)
     assert "4,21 %" in text and "101,5 indice" in text
-    assert "3,05" not in text  # France
+    # France only as the reference of the same KPI, with the gap computed by the code.
+    assert "France : 3,05 % | écart à la France : 1,16 point au-dessus" in text
     assert "1480" not in text  # Réseau axis
     assert "Payback" not in text  # Rentabilité axis
 
@@ -171,7 +173,9 @@ def test_a_business_request_only_sees_its_scenario_and_the_common_rows(warehouse
     central = next(r for r in requests_of(warehouse) if r.valeur_filtre == "central")
     text = "\n".join(central.lines)
     assert "scénario central" in text and "Point mort" in text
-    assert "pessimiste" not in text
+    # The pessimistic scenario is only named as the one the payback threshold is judged on.
+    assert "Payback (scénario pessimiste)" not in text
+    assert "seuil : ≤ 36 mois, jugé sur le scénario pessimiste" in text
 
 
 def test_a_missing_payback_is_said_not_reached(warehouse):
@@ -179,9 +183,9 @@ def test_a_missing_payback_is_said_not_reached(warehouse):
     assert ai.MISSING_PAYBACK in "\n".join(pessimistic.lines)
 
 
-def test_the_synthesis_counts_the_verdicts(warehouse):
-    synthesis = requests_of(warehouse)[0]
-    assert synthesis.template == "synthese.md"
+def test_the_slide_counts_the_verdicts(warehouse):
+    synthesis = requests_of(warehouse)[-1]
+    assert synthesis.page == ai.PAGE_SLIDE and synthesis.template == "synthese.md"
     # Searched, not indexed: the lines of the team decision, when there is one, come after.
     assert "- Verdicts des KPI à seuil : 1 GO, 1 NO-GO" in synthesis.lines
 
@@ -197,21 +201,21 @@ def test_the_synthesis_reads_the_team_decision_and_never_takes_it(warehouse):
     }
     con = duckdb.connect(str(warehouse), read_only=True)
     try:
-        without = ai.build_requests(con, {**config, "decision": None})[0].lines
-        with_decision = ai.build_requests(con, {**config, "decision": decision})[0].lines
+        without = ai.build_requests(con, {**config, "decision": None})[-1].lines
+        with_decision = ai.build_requests(con, {**config, "decision": decision})[-1].lines
     finally:
         con.close()
     assert without[-1] == ai.DECISION_OPEN
     assert with_decision[-3:] == (
         "- décision retenue par l'équipe / verdict : NO-GO en l'état, GO conditionnel",
-        "- décision retenue par l'équipe / conditions : environ 3 ETP ; CA/m² ≥ France + 2 % ; "
-        "centre commercial",
-        "- décision retenue par l'équipe / approvisionnement / hub : Dordrecht",
+        "- décision retenue par l'équipe / conditions du GO : environ 3 ETP ; "
+        "CA/m² ≥ France + 2 % ; centre commercial",
+        "- décision retenue par l'équipe / approvisionnement / hub logistique : Dordrecht",
     )
     # The figures of the decision may then be quoted: they are part of the prompt.
     synthesis = ai.build_requests(
         con := duckdb.connect(str(warehouse), read_only=True), {**config, "decision": decision}
-    )[0]
+    )[-1]
     con.close()
     assert (
         ai.unsupported_numbers(
@@ -281,7 +285,7 @@ def test_the_throttle_waits_between_calls_only():
 
 def test_run_writes_the_csv_and_the_table(warehouse, tmp_path):
     out = tmp_path / "ai_commentary.csv"
-    synthesis = "Contexte\nMarché en croissance de 4,21 %.\nRecommandation\nNO-GO."
+    synthesis = "Le marché croît.\nCroissance du secteur de 4,21 %."
     model = StandIn(synthesis)
     rows = ai.run(
         warehouse,
@@ -291,7 +295,7 @@ def test_run_writes_the_csv_and_the_table(warehouse, tmp_path):
         sleep=lambda _: None,
         now=lambda: datetime(2026, 11, 12, 15, 0, 0),
     )
-    assert len(rows) == 7
+    assert len(rows) == 8
 
     with out.open(encoding="utf-8", newline="") as file:
         written = list(csv.DictReader(file))
@@ -304,7 +308,7 @@ def test_run_writes_the_csv_and_the_table(warehouse, tmp_path):
     try:
         types = dict(con.execute(f"DESCRIBE {ai.TABLE}").fetchall()[i][:2] for i in range(6))
         assert types["verifie"] == "BOOLEAN" and types["date_generation"] == "TIMESTAMP"
-        assert con.execute(f"SELECT count(*) FROM {ai.TABLE}").fetchone()[0] == 7
+        assert con.execute(f"SELECT count(*) FROM {ai.TABLE}").fetchone()[0] == 8
     finally:
         con.close()
 
@@ -399,18 +403,23 @@ def test_a_missing_key_stops_with_a_clear_message(tmp_path, monkeypatch):
         ai.load_api_key(tmp_path / ".env")
 
 
-def test_the_synthesis_is_asked_to_fit_in_a_text_box(warehouse):
-    """A synthesis without a limit was cut at max_tokens, after 816 words (12/11/2026)."""
-    synthesis = requests_of(warehouse)[0]
+def test_the_slide_text_fits_its_limit_with_the_team_sentence(warehouse):
+    """A synthesis without a limit was cut at max_tokens, after 816 words (12/11/2026). The
+    team's sentence is added after the model's text: its words come off the model's limit."""
+    slide = requests_of(warehouse)[-1]
     limit = ai.load_settings()["synthese_mots_max"]
-    assert synthesis.max_words == limit
-    assert f"en {limit} mots au plus" in ai.user_prompt(synthesis)
+    ending = ai.load_config()["decision"][ai.CONFIRMATION_KEY]
+    assert slide.max_words == limit and slide.ending == ending
+    assert slide.model_words == limit - ai.count_words(ending)
+    assert f"en {slide.model_words} mots au plus" in ai.user_prompt(slide)
+    # The model never sees the sentence: it would rephrase it.
+    assert "pilote" not in ai.user_prompt(slide)
 
 
 def test_every_page_comment_is_short_and_starts_with_its_key_message(warehouse):
     """Two or three short sentences, the key message first (Jean-Li, 12/11/2026)."""
     limit = ai.load_settings()["commentaire_mots_max"]
-    for request in requests_of(warehouse)[1:]:
+    for request in requests_of(warehouse)[:-1]:
         prompt = ai.user_prompt(request)
         assert request.max_words == limit and f"{limit} mots au plus" in prompt
         assert "deux ou trois phrases courtes au maximum" in prompt
@@ -454,23 +463,26 @@ def add_sensitivity_view(path):
     con.close()
 
 
-def test_the_pessimistic_page_ends_on_the_team_condition_read_in_the_data(warehouse):
+def test_the_team_condition_goes_to_the_slide_never_to_the_dashboard(warehouse):
     """The 35,5 months come from sensibilite_payback, on the row of the decision: a value the
-    guard rail accepts, not the figure of a comment of the config."""
+    guard rail accepts, not the figure of a comment of the config. A condition for a GO is a
+    recommendation: the slide has it, no page of the dashboard (teacher, 13/11/2026)."""
     add_sensitivity_view(warehouse)
     config = {**ai.load_config(), "decision": DECISION}
     con = duckdb.connect(str(warehouse), read_only=True)
     try:
-        requests = {r.valeur_filtre: r for r in ai.build_requests(con, config)}
+        requests = ai.build_requests(con, config)
     finally:
         con.close()
-    condition = requests["pessimiste"].lines[-1]
+    slide = requests[-1]
+    condition = slide.lines[-1]
     assert "3 ETP" in condition and "France + 2 %" in condition
     assert "payback 35,5 mois" in condition and "verdict GO" in condition
     assert "41,2" not in condition  # the other row of the view is not the condition
-    allowed = ai.allowed_values(ai.user_prompt(requests["pessimiste"]))
+    allowed = ai.allowed_values(ai.user_prompt(slide))
     assert ai.unsupported_numbers("GO possible à 3 ETP, France + 2 %, en 35,5 mois.", allowed) == []
-    assert not any("condition de l'équipe" in line for line in requests["central"].lines)
+    for request in requests[:-1]:
+        assert not any("condition de l'équipe" in line for line in request.lines)
 
 
 def test_without_a_decision_or_the_view_there_is_no_condition(warehouse):
@@ -503,3 +515,127 @@ def test_a_city_gets_its_rank_on_each_note():
     assert "note_potentiel rang 3 sur 3" in line  # the weakest potential of the three
     assert "note_loyer rang 1 sur 3" in line  # tied first: both have 90,4
     assert ai.criterion_ranks({"ville": "X"}, [{"ville": "X"}]) == ()  # no note, no line
+
+
+# -- Dashboard: facts and gaps, no verdict (teacher, 13/11/2026) -------------------------
+def test_the_dashboard_pages_get_positions_and_gaps_never_verdicts(warehouse):
+    requests = requests_of(warehouse)
+    for request in requests[:-1]:
+        text = "\n".join(request.lines)
+        assert "verdict" not in text and "est_prioritaire" not in text
+    germany = next(r for r in requests if r.valeur_filtre == "Allemagne")
+    assert "position : seuil respecté | écart au seuil : 2,21 points au-dessus" in germany.lines[0]
+    pessimistic = next(r for r in requests if r.valeur_filtre == "pessimiste")
+    assert "position : seuil non respecté" in "\n".join(pessimistic.lines)
+    # The slide keeps the verdicts.
+    assert "verdict : NO-GO" in "\n".join(requests[-1].lines)
+
+
+def test_a_scenario_without_threshold_points_to_the_one_it_is_judged_on():
+    """The pessimistic page said "sans seuil fixé" for an occupancy cost (Jean-Li, 13/11/2026)."""
+    rows = [
+        {
+            "kpi": "Coût d'occupation (scénario central) : Centre commercial",
+            "pays": "DE",
+            "seuil": "≤ 15 %",
+        },
+        {
+            "kpi": "Coût d'occupation (scénario pessimiste) : Centre commercial",
+            "pays": "DE",
+            "seuil": None,
+        },
+    ]
+    thresholds = ai.scenario_thresholds(rows)
+    row = {
+        **rows[1],
+        "axe": "Rentabilité",
+        "valeur": 17.92,
+        "unite": "%",
+        "statut_go": "INFO",
+        "statut_epistemique": "CALCUL",
+        "origine_donnees": "SIMULE",
+    }
+    line = ai.render_kpi(row, verdict=False, thresholds=thresholds)
+    assert (
+        "seuil : ≤ 15 %, jugé sur le scénario central | écart au seuil : 2,92 points au-dessus"
+        in line
+    )
+
+
+def test_the_business_pages_say_the_labels_are_formats(warehouse):
+    for request in requests_of(warehouse):
+        assert (ai.FORMATS_LINE in request.lines) == (request.page == ai.PAGE_BUSINESS)
+
+
+def test_gaps_are_computed_by_the_code_in_the_unit_of_the_kpi():
+    assert ai.gap(3.89, 2.0, "%") == "1,89 point au-dessus"
+    assert ai.gap(13.97, 24.03, "%") == "10,06 points au-dessous"
+    assert ai.gap(100.85, 100.0, "indice") == "0,85 point d'indice au-dessus"
+    assert ai.gap(93.9, 36.0, "mois") == "57,9 mois au-dessus"
+    assert ai.gap(4.26, 4.26, "%") == "aucun écart"
+    assert ai.threshold_bound("≥ 66.91 %") == 66.91 and ai.threshold_bound("95 à 110") is None
+
+
+# -- Thousands, words, forbidden phrases (Jean-Li, 13/11/2026) ---------------------------
+def test_large_numbers_get_a_thousands_separator_years_do_not():
+    nbsp = "\u00a0"
+    assert ai.format_value(565010.0) == f"565{nbsp}010"
+    assert ai.format_value(1234567.25) == f"1{nbsp}234{nbsp}567,25"
+    assert ai.format_value(5707.0) == "5707" and ai.format_value(66.1) == "66,1"
+    assert ai.normalize_numbers("Point mort de 565010 € en 2027, 14,94 %.") == (
+        f"Point mort de 565{nbsp}010 € en 2027, 14,94 %."
+    )
+    # The grouped number is still read as one number by the guard rail.
+    assert ai.unsupported_numbers(ai.normalize_numbers("565010 €"), [565010.0]) == []
+
+
+def test_words_are_counted_a_number_being_one_word():
+    assert ai.count_words("Le point mort atteint 565 010 € de CA, soit 14,94 %.") == 9
+
+
+def test_a_text_over_its_limit_is_regenerated(warehouse):
+    request = next(r for r in requests_of(warehouse) if r.valeur_filtre == "Allemagne")
+    long = " ".join(["mot"] * (request.model_words + 1)) + "."
+    model = StandIn(long, "Le marché croît.")
+    text, verified, _ = ai.comment(model, request)
+    assert verified and text == "Le marché croît."
+    assert f"{request.model_words + 1} mots pour {request.model_words} au plus" in model.prompts[1]
+    text, verified, problem = ai.comment(StandIn(long, long), request)
+    assert not verified and problem.endswith(f"mots pour {request.model_words} au plus")
+
+
+def test_a_forbidden_phrase_is_regenerated_on_its_pages_only(warehouse):
+    rules = ai.load_settings()["formulations_interdites"]
+    requests = requests_of(warehouse)
+    business = next(r for r in requests if r.page == ai.PAGE_BUSINESS)
+    model = StandIn("Le payback n'est atteint dans aucune des deux villes.", "Les deux formats.")
+    text, verified, _ = ai.comment(model, business, rules)
+    assert verified and text == "Les deux formats."
+    assert "formulation interdite « deux villes »" in model.prompts[1]
+    # "coût au m²" is forbidden everywhere; "coût moyen au m²", a KPI of the warehouse, is not.
+    assert ai.forbidden_phrases("Un coût au m² de 1,02.", ai.PAGE_SLIDE, rules)
+    assert not ai.forbidden_phrases(
+        "Le coût moyen au m² du centre commercial.", ai.PAGE_SLIDE, rules
+    )
+    # No verdict on the dashboard; the slide may give one.
+    for page in ai.DASHBOARD_PAGES:
+        assert ai.forbidden_phrases("Le critère est GO.", page, rules)
+        assert ai.forbidden_phrases("Nous recommandons Berlin.", page, rules)
+    assert not ai.forbidden_phrases("NO-GO en l'état, GO conditionnel.", ai.PAGE_SLIDE, rules)
+    assert not ai.forbidden_phrases("Le centre-ville de Hugo.", ai.PAGE_MARKET, rules)
+
+
+def test_regenerations_stop_at_the_configured_number(warehouse):
+    request = next(r for r in requests_of(warehouse) if r.valeur_filtre == "Allemagne")
+    model = StandIn("Croissance de 9,9 %.", "Croissance de 9,9 %.", "Croissance de 9,9 %.", "x")
+    _, verified, _ = ai.comment(model, request, regenerations=2)
+    assert not verified and len(model.prompts) == 3
+
+
+def test_the_team_sentence_ends_the_slide_word_for_word(warehouse):
+    slide = requests_of(warehouse)[-1]
+    text, verified, _ = ai.comment(StandIn("Contexte\nRecommandation\nNO-GO en l'état."), slide)
+    assert verified and text == f"Contexte\nRecommandation\nNO-GO en l'état. {slide.ending}"
+    # An empty answer gets no ending: it stays an empty, rejected text.
+    text, verified, _ = ai.comment(StandIn("", ""), slide)
+    assert (text, verified) == ("", False)

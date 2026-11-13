@@ -113,6 +113,7 @@ decision:                   # Synthèse Go / No-Go, règle de combinaison du REA
     ca_m2_min_vs_france: 1.02          # sensibilite_payback : CA/m² au moins égal à celui de la France au même format + 2 %, à 3 ETP
     villes: [Berlin, Dortmund, Hamburg, Köln, Hannover, Nürnberg]   # city_scoring : les 6 villes prioritaires (est_prioritaire)
     hub: Dordrecht                     # distance_hub (OSRM) : hub le plus proche des 6 villes prioritaires (11 villes sur 12)
+  confirmation_go: "Le GO sera confirmé si le pilote atteint 60 % du CA/m² cible à 12 mois et 80 % à 24 mois."   # Jean-Li, 13/11/2026 : ajoutée telle quelle à la fin du texte de la slide 9, jamais reformulée par le modèle
   leviers_secondaires:
     preference_vietnam_gain_marge_pts: 1.6   # impact_origine : droit de douane UE à 0 % pour les produits fabriqués au Vietnam ;
                                              # +1,6 point de marge, payback pessimiste toujours non atteint : insuffisant seul
@@ -193,4 +194,15 @@ ia:                         # T9 (Briac) : commentaires du dashboard, src/ai/com
   delai_entre_appels_s: 0.5     # CONVENTION : marge entre deux appels ; le SDK rejoue de lui-même une erreur 429
   tentatives_max: 3             # nouveaux essais du SDK sur 408, 409, 429 et 5xx (anthropic/_base_client.py)
   synthese_mots_max: 300        # CONVENTION : la synthèse tient dans une zone de texte du dashboard ; une version sans limite a été coupée à 816 mots au plafond max_tokens le 12/11/2026
-  commentaire_mots_max: 60      # CONVENTION : commentaire d'une page, deux ou trois phrases courtes (demande de Jean-Li, 12/11/2026) ; le modèle dépasse parfois la limite
+  commentaire_mots_max: 60      # CONVENTION : commentaire d'une page, deux ou trois phrases courtes (Jean-Li, 12/11/2026) ; contrôlé par code depuis le 13/11/2026
+  regenerations_max: 2          # CONVENTION : nouvelles générations quand un contrôle échoue (chiffres, nombre de mots, formulation interdite) ; ensuite verifie = false
+  formulations_interdites:      # CONTRÔLE par code (Jean-Li, 13/11/2026) : expression régulière, casse ignorée ; une occurrence déclenche une régénération
+    - motif: 'co[uû]ts? au m²'
+      pages: toutes
+      raison: "le seuil de la décision porte sur le CA/m², pas sur un coût"
+    - motif: 'deux villes'
+      pages: ["Business case"]
+      raison: "Centre commercial et Centre-ville sont deux formats"
+    - motif: '\b(no-)?go\b|verdict|recommand|préconis|\bconseil|\bil faut\b|\bil convient\b|\bdevr(ait|aient|a)\b|prioritaire|\bconclu|\bdécision'
+      pages: ["Synthèse Comex", "Marché & prix", "Où s'implanter", "Business case"]
+      raison: "le dashboard ne donne que des constats et des écarts, sans verdict ni recommandation (retour du prof, 13/11/2026)"
