@@ -1,6 +1,7 @@
-Une première version de ce texte contenait des nombres absents des données : {nombres}.
+Une première version de ce texte ne passe pas les contrôles automatiques :
+{problemes}
 
 Première version :
 {texte}
 
-Réécris-la en n'employant que des nombres fournis dans les données. Retire chaque nombre non fourni ou remplace-le par une formulation sans chiffre.
+Réécris-la en corrigeant chaque point : n'emploie que des nombres fournis dans les données (retire chaque nombre non fourni ou remplace-le par une formulation sans chiffre), tiens en {mots_max} mots au plus, et n'emploie aucune des formulations signalées.
