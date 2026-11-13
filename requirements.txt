@@ -16,6 +16,9 @@ beautifulsoup4==4.15.0
 # AI commentary (T9): Anthropic client, imported only when `make ai` calls the model
 anthropic==2.8.0
 
+# Slides (T13): PowerPoint deck written by slides/build_slides.py
+python-pptx==1.0.2
+
 # Quality: same tools as the CI, pinned so that local and CI results match
 black==26.10.1
 flake8==7.5.0
