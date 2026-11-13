@@ -51,6 +51,7 @@ kpi:
 # data/gold/ai_commentary.csv (T9) is copied as it is when it exists.
 exports:
 	$(PYTHON) -m src.transform.export_gold --warehouse $(WAREHOUSE) --exports $(EXPORTS_DIR) --ai-commentary $(AI_COMMENTARY)
+	$(PYTHON) -m src.transform.kpi_guide --warehouse $(WAREHOUSE) --out $(EXPORTS_DIR)/kpi_guide.csv
 
 # T9: generates the AI commentary with the language model, then rewrites the exports. Needs
 # the key in .env and the network: like `collect`, it is not part of `all`. Run it after `all`.

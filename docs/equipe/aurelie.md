@@ -68,6 +68,7 @@ Les fichiers sont dans `data/gold/exports/`, un par table ou vue, avec les même
 | `eurostat_series.csv` | Séries annuelles Eurostat par pays et indicateur (dépenses en chaussures, prix, population, chômage...), réelles | 463 |
 | `crocs_produits.csv` | Prix relevés sur crocs.fr et crocs.de, par modèle et coloris, le 12/11/2026, réels | 577 |
 | `ai_commentary.csv` | Commentaires générés par IA, un par page et valeur de filtre, avec la synthèse Comex | 23 |
+| `kpi_guide.csv` | Guide des KPI : une ligne par KPI de `kpi_summary` (jointure sur `kpi_summary[kpi]` = `kpi_guide[nom]`), avec définition, formule, unité HT / TTC, périmètre, source, origine et seuil ; pour une infobulle ou une page d'aide | 79 |
 
 `ai_commentary.csv` (T9) contient 23 textes : la synthèse Comex (`page` = « Synthèse Comex »), un commentaire par pays (« Marché & prix »), par ville allemande (« Où s'implanter ») et par scénario (« Business case »). `make exports` le copie tel quel depuis `data/gold/ai_commentary.csv`. La colonne `verifie` vaut `true` quand chaque chiffre du texte a été retrouvé dans les données par le garde-fou de T9 : n'afficher que ces textes.
 
