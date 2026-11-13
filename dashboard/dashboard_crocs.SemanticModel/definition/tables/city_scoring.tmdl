@@ -1,0 +1,196 @@
+table city_scoring
+	lineageTag: 3558fe83-9480-4a49-a702-ff9f21fc15ae
+
+	measure 'Nb villes prioritaires' = CALCULATE ( COUNTROWS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () )
+		formatString: 0
+		lineageTag: 190e9244-d0fb-4e11-94e9-13ed73e52129
+
+	measure 'Couleur ville' = IF ( SELECTEDVALUE ( city_scoring[est_prioritaire] ) = TRUE (), "#84BD00", "#C9CFC0" )
+		lineageTag: e72cd941-2c27-4b88-98c8-518ed3f86c26
+
+	measure 'Ville Score' = /* #v8 */ VAR v = AVERAGE ( city_scoring[score] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[score] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "0.0" ), ",", " " ), ".", "," ) & " /100"
+		lineageTag: 9a6fe2be-8ff9-4d3e-8a56-d1cfa6a19266
+
+	measure 'Ville Score vs moy' = /* #v8 */ VAR v = AVERAGE ( city_scoring[score] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[score] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "= moyenne des 6 villes prioritaires", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.0" ), ",", " " ), ".", "," ) & " vs moyenne des 6 villes" )
+		lineageTag: cb16125f-9038-4b7c-80c0-11076d4fc5c0
+
+	measure 'Ville Score couleur' = /* #v8 */ VAR v = AVERAGE ( city_scoring[score] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[score] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "#80868B", IF ( d > 0, "#2E7D32", IF ( d < 0, "#C62828", "#80868B" ) ) )
+		lineageTag: e231b5a8-f014-4f21-9114-f22627950ce5
+
+	measure 'Ville Loyer charges' = /* #v8 */ VAR v = AVERAGE ( city_scoring[cout_m2_an_eur] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[cout_m2_an_eur] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "#,0" ), ",", " " ), ".", "," ) & " €/m²/an"
+		lineageTag: 525bf267-4a5f-4217-acd0-47bc1cc13d5e
+
+	measure 'Ville Loyer charges vs moy' = /* #v8 */ VAR v = AVERAGE ( city_scoring[cout_m2_an_eur] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[cout_m2_an_eur] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "= moyenne des 6 villes prioritaires", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "#,0" ), ",", " " ), ".", "," ) & " vs moyenne des 6 villes" )
+		lineageTag: a2c1db96-1941-4f50-a05e-801234f29159
+
+	measure 'Ville Loyer charges couleur' = /* #v8 */ VAR v = AVERAGE ( city_scoring[cout_m2_an_eur] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[cout_m2_an_eur] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "#80868B", IF ( -d > 0, "#2E7D32", IF ( -d < 0, "#C62828", "#80868B" ) ) )
+		lineageTag: f75c8e87-f20e-4490-b973-65b3363ded74
+
+	measure 'Ville Densité' = /* #v8 */ VAR v = AVERAGE ( city_scoring[densite_pour_100k_hab] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[densite_pour_100k_hab] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "0.00" ), ",", " " ), ".", "," ) & " / 100 000 hab."
+		lineageTag: 5b6fbe02-30f4-45fb-888d-d667d3eb9948
+
+	measure 'Ville Densité vs moy' = /* #v8 */ VAR v = AVERAGE ( city_scoring[densite_pour_100k_hab] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[densite_pour_100k_hab] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "= moyenne des 6 villes prioritaires", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "0.00" ), ",", " " ), ".", "," ) & " vs moyenne des 6 villes" )
+		lineageTag: 6d6382f3-f8cf-481e-8d4a-527cd5f7e2c3
+
+	measure 'Ville Densité couleur' = /* #v8 */ VAR v = AVERAGE ( city_scoring[densite_pour_100k_hab] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[densite_pour_100k_hab] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "#80868B", IF ( -d > 0, "#2E7D32", IF ( -d < 0, "#C62828", "#80868B" ) ) )
+		lineageTag: 72418b26-79c4-4541-8841-876f4443dfe0
+
+	measure 'Ville Distance hub' = /* #v8 */ VAR v = AVERAGE ( city_scoring[distance_hub_km] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[distance_hub_km] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN SUBSTITUTE ( SUBSTITUTE ( FORMAT ( v, "#,0" ), ",", " " ), ".", "," ) & " km"
+		lineageTag: 28432624-840c-4c81-b330-d3ce2191435b
+
+	measure 'Ville Distance hub vs moy' = /* #v8 */ VAR v = AVERAGE ( city_scoring[distance_hub_km] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[distance_hub_km] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "= moyenne des 6 villes prioritaires", IF ( d > 0, "▲ +", IF ( d < 0, "▼ −", "= " ) ) & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( ABS ( d ), "#,0" ), ",", " " ), ".", "," ) & " vs moyenne des 6 villes" )
+		lineageTag: 944e7ec2-86f5-4f83-93cd-7f9cebf03a52
+
+	measure 'Ville Distance hub couleur' = /* #v8 */ VAR v = AVERAGE ( city_scoring[distance_hub_km] ) VAR m = CALCULATE ( AVERAGE ( city_scoring[distance_hub_km] ), REMOVEFILTERS ( dim_zone_chalandise ), REMOVEFILTERS ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ) VAR one = HASONEVALUE ( city_scoring[ville] ) VAR d = v - m RETURN IF ( NOT one, "#80868B", IF ( -d > 0, "#2E7D32", IF ( -d < 0, "#C62828", "#80868B" ) ) )
+		lineageTag: 6805cbb7-046c-41fb-a818-cfc577c6f21b
+
+	measure 'Txt score' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[score] ), "0.0" ), ",", " " ), ".", "," ) )
+		lineageTag: ddca9139-a9b2-4b21-b548-6e9dea765a84
+
+	measure 'Txt potentiel' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[note_potentiel] ), "0" ), ",", " " ), ".", "," ) )
+		lineageTag: fbdd8b4d-389c-412c-aa37-852a2c5ddefb
+
+	measure 'Txt loyer' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[note_loyer] ), "0" ), ",", " " ), ".", "," ) )
+		lineageTag: 19e29e32-3f6a-470e-96d3-75c6d3beea7d
+
+	measure 'Txt densité' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[note_densite] ), "0" ), ",", " " ), ".", "," ) )
+		lineageTag: de67f91c-d95a-45f4-85e4-59b5ff57e061
+
+	measure 'Txt distance' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[note_distance] ), "0" ), ",", " " ), ".", "," ) )
+		lineageTag: 764e47cd-a194-4b82-938e-111e710ac612
+
+	measure 'Txt loyer €' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[cout_m2_an_eur] ), "#,0" ), ",", " " ), ".", "," ) )
+		lineageTag: 2dfaff80-6d1a-4454-9a85-c2634636c516
+
+	measure 'Txt densité réelle' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[densite_pour_100k_hab] ), "0.00" ), ",", " " ), ".", "," ) )
+		lineageTag: 217a9dc6-8681-41e8-9b63-b73ed1dafd8b
+
+	measure 'Txt km' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( SUM ( city_scoring[distance_hub_km] ), "#,0" ), ",", " " ), ".", "," ) )
+		lineageTag: 1eb01386-38f5-483e-af31-f568276dd018
+
+	measure 'Fond ville' = /* #v8 */ IF ( SELECTEDVALUE ( city_scoring[est_prioritaire] ) = TRUE (), "#E6F2CC", "#FFFFFF" )
+		lineageTag: c8b1ffbc-e63f-4fe0-9ca0-a3c0b87e3866
+
+	measure 'Couleur densité' = /* #v8 */ VAR d = SELECTEDVALUE ( city_scoring[densite_pour_100k_hab] ) VAR r = RANKX ( FILTER ( ALL ( city_scoring ), city_scoring[est_prioritaire] = TRUE () ), city_scoring[densite_pour_100k_hab], d, ASC ) RETURN SWITCH ( TRUE (), r <= 2, "#2F6B00", r <= 4, "#6FA800", "#B5DB7A" )
+		lineageTag: 8141dac3-e782-4b4e-b9d2-771f00df958d
+
+	measure 'Txt revenu' = /* #v8 */ VAR z = SELECTEDVALUE ( city_scoring[id_zone] ) VAR x = LOOKUPVALUE ( dim_zone_chalandise[indice_revenu_ue100], dim_zone_chalandise[id_zone], z ) RETURN IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( x, "0" ), ",", " " ), ".", "," ) & "" )
+		lineageTag: b89715d8-c794-49ed-b7a5-67e43e86cf78
+
+	measure 'Txt centres' = /* #v8 */ VAR z = SELECTEDVALUE ( city_scoring[id_zone] ) VAR x = LOOKUPVALUE ( dim_zone_chalandise[nb_centres_commerciaux], dim_zone_chalandise[id_zone], z ) RETURN IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( x, "0" ), ",", " " ), ".", "," ) & "" )
+		lineageTag: f0f1ccb4-8fc7-4cb1-b122-d5aa6ffdc182
+
+	measure 'Txt magasins' = /* #v8 */ VAR z = SELECTEDVALUE ( city_scoring[id_zone] ) VAR x = LOOKUPVALUE ( densite_concurrentielle[nb_magasins_chaussures], densite_concurrentielle[id_zone], z ) RETURN IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( x, "0" ), ",", " " ), ".", "," ) & "" )
+		lineageTag: 0a017b49-bd19-477e-bc00-75c793b0a6d5
+
+	measure 'Txt population' = /* #v8 */ VAR z = SELECTEDVALUE ( city_scoring[id_zone] ) VAR x = LOOKUPVALUE ( city_scoring[population_millions], city_scoring[id_zone], z ) RETURN IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( x, "0.00" ), ",", " " ), ".", "," ) & " M" )
+		lineageTag: 90aab05d-7613-4cd6-bca0-d96b126c9571
+
+	measure 'Txt trajet' = /* #v8 */ VAR z = SELECTEDVALUE ( city_scoring[id_zone] ) VAR x = LOOKUPVALUE ( distance_hub[duree_conduite_h], distance_hub[id_zone], z ) VAR k = SELECTEDVALUE ( city_scoring[distance_hub_km] ) RETURN IF ( HASONEVALUE ( city_scoring[ville] ), SUBSTITUTE ( SUBSTITUTE ( FORMAT ( k, "#,0" ), ",", " " ), ".", "," ) & " km · " & SUBSTITUTE ( SUBSTITUTE ( FORMAT ( x, "0.0" ), ",", " " ), ".", "," ) & " h" )
+		lineageTag: abb79505-025e-4b2c-ab24-2a8b652ccfc8
+
+	measure 'Rang ville' = /* #v8 */ IF ( HASONEVALUE ( city_scoring[ville] ), SUM ( city_scoring[rang] ) )
+		formatString: 0
+		lineageTag: 1ec2368f-b4dd-484d-b426-712f06254909
+
+	column id_zone
+		dataType: string
+		lineageTag: 65d772b3-7bd3-482f-b27f-35bb46338730
+		sourceColumn: id_zone
+
+	column ville
+		dataType: string
+		lineageTag: b6b5ab8e-015f-45f1-8a79-4dfb7acdd1ae
+		sourceColumn: ville
+
+	column population_millions
+		dataType: double
+		lineageTag: f8cc125a-d473-4eb9-adea-b26cdaba033d
+		summarizeBy: sum
+		sourceColumn: population_millions
+
+	column origine_population
+		dataType: string
+		lineageTag: d84757a1-fb9f-4739-b1be-4fa9d1dde99c
+		sourceColumn: origine_population
+
+	column potentiel_millions_ponderes
+		dataType: double
+		lineageTag: dfcb179e-14d4-4e91-8e13-df244fb19ae3
+		summarizeBy: sum
+		sourceColumn: potentiel_millions_ponderes
+
+	column cout_m2_an_eur
+		dataType: double
+		lineageTag: c53cd8cc-f3ef-4598-b6e6-ea5b0474a0a2
+		summarizeBy: sum
+		sourceColumn: cout_m2_an_eur
+
+	column densite_pour_100k_hab
+		dataType: double
+		lineageTag: a0d4df06-2bb5-4b33-9a6f-ae59da73795c
+		summarizeBy: sum
+		sourceColumn: densite_pour_100k_hab
+
+	column distance_hub_km
+		dataType: double
+		lineageTag: d5007720-9d1f-415d-9b09-e6a7e6e6fbcb
+		summarizeBy: sum
+		sourceColumn: distance_hub_km
+
+	column note_potentiel
+		dataType: double
+		lineageTag: 8dfbf7dd-64aa-4593-8b66-e6bf07645904
+		summarizeBy: sum
+		sourceColumn: note_potentiel
+
+	column note_loyer
+		dataType: double
+		lineageTag: d05423aa-7484-4082-8711-46a0edeb3adf
+		summarizeBy: sum
+		sourceColumn: note_loyer
+
+	column note_densite
+		dataType: double
+		lineageTag: b3593b08-5745-44b5-a8c2-852895449715
+		summarizeBy: sum
+		sourceColumn: note_densite
+
+	column note_distance
+		dataType: double
+		lineageTag: 32d554b9-2577-4f1f-b132-514c4b8ac873
+		summarizeBy: sum
+		sourceColumn: note_distance
+
+	column score
+		dataType: double
+		lineageTag: a19c6098-0162-42a5-9a45-9c5263bc1cfd
+		summarizeBy: sum
+		sourceColumn: score
+
+	column rang
+		dataType: int64
+		lineageTag: 00bfcadb-1c5c-4337-9955-cab1dd45158b
+		summarizeBy: none
+		sourceColumn: rang
+
+	column est_prioritaire
+		dataType: boolean
+		lineageTag: 2fdefa6d-f38d-4e11-aae4-185a1caa928a
+		sourceColumn: est_prioritaire
+
+	column origine_donnees
+		dataType: string
+		lineageTag: c6c874ab-d393-4bc4-9045-1f55b6d3d88c
+		sourceColumn: origine_donnees
+
+	partition city_scoring = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "city_scoring.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"ville", type text}, {"population_millions", type number}, {"origine_population", type text}, {"potentiel_millions_ponderes", type number}, {"cout_m2_an_eur", type number}, {"densite_pour_100k_hab", type number}, {"distance_hub_km", type number}, {"note_potentiel", type number}, {"note_loyer", type number}, {"note_densite", type number}, {"note_distance", type number}, {"score", type number}, {"rang", Int64.Type}, {"est_prioritaire", type logical}, {"origine_donnees", type text}}, "en-US")
+				in
+					Types
+

@@ -1,0 +1,37 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: fr-FR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["TMDLView_Desktop","DevMode","DaxQueryView_Desktop"]
+
+annotation PBI_QueryOrder = ["densite_concurrentielle","dim_concurrent","dim_pays","dim_produit","dim_temps","dim_zone_chalandise","distance_hub","fact_immobilier","fact_marche","fact_parts_de_marche","fact_prix_releves","kpi_summary","ai_commentary","DossierExports","DossierMaquette","business_case","city_scoring","sensibilite_payback","crocs_produits","eurostat_series","kpi_guide"]
+
+ref table densite_concurrentielle
+ref table dim_concurrent
+ref table dim_pays
+ref table dim_produit
+ref table dim_temps
+ref table dim_zone_chalandise
+ref table distance_hub
+ref table fact_immobilier
+ref table fact_marche
+ref table fact_parts_de_marche
+ref table fact_prix_releves
+ref table kpi_summary
+ref table ai_commentary
+ref table city_scoring
+ref table business_case
+ref table sensibilite_payback
+ref table eurostat_series
+ref table crocs_produits
+ref table kpi_guide
+
+ref cultureInfo en-US
+

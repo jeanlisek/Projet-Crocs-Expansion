@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "54d6c58316ecddd6cb72",
+  "position": {
+    "x": 196,
+    "y": 68,
+    "z": 400,
+    "height": 44,
+    "width": 800,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Périmètre : ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#84BD00",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Allemagne · 6 villes prioritaires du scoring · ville choisie dans le bandeau (sinon moyenne des 6) · loyers simulés, population, magasins et distances réels",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#E0E0E0",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

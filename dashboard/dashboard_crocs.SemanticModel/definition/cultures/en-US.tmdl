@@ -1,0 +1,1127 @@
+cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "kpi_summary.axe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "axe"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.kpi": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "kpi"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Indicateur": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.valeur_affichee": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "valeur_affichee"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.seuil": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "seuil"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.statut_go": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "statut_go"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.origine_donnees": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "origine_donnees"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "business_case.scenario": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "business_case",
+			          "ConceptualProperty": "scenario"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Scénario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "business_case.format": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "business_case",
+			          "ConceptualProperty": "format"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Format": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.taille_réelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Taille réelle"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.taille_projetée": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Taille projetée"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "business_case.payback_libellé": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "business_case",
+			          "ConceptualProperty": "Payback libellé"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Payback": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "sensibilite_payback.etp_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "sensibilite_payback",
+			          "ConceptualProperty": "etp_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Effectif": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "sensibilite_payback.ratio_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "sensibilite_payback",
+			          "ConceptualProperty": "ratio_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "CA/m² vs France": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "sensibilite_payback.payback_sensi": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "sensibilite_payback",
+			          "ConceptualProperty": "Payback sensi"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Payback (mois)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.indice_prix_vs_crocs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Indice prix vs Crocs"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "ai_commentary.commentaire_synthèse": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ai_commentary",
+			          "ConceptualProperty": "Commentaire Synthèse"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "ai_commentary.commentaire_marché": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ai_commentary",
+			          "ConceptualProperty": "Commentaire Marché"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "ai_commentary.commentaire_implantation": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ai_commentary",
+			          "ConceptualProperty": "Commentaire Implantation"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "ai_commentary.commentaire_business_case": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ai_commentary",
+			          "ConceptualProperty": "Commentaire Business case"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_guide.axe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "axe"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Axe": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.nom": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "nom"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "KPI": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.definition": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "definition"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Définition": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.formule": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "formule"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Formule": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.unite": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "unite"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Unité": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.perimetre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "perimetre"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_guide.source": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "source"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Source": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.origine": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "origine"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Origine": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_guide.seuil": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_guide",
+			          "ConceptualProperty": "seuil"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Seuil": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.axe_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "axe_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Axe": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.tab_allemagne": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Tab Allemagne"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Allemagne": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.tab_france": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Tab France"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "France": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.tab_écart": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Tab écart"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Écart DE − FR": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.tab_seuil": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Tab seuil"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Seuil": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.tab_écart_seuil": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Tab écart seuil"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Écart au seuil (DE)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.origine_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "origine_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Origine": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "kpi_summary.allemagne_réel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Allemagne réel"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.allemagne_projeté": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "Allemagne projeté"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.france_réel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "France réel"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "kpi_summary.france_projeté": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "kpi_summary",
+			          "ConceptualProperty": "France projeté"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_parts_de_marche.rang_2025": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Rang 2025"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rang": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_pdm_2025": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt PdM 2025"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "PdM 2025": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_pdm_2024": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt PdM 2024"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_parts_de_marche.txt_écart_pdm": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt écart PdM"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "vs 2024": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_ca_2025": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt CA 2025"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "CA 2025": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_écart_ca": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt écart CA"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_parts_de_marche.pdm_crocs_allemagne": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "PdM Crocs Allemagne"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_parts_de_marche.pdm_crocs_france": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "PdM Crocs France"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_concurrent.nom_concurrent": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_concurrent",
+			          "ConceptualProperty": "nom_concurrent"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Marque": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.ville": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "ville"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ville": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_score": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt score"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Score /100": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_potentiel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt potentiel"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "city_scoring.txt_loyer": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt loyer"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "city_scoring.txt_densité": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt densité"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "city_scoring.txt_distance": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt distance"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "city_scoring.txt_loyer_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt loyer €"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Loyer + charges €/m²/an (simulé)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_densité_réelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt densité réelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Magasins / 100 000 hab.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_km": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt km"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_parts_de_marche.txt_écart_vs_crocs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt écart vs Crocs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "vs Crocs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_prix_moyen": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt prix moyen"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Prix moyen": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.txt_indice_prix": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Txt indice prix"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Indice prix (Crocs = 100)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.indice_prix_top": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "Indice prix top"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Indice prix": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_parts_de_marche.pdm_top": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_parts_de_marche",
+			          "ConceptualProperty": "PdM top"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Part de marché (%)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.rang_ville": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Rang ville"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rang": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_population": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt population"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Population (Destatis)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_revenu": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt revenu"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Revenu (UE = 100, simulé)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_centres": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt centres"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Centres commerciaux (simulé)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_magasins": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt magasins"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Magasins de chaussures (OSM)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "city_scoring.txt_trajet": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "city_scoring",
+			          "ConceptualProperty": "Txt trajet"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Trajet depuis Dordrecht (OSRM)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

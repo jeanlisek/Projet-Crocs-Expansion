@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "f7572313de4e94625447",
+  "position": {
+    "x": 196,
+    "y": 68,
+    "z": 400,
+    "height": 44,
+    "width": 800,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Périmètre : ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#84BD00",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Allemagne vs France · 2022-2025 · prix HT, marché TTC · business case : scénario et format du bandeau",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#E0E0E0",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

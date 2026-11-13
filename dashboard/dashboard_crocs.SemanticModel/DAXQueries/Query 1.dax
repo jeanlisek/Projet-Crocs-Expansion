@@ -1,0 +1,3 @@
+EVALUATE SELECTCOLUMNS ( FILTER ( kpi_summary, CONTAINSSTRING ( kpi_summary[kpi], "Eurostat" ) ), "pays", kpi_summary[pays], "valeur", kpi_summary[valeur] )
+EVALUATE { [Eurostat pays choisi] }
+EVALUATE { COUNTROWS ( kpi_summary ) }

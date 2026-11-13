@@ -1,0 +1,57 @@
+table fact_immobilier
+	lineageTag: ad07754c-c85c-48e7-bf68-7a545736751b
+
+	column id_zone
+		dataType: string
+		lineageTag: c4b85ddb-a234-45ba-ad79-a4799eb8cc58
+		sourceColumn: id_zone
+
+	column annee
+		dataType: int64
+		lineageTag: eb818d4a-73cb-4b17-a5b4-4868f1498e46
+		summarizeBy: none
+		sourceColumn: annee
+
+	column type_emplacement
+		dataType: string
+		lineageTag: 7ffed9fe-9de8-4358-8c7f-fd3cbf1779f2
+		sourceColumn: type_emplacement
+
+	column loyer_m2_an_eur
+		dataType: int64
+		lineageTag: 379d63fe-4052-44ab-9deb-660743d556b4
+		summarizeBy: sum
+		sourceColumn: loyer_m2_an_eur
+
+	column charges_m2_an_eur
+		dataType: int64
+		lineageTag: 32c7cf21-6d2b-40f0-841a-531192595919
+		summarizeBy: sum
+		sourceColumn: charges_m2_an_eur
+
+	column taux_vacance_pct
+		dataType: double
+		lineageTag: 2bbd3d87-1eb1-4915-b05b-e06e5af8a0d5
+		summarizeBy: sum
+		sourceColumn: taux_vacance_pct
+
+	column source
+		dataType: string
+		lineageTag: 47c408a2-4589-4d68-ba5a-c4601e7c2c29
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: f421ba05-c475-431f-beea-da5ce1e94126
+		sourceColumn: est_simule
+
+	partition fact_immobilier = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "fact_immobilier.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"annee", Int64.Type}, {"type_emplacement", type text}, {"loyer_m2_an_eur", Int64.Type}, {"charges_m2_an_eur", Int64.Type}, {"taux_vacance_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

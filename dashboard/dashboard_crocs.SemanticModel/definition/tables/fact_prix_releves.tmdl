@@ -1,0 +1,88 @@
+table fact_prix_releves
+	lineageTag: b2ac8448-cf59-458d-8feb-681dbe7e4dd9
+
+	column id_releve
+		dataType: int64
+		lineageTag: 738039b9-bbe4-422a-a422-c5416a164106
+		summarizeBy: none
+		sourceColumn: id_releve
+
+	column id_date
+		dataType: int64
+		lineageTag: be16796d-51fe-4d48-88ab-50073df24108
+		summarizeBy: none
+		sourceColumn: id_date
+
+	column code_pays
+		dataType: string
+		lineageTag: 0658768e-2207-4f4c-a3d7-419534b8947d
+		sourceColumn: code_pays
+
+	column enseigne
+		dataType: string
+		lineageTag: 0a97cc55-f9fc-4c00-969b-d160ac75f554
+		sourceColumn: enseigne
+
+	column id_concurrent
+		dataType: string
+		lineageTag: 2f14352e-ec56-46cd-b4ef-299f27a4b1c0
+		sourceColumn: id_concurrent
+
+	column id_produit
+		dataType: string
+		lineageTag: 2401681a-90d0-4f1a-a912-5b09776d9129
+		sourceColumn: id_produit
+
+	column libelle_produit
+		dataType: string
+		lineageTag: 9629fd05-2958-4e90-add2-bd49c52c66c4
+		sourceColumn: libelle_produit
+
+	column categorie
+		dataType: string
+		lineageTag: d39a93e0-7985-4964-a2b5-8dc539eaa19d
+		sourceColumn: categorie
+
+	column prix_affiche_eur
+		dataType: double
+		lineageTag: a858edfb-e59e-40df-b728-3dedc0cc8ac1
+		summarizeBy: sum
+		sourceColumn: prix_affiche_eur
+
+	column prix_affiche_devise_locale
+		dataType: double
+		lineageTag: c4766b89-5615-4aca-bada-1ad4d26c99b3
+		summarizeBy: sum
+		sourceColumn: prix_affiche_devise_locale
+
+	column en_promotion
+		dataType: boolean
+		lineageTag: cc6a9b6b-31e3-4b7d-bb1b-7b849fb5ff42
+		sourceColumn: en_promotion
+
+	column taux_remise_pct
+		dataType: double
+		lineageTag: 6ea229bd-134e-48a1-8d9e-26f6eb447bc8
+		summarizeBy: sum
+		sourceColumn: taux_remise_pct
+
+	column source
+		dataType: string
+		lineageTag: 3c5aaa01-5fa6-44a7-bb8b-1dcbc2ef3b36
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: f73c5f4d-53dd-47ac-800f-d3f9bba56b55
+		sourceColumn: est_simule
+
+	partition fact_prix_releves = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "fact_prix_releves.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_releve", Int64.Type}, {"id_date", Int64.Type}, {"code_pays", type text}, {"enseigne", type text}, {"id_concurrent", type text}, {"id_produit", type text}, {"libelle_produit", type text}, {"categorie", type text}, {"prix_affiche_eur", type number}, {"prix_affiche_devise_locale", type number}, {"en_promotion", type logical}, {"taux_remise_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

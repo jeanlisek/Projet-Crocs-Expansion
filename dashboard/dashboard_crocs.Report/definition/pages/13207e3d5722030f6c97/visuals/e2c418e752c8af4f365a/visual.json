@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "e2c418e752c8af4f365a",
+  "position": {
+    "x": 20,
+    "y": 620,
+    "z": 3600,
+    "height": 300,
+    "width": 560,
+    "tabOrder": 36
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Hypothèses du magasin type",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Surface, effectif, CA/m² et marge : moyennes du réseau France au même format, marge corrigée de l'écart post-taxe Allemagne - France.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CA/m² vs France : 75 % (pessimiste), 90 % (central), scénario optimiste au-dessus ; montée en charge sur 3 ans.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Payback > 120 mois : investissement non récupéré sur l'horizon de 10 ans.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Détail : config/hypotheses.yaml.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

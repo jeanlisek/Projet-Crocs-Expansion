@@ -1,0 +1,207 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "35f9e3ae7cc128420ac6",
+  "position": {
+    "x": 1276,
+    "y": 210,
+    "z": 1600,
+    "height": 285,
+    "width": 610,
+    "tabOrder": 16
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Sources et licences",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Prix : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "crocs.fr et crocs.de, pages produit publiques, relevé du 12/11/2026 (réel).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Dépenses des ménages en chaussures : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Eurostat, nama_10_cp18, données provisoires (réel).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Population : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "© Statistisches Bundesamt (Destatis), 2025, reproduction autorisée avec mention de la source.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Magasins de chaussures : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "© les contributeurs d'OpenStreetMap, licence ODbL.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Distances routières au hub : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "OSRM, sur données OpenStreetMap (ODbL).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Taxes : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "sources officielles, citées ligne par ligne dans le tableau ci-dessous.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Marché, parts de marché, loyers, business case : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "jeu simulé calibré (src/simulate/generate_data.py, config/hypotheses.yaml).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Commentaires IA : ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "générés puis vérifiés par code (chiffres recalculés, verifie = VRAI).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

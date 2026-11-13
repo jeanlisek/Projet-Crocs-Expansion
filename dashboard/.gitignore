@@ -1,0 +1,5 @@
+# Cache local de Power BI (donnees chargees et reglages du poste) : jamais versionne
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+# Ancienne version binaire, remplacee par le projet .pbip
+*.pbix

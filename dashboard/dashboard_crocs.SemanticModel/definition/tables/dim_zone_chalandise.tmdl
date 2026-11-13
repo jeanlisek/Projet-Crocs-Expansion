@@ -1,0 +1,111 @@
+table dim_zone_chalandise
+	lineageTag: a73da2db-bbf1-4826-907c-7166d4a8e7ab
+
+	column id_zone
+		dataType: string
+		lineageTag: 2adeae4a-4718-408d-9c92-d5f7679a78f1
+		sourceColumn: id_zone
+
+	column code_pays
+		dataType: string
+		lineageTag: 7eef2464-d1d0-4e38-8145-14c8527107f3
+		sourceColumn: code_pays
+
+	column ville
+		dataType: string
+		lineageTag: 594bbb1c-637d-475a-a9de-8b1767f0aa70
+		sourceColumn: ville
+
+	column latitude
+		dataType: double
+		lineageTag: 902b6bbb-8dc4-42cd-8b1b-10d17dcd7b51
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		lineageTag: a4a9465d-eb4c-4014-9e5c-25cddded8951
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column population_ville_millions
+		dataType: double
+		lineageTag: 71176272-a283-435a-87f1-5ff79bb9fbc3
+		summarizeBy: sum
+		sourceColumn: population_ville_millions
+
+	column population_zone_chalandise_millions
+		dataType: double
+		lineageTag: 58b4f7e3-fd3b-44c8-be85-858b17acc88d
+		summarizeBy: sum
+		sourceColumn: population_zone_chalandise_millions
+
+	column indice_revenu_ue100
+		dataType: int64
+		lineageTag: ae503623-7d6a-4148-850c-3350af61579b
+		summarizeBy: sum
+		sourceColumn: indice_revenu_ue100
+
+	column indice_frequentation_commerce
+		dataType: double
+		lineageTag: b9065b87-edf5-441b-8454-fd83e626bd83
+		summarizeBy: sum
+		sourceColumn: indice_frequentation_commerce
+
+	column nb_centres_commerciaux
+		dataType: int64
+		lineageTag: 2a2fa0ba-e653-43c8-90d9-f1b0381637cf
+		summarizeBy: sum
+		sourceColumn: nb_centres_commerciaux
+
+	column part_touristes_pct
+		dataType: double
+		lineageTag: 89277e5e-2f2c-4baa-8e7c-f6021a67ebe1
+		summarizeBy: sum
+		sourceColumn: part_touristes_pct
+
+	column climat_temperature_moy_ete
+		dataType: double
+		lineageTag: 8b0e02e8-b2fb-4c75-bf7e-f4868775796c
+		summarizeBy: sum
+		sourceColumn: climat_temperature_moy_ete
+
+	column nb_points_vente_concurrents
+		dataType: int64
+		lineageTag: 497a911f-e4c7-4d9d-bb85-7a256d50b3ca
+		summarizeBy: sum
+		sourceColumn: nb_points_vente_concurrents
+
+	column densite_concurrentielle_pour_100k_hab
+		dataType: double
+		lineageTag: 20b0111e-6d45-4d27-9638-0ed9c5e4ef4a
+		summarizeBy: sum
+		sourceColumn: densite_concurrentielle_pour_100k_hab
+
+	column zone_insulaire
+		dataType: boolean
+		lineageTag: 86ed8f26-2400-4a93-b54e-3505a0d7a8a4
+		sourceColumn: zone_insulaire
+
+	column source
+		dataType: string
+		lineageTag: 04655938-189b-45db-a6b9-a95087b66779
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: fea8ff9e-e9c4-4eb1-ac82-20e72b07d42c
+		sourceColumn: est_simule
+
+	partition dim_zone_chalandise = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "dim_zone_chalandise.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"code_pays", type text}, {"ville", type text}, {"latitude", type number}, {"longitude", type number}, {"population_ville_millions", type number}, {"population_zone_chalandise_millions", type number}, {"indice_revenu_ue100", Int64.Type}, {"indice_frequentation_commerce", type number}, {"nb_centres_commerciaux", Int64.Type}, {"part_touristes_pct", type number}, {"climat_temperature_moy_ete", type number}, {"nb_points_vente_concurrents", Int64.Type}, {"densite_concurrentielle_pour_100k_hab", type number}, {"zone_insulaire", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

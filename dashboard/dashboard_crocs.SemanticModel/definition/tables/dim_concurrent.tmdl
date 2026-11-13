@@ -1,0 +1,54 @@
+table dim_concurrent
+	lineageTag: cd57e9e6-92a8-4c71-b059-e5d798b2ebf1
+
+	column id_concurrent
+		dataType: string
+		lineageTag: ddafdcbb-738e-43be-b013-cc9349d3137e
+		sourceColumn: id_concurrent
+
+	column nom_concurrent
+		dataType: string
+		lineageTag: c8205893-db9a-46a6-8b45-69767fd6b76b
+		sourceColumn: nom_concurrent
+
+	column type_acteur
+		dataType: string
+		lineageTag: 72749878-d699-4dff-b6df-cf9b2aea6bc8
+		sourceColumn: type_acteur
+
+	column positionnement_prix
+		dataType: string
+		lineageTag: 96d5a64d-60d4-49ef-91d4-42b37180da57
+		sourceColumn: positionnement_prix
+
+	column prix_moyen_eur
+		dataType: int64
+		lineageTag: 8b3e0eb6-412a-4eef-b28f-c8c36b419890
+		summarizeBy: sum
+		sourceColumn: prix_moyen_eur
+
+	column pays_origine
+		dataType: string
+		lineageTag: ae3c900b-01b1-4177-bcbb-bed6c456cc94
+		sourceColumn: pays_origine
+
+	column source
+		dataType: string
+		lineageTag: a90ac19a-49e4-4721-8274-fbc5b7fb72e2
+		sourceColumn: source
+
+	column est_simule
+		dataType: boolean
+		lineageTag: 3c136df4-a7c5-4408-afde-ed4c746bd6f5
+		sourceColumn: est_simule
+
+	partition dim_concurrent = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(DossierExports & "dim_concurrent.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"id_concurrent", type text}, {"nom_concurrent", type text}, {"type_acteur", type text}, {"positionnement_prix", type text}, {"prix_moyen_eur", Int64.Type}, {"pays_origine", type text}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+				in
+					Types
+

@@ -1,0 +1,929 @@
+createOrReplace
+
+	expression DossierExports = "C:\Users\aurel\Documents\Projet-Crocs-Expansion\data\gold\exports\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+	expression DossierMaquette = "C:\Users\aurel\Documents\installation-crocs\exports_maquette\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+	table densite_concurrentielle
+
+		column id_zone
+			dataType: string
+			sourceColumn: id_zone
+
+		column ville
+			dataType: string
+			sourceColumn: ville
+
+		column nb_magasins_chaussures
+			dataType: int64
+			sourceColumn: nb_magasins_chaussures
+			summarizeBy: sum
+
+		column population_destatis
+			dataType: int64
+			sourceColumn: population_destatis
+			summarizeBy: sum
+
+		column date_reference_population
+			dataType: string
+			sourceColumn: date_reference_population
+
+		column densite_pour_100k_hab
+			dataType: double
+			sourceColumn: densite_pour_100k_hab
+			summarizeBy: sum
+
+		column population_osm
+			dataType: double
+			sourceColumn: population_osm
+			summarizeBy: sum
+
+		column annee_population_osm
+			dataType: double
+			sourceColumn: annee_population_osm
+			summarizeBy: none
+
+		column densite_population_osm
+			dataType: double
+			sourceColumn: densite_population_osm
+			summarizeBy: sum
+
+		column population_simulee
+			dataType: int64
+			sourceColumn: population_simulee
+			summarizeBy: sum
+
+		column densite_population_simulee
+			dataType: double
+			sourceColumn: densite_population_simulee
+			summarizeBy: sum
+
+		column densite_simulee
+			dataType: double
+			sourceColumn: densite_simulee
+			summarizeBy: sum
+
+		column origine_donnees
+			dataType: string
+			sourceColumn: origine_donnees
+
+		partition densite_concurrentielle = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "densite_concurrentielle.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"ville", type text}, {"nb_magasins_chaussures", Int64.Type}, {"population_destatis", Int64.Type}, {"date_reference_population", type text}, {"densite_pour_100k_hab", type number}, {"population_osm", type number}, {"annee_population_osm", type number}, {"densite_population_osm", type number}, {"population_simulee", Int64.Type}, {"densite_population_simulee", type number}, {"densite_simulee", type number}, {"origine_donnees", type text}}, "en-US")
+					in
+						Types
+
+	table dim_concurrent
+
+		column id_concurrent
+			dataType: string
+			sourceColumn: id_concurrent
+
+		column nom_concurrent
+			dataType: string
+			sourceColumn: nom_concurrent
+
+		column type_acteur
+			dataType: string
+			sourceColumn: type_acteur
+
+		column positionnement_prix
+			dataType: string
+			sourceColumn: positionnement_prix
+
+		column prix_moyen_eur
+			dataType: int64
+			sourceColumn: prix_moyen_eur
+			summarizeBy: sum
+
+		column pays_origine
+			dataType: string
+			sourceColumn: pays_origine
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition dim_concurrent = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "dim_concurrent.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_concurrent", type text}, {"nom_concurrent", type text}, {"type_acteur", type text}, {"positionnement_prix", type text}, {"prix_moyen_eur", Int64.Type}, {"pays_origine", type text}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table dim_pays
+
+		column code_pays
+			dataType: string
+			sourceColumn: code_pays
+
+		column nom_pays
+			dataType: string
+			sourceColumn: nom_pays
+
+		column devise
+			dataType: string
+			sourceColumn: devise
+
+		column taux_change_vs_eur
+			dataType: double
+			sourceColumn: taux_change_vs_eur
+			summarizeBy: sum
+
+		column population_millions
+			dataType: double
+			sourceColumn: population_millions
+			summarizeBy: sum
+
+		column pib_habitant_spa_ue100
+			dataType: int64
+			sourceColumn: pib_habitant_spa_ue100
+			summarizeBy: sum
+
+		column taux_chomage_pct
+			dataType: double
+			sourceColumn: taux_chomage_pct
+			summarizeBy: sum
+
+		column indice_niveau_prix_chaussures_ue100
+			dataType: int64
+			sourceColumn: indice_niveau_prix_chaussures_ue100
+			summarizeBy: sum
+
+		column indice_confiance_conso
+			dataType: int64
+			sourceColumn: indice_confiance_conso
+			summarizeBy: sum
+
+		column langue_principale
+			dataType: string
+			sourceColumn: langue_principale
+
+		column membre_ue
+			dataType: boolean
+			sourceColumn: membre_ue
+
+		column union_douaniere_avec_fr
+			dataType: boolean
+			sourceColumn: union_douaniere_avec_fr
+
+		column est_pays_reference
+			dataType: boolean
+			sourceColumn: est_pays_reference
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition dim_pays = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "dim_pays.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"nom_pays", type text}, {"devise", type text}, {"taux_change_vs_eur", type number}, {"population_millions", type number}, {"pib_habitant_spa_ue100", Int64.Type}, {"taux_chomage_pct", type number}, {"indice_niveau_prix_chaussures_ue100", Int64.Type}, {"indice_confiance_conso", Int64.Type}, {"langue_principale", type text}, {"membre_ue", type logical}, {"union_douaniere_avec_fr", type logical}, {"est_pays_reference", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table dim_produit
+
+		column id_produit
+			dataType: string
+			sourceColumn: id_produit
+
+		column sku
+			dataType: string
+			sourceColumn: sku
+
+		column marque
+			dataType: string
+			sourceColumn: marque
+
+		column categorie
+			dataType: string
+			sourceColumn: categorie
+
+		column sous_categorie
+			dataType: string
+			sourceColumn: sous_categorie
+
+		column modele
+			dataType: string
+			sourceColumn: modele
+
+		column coloris
+			dataType: string
+			sourceColumn: coloris
+
+		column cible
+			dataType: string
+			sourceColumn: cible
+
+		column prix_vente_ttc_fr
+			dataType: double
+			sourceColumn: prix_vente_ttc_fr
+			summarizeBy: sum
+
+		column prix_vente_ht_fr
+			dataType: double
+			sourceColumn: prix_vente_ht_fr
+			summarizeBy: sum
+
+		column cout_fob_usd
+			dataType: double
+			sourceColumn: cout_fob_usd
+			summarizeBy: sum
+
+		column cout_fob_eur
+			dataType: double
+			sourceColumn: cout_fob_eur
+			summarizeBy: sum
+
+		column cout_fret_unitaire_eur
+			dataType: double
+			sourceColumn: cout_fret_unitaire_eur
+			summarizeBy: sum
+
+		column droits_douane_ue_eur
+			dataType: double
+			sourceColumn: droits_douane_ue_eur
+			summarizeBy: sum
+
+		column cout_debarque_eur
+			dataType: double
+			sourceColumn: cout_debarque_eur
+			summarizeBy: sum
+
+		column code_sh
+			dataType: double
+			sourceColumn: code_sh
+			summarizeBy: none
+
+		column taux_droit_ue_pct
+			dataType: double
+			sourceColumn: taux_droit_ue_pct
+			summarizeBy: sum
+
+		column taux_droit_uk_pct
+			dataType: double
+			sourceColumn: taux_droit_uk_pct
+			summarizeBy: sum
+
+		column pays_origine
+			dataType: string
+			sourceColumn: pays_origine
+
+		column poids_unitaire_kg
+			dataType: double
+			sourceColumn: poids_unitaire_kg
+			summarizeBy: sum
+
+		column profil_saisonnier
+			dataType: string
+			sourceColumn: profil_saisonnier
+
+		column produit_sous_licence
+			dataType: boolean
+			sourceColumn: produit_sous_licence
+
+		column annee_lancement
+			dataType: int64
+			sourceColumn: annee_lancement
+			summarizeBy: none
+
+		column statut
+			dataType: string
+			sourceColumn: statut
+
+		column taux_marge_theorique_pct
+			dataType: double
+			sourceColumn: taux_marge_theorique_pct
+			summarizeBy: sum
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition dim_produit = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "dim_produit.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_produit", type text}, {"sku", type text}, {"marque", type text}, {"categorie", type text}, {"sous_categorie", type text}, {"modele", type text}, {"coloris", type text}, {"cible", type text}, {"prix_vente_ttc_fr", type number}, {"prix_vente_ht_fr", type number}, {"cout_fob_usd", type number}, {"cout_fob_eur", type number}, {"cout_fret_unitaire_eur", type number}, {"droits_douane_ue_eur", type number}, {"cout_debarque_eur", type number}, {"code_sh", type number}, {"taux_droit_ue_pct", type number}, {"taux_droit_uk_pct", type number}, {"pays_origine", type text}, {"poids_unitaire_kg", type number}, {"profil_saisonnier", type text}, {"produit_sous_licence", type logical}, {"annee_lancement", Int64.Type}, {"statut", type text}, {"taux_marge_theorique_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table dim_temps
+
+		column id_date
+			dataType: int64
+			sourceColumn: id_date
+			summarizeBy: none
+
+		column date_debut_mois
+			dataType: string
+			sourceColumn: date_debut_mois
+
+		column annee
+			dataType: int64
+			sourceColumn: annee
+			summarizeBy: none
+
+		column trimestre
+			dataType: string
+			sourceColumn: trimestre
+
+		column mois
+			dataType: int64
+			sourceColumn: mois
+			summarizeBy: none
+
+		column nom_mois
+			dataType: string
+			sourceColumn: nom_mois
+
+		column saison
+			dataType: string
+			sourceColumn: saison
+
+		column periode_soldes_fr
+			dataType: boolean
+			sourceColumn: periode_soldes_fr
+
+		column black_friday
+			dataType: boolean
+			sourceColumn: black_friday
+
+		column est_historique
+			dataType: boolean
+			sourceColumn: est_historique
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition dim_temps = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "dim_temps.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_date", Int64.Type}, {"date_debut_mois", type text}, {"annee", Int64.Type}, {"trimestre", type text}, {"mois", Int64.Type}, {"nom_mois", type text}, {"saison", type text}, {"periode_soldes_fr", type logical}, {"black_friday", type logical}, {"est_historique", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table dim_zone_chalandise
+
+		column id_zone
+			dataType: string
+			sourceColumn: id_zone
+
+		column code_pays
+			dataType: string
+			sourceColumn: code_pays
+
+		column ville
+			dataType: string
+			sourceColumn: ville
+
+		column latitude
+			dataType: double
+			sourceColumn: latitude
+			summarizeBy: none
+			dataCategory: Latitude
+
+		column longitude
+			dataType: double
+			sourceColumn: longitude
+			summarizeBy: none
+			dataCategory: Longitude
+
+		column population_ville_millions
+			dataType: double
+			sourceColumn: population_ville_millions
+			summarizeBy: sum
+
+		column population_zone_chalandise_millions
+			dataType: double
+			sourceColumn: population_zone_chalandise_millions
+			summarizeBy: sum
+
+		column indice_revenu_ue100
+			dataType: int64
+			sourceColumn: indice_revenu_ue100
+			summarizeBy: sum
+
+		column indice_frequentation_commerce
+			dataType: double
+			sourceColumn: indice_frequentation_commerce
+			summarizeBy: sum
+
+		column nb_centres_commerciaux
+			dataType: int64
+			sourceColumn: nb_centres_commerciaux
+			summarizeBy: sum
+
+		column part_touristes_pct
+			dataType: double
+			sourceColumn: part_touristes_pct
+			summarizeBy: sum
+
+		column climat_temperature_moy_ete
+			dataType: double
+			sourceColumn: climat_temperature_moy_ete
+			summarizeBy: sum
+
+		column nb_points_vente_concurrents
+			dataType: int64
+			sourceColumn: nb_points_vente_concurrents
+			summarizeBy: sum
+
+		column densite_concurrentielle_pour_100k_hab
+			dataType: double
+			sourceColumn: densite_concurrentielle_pour_100k_hab
+			summarizeBy: sum
+
+		column zone_insulaire
+			dataType: boolean
+			sourceColumn: zone_insulaire
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition dim_zone_chalandise = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "dim_zone_chalandise.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"code_pays", type text}, {"ville", type text}, {"latitude", type number}, {"longitude", type number}, {"population_ville_millions", type number}, {"population_zone_chalandise_millions", type number}, {"indice_revenu_ue100", Int64.Type}, {"indice_frequentation_commerce", type number}, {"nb_centres_commerciaux", Int64.Type}, {"part_touristes_pct", type number}, {"climat_temperature_moy_ete", type number}, {"nb_points_vente_concurrents", Int64.Type}, {"densite_concurrentielle_pour_100k_hab", type number}, {"zone_insulaire", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table distance_hub
+
+		column id_zone
+			dataType: string
+			sourceColumn: id_zone
+
+		column ville
+			dataType: string
+			sourceColumn: ville
+
+		column id_hub_le_plus_proche
+			dataType: string
+			sourceColumn: id_hub_le_plus_proche
+
+		column commune_hub_le_plus_proche
+			dataType: string
+			sourceColumn: commune_hub_le_plus_proche
+
+		column distance_reelle_km
+			dataType: double
+			sourceColumn: distance_reelle_km
+			summarizeBy: sum
+
+		column duree_conduite_h
+			dataType: double
+			sourceColumn: duree_conduite_h
+			summarizeBy: sum
+
+		column id_hub_le_plus_proche_simule
+			dataType: string
+			sourceColumn: id_hub_le_plus_proche_simule
+
+		column distance_simulee_km
+			dataType: int64
+			sourceColumn: distance_simulee_km
+			summarizeBy: sum
+
+		column meme_hub
+			dataType: boolean
+			sourceColumn: meme_hub
+
+		column ecart_km
+			dataType: double
+			sourceColumn: ecart_km
+			summarizeBy: sum
+
+		column ecart_pct
+			dataType: double
+			sourceColumn: ecart_pct
+			summarizeBy: sum
+
+		column origine_donnees
+			dataType: string
+			sourceColumn: origine_donnees
+
+		partition distance_hub = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "distance_hub.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"ville", type text}, {"id_hub_le_plus_proche", type text}, {"commune_hub_le_plus_proche", type text}, {"distance_reelle_km", type number}, {"duree_conduite_h", type number}, {"id_hub_le_plus_proche_simule", type text}, {"distance_simulee_km", Int64.Type}, {"meme_hub", type logical}, {"ecart_km", type number}, {"ecart_pct", type number}, {"origine_donnees", type text}}, "en-US")
+					in
+						Types
+
+	table fact_immobilier
+
+		column id_zone
+			dataType: string
+			sourceColumn: id_zone
+
+		column annee
+			dataType: int64
+			sourceColumn: annee
+			summarizeBy: none
+
+		column type_emplacement
+			dataType: string
+			sourceColumn: type_emplacement
+
+		column loyer_m2_an_eur
+			dataType: int64
+			sourceColumn: loyer_m2_an_eur
+			summarizeBy: sum
+
+		column charges_m2_an_eur
+			dataType: int64
+			sourceColumn: charges_m2_an_eur
+			summarizeBy: sum
+
+		column taux_vacance_pct
+			dataType: double
+			sourceColumn: taux_vacance_pct
+			summarizeBy: sum
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition fact_immobilier = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "fact_immobilier.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_zone", type text}, {"annee", Int64.Type}, {"type_emplacement", type text}, {"loyer_m2_an_eur", Int64.Type}, {"charges_m2_an_eur", Int64.Type}, {"taux_vacance_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table fact_marche
+
+		column code_pays
+			dataType: string
+			sourceColumn: code_pays
+
+		column annee
+			dataType: int64
+			sourceColumn: annee
+			summarizeBy: none
+
+		column segment
+			dataType: string
+			sourceColumn: segment
+
+		column taille_marche_meur
+			dataType: double
+			sourceColumn: taille_marche_meur
+			summarizeBy: sum
+
+		column taux_croissance_annuel_pct
+			dataType: double
+			sourceColumn: taux_croissance_annuel_pct
+			summarizeBy: sum
+
+		column est_projection
+			dataType: boolean
+			sourceColumn: est_projection
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition fact_marche = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "fact_marche.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"annee", Int64.Type}, {"segment", type text}, {"taille_marche_meur", type number}, {"taux_croissance_annuel_pct", type number}, {"est_projection", type logical}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table fact_parts_de_marche
+
+		column code_pays
+			dataType: string
+			sourceColumn: code_pays
+
+		column annee
+			dataType: int64
+			sourceColumn: annee
+			summarizeBy: none
+
+		column id_concurrent
+			dataType: string
+			sourceColumn: id_concurrent
+
+		column part_marche_valeur_pct
+			dataType: double
+			sourceColumn: part_marche_valeur_pct
+			summarizeBy: sum
+
+		column ca_estime_meur
+			dataType: double
+			sourceColumn: ca_estime_meur
+			summarizeBy: sum
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition fact_parts_de_marche = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "fact_parts_de_marche.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"code_pays", type text}, {"annee", Int64.Type}, {"id_concurrent", type text}, {"part_marche_valeur_pct", type number}, {"ca_estime_meur", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table fact_prix_releves
+
+		column id_releve
+			dataType: int64
+			sourceColumn: id_releve
+			summarizeBy: none
+
+		column id_date
+			dataType: int64
+			sourceColumn: id_date
+			summarizeBy: none
+
+		column code_pays
+			dataType: string
+			sourceColumn: code_pays
+
+		column enseigne
+			dataType: string
+			sourceColumn: enseigne
+
+		column id_concurrent
+			dataType: string
+			sourceColumn: id_concurrent
+
+		column id_produit
+			dataType: string
+			sourceColumn: id_produit
+
+		column libelle_produit
+			dataType: string
+			sourceColumn: libelle_produit
+
+		column categorie
+			dataType: string
+			sourceColumn: categorie
+
+		column prix_affiche_eur
+			dataType: double
+			sourceColumn: prix_affiche_eur
+			summarizeBy: sum
+
+		column prix_affiche_devise_locale
+			dataType: double
+			sourceColumn: prix_affiche_devise_locale
+			summarizeBy: sum
+
+		column en_promotion
+			dataType: boolean
+			sourceColumn: en_promotion
+
+		column taux_remise_pct
+			dataType: double
+			sourceColumn: taux_remise_pct
+			summarizeBy: sum
+
+		column source
+			dataType: string
+			sourceColumn: source
+
+		column est_simule
+			dataType: boolean
+			sourceColumn: est_simule
+
+		partition fact_prix_releves = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "fact_prix_releves.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"id_releve", Int64.Type}, {"id_date", Int64.Type}, {"code_pays", type text}, {"enseigne", type text}, {"id_concurrent", type text}, {"id_produit", type text}, {"libelle_produit", type text}, {"categorie", type text}, {"prix_affiche_eur", type number}, {"prix_affiche_devise_locale", type number}, {"en_promotion", type logical}, {"taux_remise_pct", type number}, {"source", type text}, {"est_simule", type logical}}, "en-US")
+					in
+						Types
+
+	table kpi_summary
+
+		measure 'Nb critères GO DE' = ```
+				CALCULATE ( COUNTROWS ( kpi_summary ), kpi_summary[pays] = "DE", kpi_summary[statut_go] = "GO" )
+				```
+			formatString: 0
+
+		measure 'Nb critères évalués DE' = ```
+				CALCULATE ( COUNTROWS ( kpi_summary ), kpi_summary[pays] = "DE", kpi_summary[statut_go] IN { "GO", "NO-GO" } )
+				```
+			formatString: 0
+
+		measure 'Verdict DE' = ```
+				VAR go = [Nb critères GO DE]
+				VAR n = [Nb critères évalués DE]
+				RETURN IF ( n = 0, "En attente", IF ( go = n, "GO", "NO-GO" ) ) & " : " & go & " critère(s) au vert sur " & n & " calculé(s) / 6"
+				```
+
+		column kpi
+			dataType: string
+			sourceColumn: kpi
+
+		column axe
+			dataType: string
+			sourceColumn: axe
+
+		column pays
+			dataType: string
+			sourceColumn: pays
+
+		column valeur
+			dataType: double
+			sourceColumn: valeur
+			summarizeBy: sum
+
+		column unite
+			dataType: string
+			sourceColumn: unite
+
+		column seuil
+			dataType: string
+			sourceColumn: seuil
+
+		column statut_go
+			dataType: string
+			sourceColumn: statut_go
+
+		column statut_epistemique
+			dataType: string
+			sourceColumn: statut_epistemique
+
+		column origine_donnees
+			dataType: string
+			sourceColumn: origine_donnees
+
+		partition kpi_summary = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierExports & "kpi_summary.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"kpi", type text}, {"axe", type text}, {"pays", type text}, {"valeur", type number}, {"unite", type text}, {"seuil", type text}, {"statut_go", type text}, {"statut_epistemique", type text}, {"origine_donnees", type text}}, "en-US")
+					in
+						Types
+
+	table ai_commentary
+
+		measure 'Commentaire Synthèse' = ```
+				LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "synthese", ai_commentary[valeur_filtre], "TOUS" )
+				```
+
+		measure 'Commentaire Marché' = ```
+				LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "marche_prix",
+				    ai_commentary[valeur_filtre], SELECTEDVALUE ( dim_pays[code_pays], "TOUS" ) )
+				```
+
+		measure 'Commentaire Implantation' = ```
+				LOOKUPVALUE ( ai_commentary[texte], ai_commentary[page], "implantation",
+				    ai_commentary[valeur_filtre], SELECTEDVALUE ( dim_zone_chalandise[id_zone], "TOUS" ) )
+				```
+
+		column page
+			dataType: string
+			sourceColumn: page
+
+		column filtre
+			dataType: string
+			sourceColumn: filtre
+
+		column valeur_filtre
+			dataType: string
+			sourceColumn: valeur_filtre
+
+		column texte
+			dataType: string
+			sourceColumn: texte
+
+		column verifie
+			dataType: boolean
+			sourceColumn: verifie
+
+		column date_generation
+			dataType: string
+			sourceColumn: date_generation
+
+		partition ai_commentary = m
+			mode: import
+			source =
+					let
+						Source = Csv.Document(File.Contents(DossierMaquette & "ai_commentary_FACTICE.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+						Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+						Types = Table.TransformColumnTypes(Entetes, {{"page", type text}, {"filtre", type text}, {"valeur_filtre", type text}, {"texte", type text}, {"verifie", type logical}, {"date_generation", type text}}, "en-US")
+					in
+						Types
+
+	relationship rel_kpi_summary_pays
+		fromColumn: kpi_summary.pays
+		toColumn: dim_pays.code_pays
+
+	relationship rel_dim_zone_chalandise_code_pays
+		fromColumn: dim_zone_chalandise.code_pays
+		toColumn: dim_pays.code_pays
+
+	relationship rel_fact_marche_code_pays
+		fromColumn: fact_marche.code_pays
+		toColumn: dim_pays.code_pays
+
+	relationship rel_fact_parts_de_marche_code_pays
+		fromColumn: fact_parts_de_marche.code_pays
+		toColumn: dim_pays.code_pays
+
+	relationship rel_fact_prix_releves_code_pays
+		fromColumn: fact_prix_releves.code_pays
+		toColumn: dim_pays.code_pays
+
+	relationship rel_fact_immobilier_id_zone
+		fromColumn: fact_immobilier.id_zone
+		toColumn: dim_zone_chalandise.id_zone
+
+	relationship rel_densite_concurrentielle_id_zone
+		fromColumn: densite_concurrentielle.id_zone
+		toColumn: dim_zone_chalandise.id_zone
+
+	relationship rel_distance_hub_id_zone
+		fromColumn: distance_hub.id_zone
+		toColumn: dim_zone_chalandise.id_zone
+
+	relationship rel_fact_parts_de_marche_id_concurrent
+		fromColumn: fact_parts_de_marche.id_concurrent
+		toColumn: dim_concurrent.id_concurrent
+
+	relationship rel_fact_prix_releves_id_concurrent
+		fromColumn: fact_prix_releves.id_concurrent
+		toColumn: dim_concurrent.id_concurrent
+
+	relationship rel_fact_prix_releves_id_produit
+		fromColumn: fact_prix_releves.id_produit
+		toColumn: dim_produit.id_produit
+
+	relationship rel_fact_prix_releves_id_date
+		fromColumn: fact_prix_releves.id_date
+		toColumn: dim_temps.id_date

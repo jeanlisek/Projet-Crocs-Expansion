@@ -1,0 +1,51 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "983a8e8e43762ff11f08",
+  "position": {
+    "x": 1440,
+    "y": 210,
+    "z": 4200,
+    "height": 56,
+    "width": 440,
+    "tabOrder": 42
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Commentaire IA",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#202124",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "généré puis vérifié par code, suit les filtres",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#5F6368",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

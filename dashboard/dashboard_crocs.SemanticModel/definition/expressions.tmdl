@@ -1,0 +1,10 @@
+expression DossierExports = "C:\Users\aurel\Documents\Projet-Crocs-Expansion\data\gold\exports\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 9961c304-f818-400a-bc75-3b6262fde393
+
+	annotation PBI_ResultType = Text
+
+expression DossierMaquette = "C:\Users\aurel\Documents\installation-crocs\exports_maquette\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 12bd15d2-58c7-46f7-a042-2e4f33d3bb6f
+
+	annotation PBI_ResultType = Text
+
