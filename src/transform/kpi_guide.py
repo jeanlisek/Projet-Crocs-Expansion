@@ -48,6 +48,17 @@ COLUMNS = [
 HT = "HT"
 NO_BASE = "HT / TTC sans objet"
 UNKNOWN_BASE = "HT ou TTC non précisé dans la source"
+# Eurostat, metadata of nama_10_cp18 (« recorded at purchasers' prices ») and glossary « Purchaser
+# price » (« excluding any VAT or similar tax deductible by the purchaser »): a household does not
+# deduct VAT, so its consumption expenditure includes it.
+EUROSTAT_METADATA = "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_cp18_esms.htm"
+PURCHASER_PRICE = (
+    "TTC : prix d'acquisition, hors seule TVA déductible par l'acheteur, que les ménages ne "
+    "déduisent pas (métadonnées Eurostat de nama_10_cp18)"
+)
+# src/simulate/generate_data.py, section 7 : « marché total chaussures 2024 (Md€, prix de vente au
+# détail TTC) » ; section 8 : parts de marché en valeur de ce segment.
+SIMULATED_RETAIL = "TTC : prix de vente au détail, jeu simulé (src/simulate/generate_data.py)"
 COUNTRY_LEVEL = "sans objet (niveau pays)"
 
 
@@ -77,7 +88,7 @@ FAMILIES = [
         r"^Croissance du secteur",
         "kpi_croissance_secteur",
         "Croissance du secteur",
-        UNKNOWN_BASE,
+        SIMULATED_RETAIL,
         "TCAM {tcam_debut}-{tcam_fin}, années observées",
         grid="Croissance du segment en Allemagne",
     ),
@@ -85,22 +96,24 @@ FAMILIES = [
         r"^Croissance des dépenses des ménages",
         "kpi_croissance_depenses_chaussures",
         None,
-        UNKNOWN_BASE,
+        PURCHASER_PRICE,
         "TCAM {tcam_debut}-{tcam_fin} ; collecte Eurostat du {eurostat}",
-        tables="`eurostat_series` (Eurostat, jeu `nama_10_cp18`)",
+        tables=(
+            f"`eurostat_series` (Eurostat, jeu `nama_10_cp18`, métadonnées : {EUROSTAT_METADATA})"
+        ),
     ),
     Family(
         r"^Part de marché Crocs",
         "kpi_part_de_marche",
         "Part de marché Crocs en France",
-        UNKNOWN_BASE,
+        SIMULATED_RETAIL,
         "année {annee}",
     ),
     Family(
         r"^Part de marché ",
         "kpi_part_de_marche",
         "Part de marché d'un concurrent en Allemagne",
-        UNKNOWN_BASE,
+        SIMULATED_RETAIL,
         "année {annee}",
     ),
     Family(
